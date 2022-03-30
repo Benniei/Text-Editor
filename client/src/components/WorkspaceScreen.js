@@ -1,8 +1,7 @@
 import React from 'react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ReactQuill from 'react-quill'
-import * as ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
 function WorkspaceScreen() {
