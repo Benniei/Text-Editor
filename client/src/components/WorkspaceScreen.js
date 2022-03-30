@@ -1,3 +1,4 @@
+import React from 'react'
 import { useContext } from 'react'
 import { GlobalStoreContext } from '../store'
 import Quill from 'quill/core'
@@ -18,10 +19,12 @@ function WorkspaceScreen() {
     })
 
     return (
-        <h1>
-            return quill
-        </h1>
-    )
+        <div>
+            <h1>
+                quill
+            </h1>
+        </div>
+    );
 }
 
 export default WorkspaceScreen;
