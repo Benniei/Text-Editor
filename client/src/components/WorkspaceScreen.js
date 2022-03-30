@@ -1,29 +1,16 @@
 import React from 'react'
 import { useContext } from 'react'
 import { GlobalStoreContext } from '../store'
-import Quill from 'quill/core'
-
+import ReactQuill from 'react-quill'
+import * as ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 function WorkspaceScreen() {
     const { store } = useContext(GlobalStoreContext);
-
-    var quill = new Quill('#editor-container', {
-        modules: {
-            toolbar: [
-                ['bold', 'italic', 'underline'],
-                ['image']
-            ]
-        },
-        placeholder: 'The loathsome Dung Eater',
-        theme: 'snow'
-    })
+    const [value, setValue] = useState('');
 
     return (
-        <div>
-            <h1>
-                quill
-            </h1>
-        </div>
+        <ReactQuill theme='snow' value={value} onChange={setValue}/>
     );
 }
 
