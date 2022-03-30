@@ -1,6 +1,6 @@
-## CSE 356 Text Editor
+# CSE 356 Text Editor
 
-# Milestone 1
+## Milestone 1
 Project is to create a shared document service. Multiple clients/users should be able to edit and coordinate to work on documents.
 
 1. /connect/:id
