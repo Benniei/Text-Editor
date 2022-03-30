@@ -3,7 +3,7 @@ cors = require('cors')
 app = express()
 
 IP = "localhost"
-PORT = 3000
+PORT = 4000
 
 // Middleware
 app.use(express.urlencoded({extended: true}))

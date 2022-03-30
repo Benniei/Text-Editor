@@ -8,12 +8,17 @@ operation = async (req, res) => {
 
 }
 
-getgame = async (req, res) => {
+getdoc = async (req, res) => {
     res.send("uwu " + req.params.id)
+}
+
+alldoc = async (req, res) => {
+
 }
 
 module.exports = {
     connect,
     operation,
-    getgame
+    getdoc,
+    alldoc
 }
