@@ -1,4 +1,4 @@
-import HomeScreen from './Homescreen'
+import HomeScreen from './HomeScreen'
 import WorkspaceScreen from './WorkspaceScreen'
 
 export {
