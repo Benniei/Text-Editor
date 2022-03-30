@@ -1,6 +1,6 @@
 import './App.css';
 import {React} from 'react'
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import {GlobalStoreContextProvider} from './store'
 import {
     HomeScreen,
@@ -11,10 +11,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <GlobalStoreContextProvider>
-        <Switch>
+        <Routes>
           <Route path="/" exact component={HomeScreen} />
-          <Route path="/connect/:id" exact component={WorkspaceScreen} />
-        </Switch>
+          <Route path="/connect" exact component={WorkspaceScreen} />
+        </Routes>
       </GlobalStoreContextProvider>
     </BrowserRouter>
   )

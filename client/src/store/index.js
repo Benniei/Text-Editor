@@ -1,5 +1,5 @@
 import { createContext, useState} from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from '../api'
 
 export const GlobalStoreContext = createContext({})
@@ -14,7 +14,7 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentList: null
     });
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const storeReducer = (action) => {
         const {type, payload} = action;
