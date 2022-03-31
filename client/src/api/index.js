@@ -6,21 +6,21 @@ const api = axios.create({
 
 // Server Connections
 
-export const connect = () => api.get('/connect/${id}')
+export const connect = (id) => api.get('/connect/'+id)
 .then(response => {
     return response
  })
  .catch(error => {
     return error.response;
  });
-export const operation = (payload) => api.post('/op/${id}', payload)
+export const operation = (id, payload) => api.post('/op/'+id, payload)
 .then(response => {
     return response
  })
  .catch(error => {
     return error.response;
  });
-export const getdoc = () => api.get('/doc/${id}')
+export const getdoc = (id) => api.get('/doc/'+id)
 export const getAllDocs = () => api.get('/alldoc')
 
 

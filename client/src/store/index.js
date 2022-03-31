@@ -48,12 +48,29 @@ function GlobalStoreContextProvider(props) {
     );
 }
 
-export async function connect() {
+async function connect() {
     console.log("clack connect")
-    api.connect("owo", "payload")
+    api.operation("owo", {owo: "hehsotroll"})
 }
 
+async function operations() {
 
+}
+
+async function getDoc() {
+
+}
+
+async function getAllDoc() {
+
+}
+
+export {
+    connect,
+    operations,
+    getDoc,
+    getAllDoc
+}
 
 export default GlobalStoreContext;
 export { GlobalStoreContextProvider };

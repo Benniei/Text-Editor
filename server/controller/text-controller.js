@@ -1,12 +1,13 @@
 const document = require('../models/document-model.js')
 
 connect = async (req, res) => {
-    console.log("ding dong youre wrong")
-    console.log(req.body)
+
 }
 
 operation = async (req, res) => {
-
+    console.log("operations")
+    console.log(req.params)
+    console.log(req.body)
 }
 
 getdoc = async (req, res) => {
