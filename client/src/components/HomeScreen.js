@@ -1,6 +1,6 @@
 import React from 'react'
 import {useContext} from 'react'
-import {GlobalStoreContext} from '../store'
+import {GlobalStoreContext, connect} from '../store'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
@@ -18,12 +18,17 @@ function HomeScreen() {
         //     </Box>
         // ))
     }
+    const axiosTest = () => {
+        console.log("click");
+        connect();
+    }
 
     return(
         <div>
-            <h1>
+            <Box
+            onClick={axiosTest}>
                 owo
-            </h1>
+            </Box>
         </div>
     );
 }

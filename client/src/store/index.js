@@ -39,22 +39,6 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    async function getAllList() {
-        
-    }
-
-    async function connect() {
-
-    }
-
-    async function operation() {
-
-    }
-
-    async function getDoc() {
-
-    }
-
     return (
         <GlobalStoreContext.Provider value={{
             store
@@ -62,6 +46,11 @@ function GlobalStoreContextProvider(props) {
             {props.children}
         </GlobalStoreContext.Provider>
     );
+}
+
+export async function connect() {
+    console.log("clack connect")
+    api.connect("owo", "payload")
 }
 
 

@@ -3,10 +3,10 @@ const textController = require('../controller/text-controller')
 const router = express.Router()
 
 // Game
-router.post('/connect/:id', text.connect)
-router.post('/op/:id', text.operation)
-router.get('/doc/:id', text.getdoc)
-router.get('/alldoc', text.alldoc)
+router.get('/connect/:id', textController.connect)
+router.post('/op/:id', textController.operation)
+router.get('/doc/:id', textController.getdoc)
+router.get('/alldoc', textController.alldoc)
 
 
 module.exports = router
