@@ -48,9 +48,18 @@ connect = async (req, res) => {
 operation = async (req, res) => {
     console.log("operations")
     console.log(req.params)
-
     console.log(JSON.stringify(req.body.data))
-    return res.status(200).json({success: true});
+
+    const op = req.body.data;
+    ops.push(op);
+    res.json(op);
+    return sendOpsToAll(op, req.params.id);
+}
+
+function sendOpsToAll(op, id) {
+    clients
+        .filter(client => client.id !== id)
+        .forEach(client => client.res.write(`data: ${JSON.stringify(op)}\n\n`))
 }
 
 getdoc = async (req, res) => {
