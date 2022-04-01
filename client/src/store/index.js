@@ -1,5 +1,4 @@
 import { createContext, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
 import api from '../api'
 
 export const GlobalStoreContext = createContext({})
@@ -12,26 +11,25 @@ export const GlobalStoreActionType = {
 
 function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
-        currentList: null
+        clientID: null
     });
-    const navigate = useNavigate();
 
     const storeReducer = (action) => {
         const {type, payload} = action;
         switch(type) {
             case GlobalStoreActionType.CONNECT: {
                 return setStore({
-                    currentList: payload
+                    clientID: payload
                 })
             }
             case GlobalStoreActionType.OPERATION: {
                 return setStore({
-                    currentList: store.payload
+                    clientID: store.payload
                 })
             }
             case GlobalStoreActionType.GET_DOC: {
                 return setStore({
-                    currentList: store.payload
+                    clientID: store.payload
                 })
             }
             default:
@@ -48,13 +46,15 @@ function GlobalStoreContextProvider(props) {
     );
 }
 
-async function connect() {
-    console.log("clack connect")
-    api.operation("owo", {owo: "hehsotroll"})
+async function connect(id) {
+    console.log("connect" + id)
 }
 
-async function operations() {
-
+async function operations(id,  delta) {
+    let response = await api.operation(id, delta);
+    if(response.data.success){
+        console.log("yes")
+    }
 }
 
 async function getDoc() {
