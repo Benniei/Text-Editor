@@ -34,8 +34,7 @@ function WorkspaceScreen() {
   
 
     function handleChangeText(content, delta, source, editor) {
-        operations(delta)
-        console.log(id)
+        operations(id, delta)
     }
 
     return (
