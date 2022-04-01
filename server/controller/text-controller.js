@@ -1,7 +1,48 @@
 const document = require('../models/document-model.js')
 
+var clients = [];
+var ops = [];
+
 connect = async (req, res) => {
-    return res.status(200).json({success: true});
+    // Create the HTTP Stream
+    const head = {
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'Content-Type': 'text/event-stream'
+    };
+    res.writeHead(200, head);
+
+    // Return the list of operations.
+    const data = `data: ${JSON.stringify(ops)}\n\n`
+    res.write(data);
+
+    // Create a unique connection
+    const id = Date.now();
+    const client = {
+        id: id,
+        res
+    };
+    clients.push(client);
+
+    // Handle connection closing
+    req.on('close', () => {
+        clients = clients.filter(client => client.id !== id);
+    })
+
+    // Look for a persistent document
+    await document.findById({ _id: req.params.id }, (err, doc) => {
+        // If not found, create new persistent document and return.
+        if (err || !doc) {
+            const body = { html: '<p></p>' };
+            doc = new document(body);
+            doc
+                .save()
+                .then(() => {
+                    res.write(`doc: ${doc}\n\n`);
+                });
+        } else { res.write(`doc: ${doc}\n\n`); }
+        
+    }).catch(err => console.log(err))
 }
 
 operation = async (req, res) => {
