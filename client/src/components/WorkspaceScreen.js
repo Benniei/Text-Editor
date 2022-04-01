@@ -7,7 +7,7 @@ import 'react-quill/dist/quill.snow.css'
 
 function WorkspaceScreen() {
     const [value, setValue] = useState('');
-
+    // Used to navigate to other links
     const navigate = useNavigate();
     const modules = {
         toolbar: [
@@ -21,13 +21,15 @@ function WorkspaceScreen() {
         function uniqueID() {
             return Math.floor(Math.random() * Date.now())
         }
-    
+
+        // Route to unique client ID
         if(!id){
             let uniq = uniqueID();
             let newurl = "/connect/" + uniq.toString();
             navigate(newurl);
         }
         else {
+            // Create a connection to document with unique ID
             connect(id);
         }
     }, [id, navigate])

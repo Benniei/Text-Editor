@@ -17,7 +17,7 @@ connect = async (req, res) => {
     res.write(data);
 
     // Create a unique connection
-    const id = Date.now();
+    const id = req.params.id;
     const client = {
         id: id,
         res
@@ -29,20 +29,20 @@ connect = async (req, res) => {
         clients = clients.filter(client => client.id !== id);
     })
 
-    // Look for a persistent document
-    await document.findById({ _id: req.params.id }, (err, doc) => {
-        // If not found, create new persistent document and return.
-        if (err || !doc) {
-            const body = { html: '<p></p>' };
-            doc = new document(body);
-            doc
-                .save()
-                .then(() => {
-                    res.write(`doc: ${doc}\n\n`);
-                });
-        } else { res.write(`doc: ${doc}\n\n`); }
+//     // Look for a persistent document
+//     await document.findById({ _id: req.params.id }, (err, doc) => {
+//         // If not found, create new persistent document and return.
+//         if (err || !doc) {
+//             const body = { html: '<p></p>' };
+//             doc = new document(body);
+//             doc
+//                 .save()
+//                 .then(() => {
+//                     res.write(`doc: ${doc}\n\n`);
+//                 });
+//         } else { res.write(`doc: ${doc}\n\n`); }
         
-    }).catch(err => console.log(err))
+//     }).catch(err => console.log(err))
 }
 
 operation = async (req, res) => {
