@@ -1,0 +1,14 @@
+// Look for a persistent document
+await document.findById({ _id: req.params.id }, (err, doc) => {
+    // If not found, create new persistent document and return.
+    if (err || !doc) {
+        const body = { html: '<p></p>' };
+        doc = new document(body);
+        doc
+            .save()
+            .then(() => {
+                res.write(`doc: ${doc}\n\n`);
+            });
+    } else { res.write(`doc: ${doc}\n\n`); }
+    
+}).catch(err => console.log(err))
