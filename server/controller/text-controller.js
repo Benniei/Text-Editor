@@ -45,7 +45,6 @@ rawConnect = async(req, res) => {
 
     // Create a unique connection
     const id = Math.floor(Math.random() * Date.now());
-    console.log(id)
     const client = {
         id: id,
         res
@@ -60,15 +59,16 @@ rawConnect = async(req, res) => {
 
 operation = async (req, res) => {
     const op = req.body.data;
-    ops.push(op);
+    ops.push(op.ops);
     res.json(op);
     return sendOpsToAll(op, req.params.id);
 }
 
 function sendOpsToAll(op, id) {
     data = {
-        data: op.ops
+        data: ops
     }
+    console.log(ops)
     clients
         .filter(client => client.id !== id)
         .forEach(client => client.res.write(`data: ${JSON.stringify(data)}\n\n`))

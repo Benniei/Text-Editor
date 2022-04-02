@@ -38,8 +38,12 @@ function WorkspaceScreen() {
             const events = new EventSource('http://' + 'localhost'+ ":4000/api/connect/" + id)
             
             events.onmessage = (event) => {
-                const parsedData = JSON.parse(event.data);
-                console.log(event.data)
+                const parsedData = JSON.parse(event.data).data;
+                let merged = parsedData.flat(1)
+                let data = {
+                    ops: merged
+                }
+                setValue(data)
             }
 
             setListening(true);
