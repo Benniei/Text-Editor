@@ -4,6 +4,8 @@ import { connect, operations } from '../store'
 import { useNavigate, useParams } from 'react-router-dom'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import Quill from 'quill';
+import 'quill/dist/quill.snow.css';
 
 function WorkspaceScreen() {
     const [value, setValue] = useState('');
@@ -51,7 +53,14 @@ function WorkspaceScreen() {
         }
     }, [id, navigate])
     
-  
+    const toolbarOptions = ['bold', 'italic', 'image'];
+      const options = {
+        theme: 'snow',
+        modules: {
+          toolbar: toolbarOptions,
+        },
+      };
+    let quill = new Quill('#editor', options);
 
     function handleChangeText(content, delta, source, editor) {
         if(source !== 'user') return;
@@ -60,7 +69,7 @@ function WorkspaceScreen() {
     }
 
     return (
-        <ReactQuill theme='snow' value={value} modules={modules} onChange={handleChangeText}/>
+        <div id="editor-container"></div>
     );
 }
 
