@@ -7,6 +7,7 @@ import 'react-quill/dist/quill.snow.css'
 
 function WorkspaceScreen() {
     const [value, setValue] = useState('');
+    const [listening, setListening] = useState(false);
     // Used to navigate to other links
     const navigate = useNavigate();
     const modules = {
@@ -32,11 +33,24 @@ function WorkspaceScreen() {
             // Create a connection to document with unique ID
             connect(id);
         }
+
+        if(!listening) {
+            const events = new EventSource('http://' + 'localhost'+ ":4000/api/connect/" + id)
+            
+            events.onmessage = (event) => {
+                const parsedData = JSON.parse(event.data);
+                let op = parsedData[0].ops
+                console.log(op)
+            }
+
+            setListening(true);
+        }
     }, [id, navigate])
     
   
 
     function handleChangeText(content, delta, source, editor) {
+        if(source !== 'user') return;
         setValue(content);
         operations(id, delta);
     }
