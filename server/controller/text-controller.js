@@ -12,7 +12,7 @@ connect = async (req, res) => {
     };
     res.writeHead(200, head);
 
-    // Return the list of operations.
+    // Return the contents of the operation
     // const data = `data: ${JSON.stringify(ops)}`
     // res.write(data);
 
@@ -66,9 +66,12 @@ operation = async (req, res) => {
 }
 
 function sendOpsToAll(op, id) {
+    data = {
+        data: op.ops
+    }
     clients
         .filter(client => client.id !== id)
-        .forEach(client => client.res.write(`data: ${JSON.stringify(op)}\n\n`))
+        .forEach(client => client.res.write(`data: ${JSON.stringify(data)}\n\n`))
 }
 
 getdoc = async (req, res) => {
