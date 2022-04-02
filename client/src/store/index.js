@@ -55,7 +55,7 @@ async function connect(id) {
 
 async function operations(id,  delta) {
     let response = await api.operation(id, {
-        data: [delta]
+        data: delta
     });
     if(response.data.success){
         console.log("Operation Success")

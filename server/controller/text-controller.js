@@ -13,7 +13,7 @@ connect = async (req, res) => {
     res.writeHead(200, head);
 
     // Return the list of operations.
-    const data = `data: ${JSON.stringify(ops)}\n\n`
+    const data = `data: ${JSON.stringify(ops)}`
     res.write(data);
 
     // Create a unique connection
@@ -40,7 +40,7 @@ rawConnect = async(req, res) => {
     res.writeHead(200, head);
 
     // Return the list of operations.
-    const data = `data: ${JSON.stringify(ops)}\n\n`
+    const data = `data: ${JSON.stringify(ops)}`
     res.write(data);
 
     // Create a unique connection
@@ -59,7 +59,7 @@ rawConnect = async(req, res) => {
 }
 
 operation = async (req, res) => {
-    const op = req.body.data;
+    const op = req.body.data.ops;
     ops.push(op);
     res.json(op);
     return sendOpsToAll(op, req.params.id);
