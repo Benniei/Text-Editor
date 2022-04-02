@@ -33,32 +33,10 @@ connect = async (req, res) => {
 }
 
 rawConnect = async(req, res) => {
-    // Create the HTTP Stream
-    const head = {
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'Content-Type': 'text/event-stream'
-    };
-    res.writeHead(200, head);
-
-    // Return the list of operations.
-    // const data = `data: ${JSON.stringify(ops)}`
-    // res.write(data);
-
     // Create a unique connection
     const id = Math.floor(Math.random() * Date.now());
-    const client = {
-        id: id,
-        res
-    };
 
-    clients = clients.filter(client => (client.id !== id) || (!client.id))
-    clients.push(client)
-
-    // Handle connection closing
-    req.on('close', () => {
-        clients = clients.filter(client => client.id !== id);
-    })
+    res.redirect("http://localhost:3000/connect/" + id)
 }
 
 operation = async (req, res) => {
@@ -72,8 +50,8 @@ function sendOpsToAll(op, id) {
     data = {
         data: op.ops
     }
-    clients.map((client) => console.log(client.id))
-
+    // clients.map((client) => console.log(client.id))
+    console.log(data)
     clients
         .filter(client => client.id !== id)
         .forEach(client => client.res.write(`data: ${JSON.stringify(data)}\n\n`))

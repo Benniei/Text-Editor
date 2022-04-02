@@ -2,22 +2,13 @@ import React from 'react'
 import { useEffect, useState} from 'react'
 import { connect, operations } from '../store'
 import { useNavigate, useParams } from 'react-router-dom'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
 function WorkspaceScreen() {
-    const [value, setValue] = useState('');
     const [listening, setListening] = useState(false);
     // Used to navigate to other links
     const navigate = useNavigate();
-    const modules = {
-        toolbar: [
-          ['bold', 'italic'],
-          ['image']
-        ]
-    };
     const {id} = useParams();
 
     useEffect(() => {
@@ -45,31 +36,35 @@ function WorkspaceScreen() {
                 let data = {
                     ops: merged
                 }
-                console.log(data)
-                setValue(data)
+                console.log(data);
+                quill.updateContents(data);
             }
 
             setListening(true);
         }
-    }, [id, navigate])
-    
-    const toolbarOptions = ['bold', 'italic', 'image'];
-      const options = {
+
+        const toolbarOptions = ['bold', 'italic', 'image'];
+        const options = {
         theme: 'snow',
         modules: {
-          toolbar: toolbarOptions,
-        },
-      };
-    let quill = new Quill('#editor', options);
+            toolbar: toolbarOptions,
+        }
+        };
+        let quill = new Quill('#editor', options);
 
-    function handleChangeText(content, delta, source, editor) {
-        if(source !== 'user') return;
-        setValue(content);
-        operations(id, delta);
-    }
+        quill.on('text-change', function (delta, oldDelta, source) {
+            if (source !== 'user') return;
+            operations(id, delta);
+        });
+
+    }, [id, navigate])
+    
+   
 
     return (
-        <div id="editor-container"></div>
+        <div style={{ margin: '5%', border: '1px solid' }}>
+            <div id='editor'></div>
+        </div>
     );
 }
 
