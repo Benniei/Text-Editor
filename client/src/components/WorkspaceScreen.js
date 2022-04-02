@@ -39,8 +39,7 @@ function WorkspaceScreen() {
             
             events.onmessage = (event) => {
                 const parsedData = JSON.parse(event.data);
-                let op = parsedData[0].ops
-                console.log(op)
+                console.log(event.data)
             }
 
             setListening(true);
