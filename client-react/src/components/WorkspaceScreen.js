@@ -43,6 +43,7 @@ function WorkspaceScreen() {
                 let data = {
                     ops: merged
                 }
+                console.log(data)
                 setValue(data)
             }
 

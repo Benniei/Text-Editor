@@ -22,7 +22,9 @@ connect = async (req, res) => {
         id: id,
         res
     };
-    clients.push(client);
+
+    clients = clients.filter(client => (client.id !== id) || (!client.id))
+    clients.push(client)
 
     // Handle connection closing
     req.on('close', () => {
@@ -40,8 +42,8 @@ rawConnect = async(req, res) => {
     res.writeHead(200, head);
 
     // Return the list of operations.
-    const data = `data: ${JSON.stringify(ops)}`
-    res.write(data);
+    // const data = `data: ${JSON.stringify(ops)}`
+    // res.write(data);
 
     // Create a unique connection
     const id = Math.floor(Math.random() * Date.now());
@@ -49,7 +51,9 @@ rawConnect = async(req, res) => {
         id: id,
         res
     };
-    clients.push(client);
+
+    clients = clients.filter(client => (client.id !== id) || (!client.id))
+    clients.push(client)
 
     // Handle connection closing
     req.on('close', () => {
@@ -66,9 +70,10 @@ operation = async (req, res) => {
 
 function sendOpsToAll(op, id) {
     data = {
-        data: ops
+        data: op.ops
     }
-    console.log(ops)
+    clients.map((client) => console.log(client.id))
+
     clients
         .filter(client => client.id !== id)
         .forEach(client => client.res.write(`data: ${JSON.stringify(data)}\n\n`))
