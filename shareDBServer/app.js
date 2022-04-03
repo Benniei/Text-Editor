@@ -29,6 +29,10 @@ function createDoc(callback) {
     var doc = connection.get('text-editor', 'text1');
     doc.fetch(err => {
         if (err) throw err;
+        if (doc.type === null) {
+            doc.create([], 'rich-text', callback)
+            return;
+        }
         callback();
     })
 }
