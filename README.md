@@ -40,3 +40,12 @@ Project is to create a shared document service. Multiple clients/users should be
     Use <strong>...</strong> for bold
     Use <em>..</em> for italics
     ```
+
+4. UI Requirements: 
+
+    Serve the collaborative editor UI from the document root of the server.
+    Have an integrated client code that is responsible for the following:
+
+    a. Client should use /connect/id to open a connection and listen to the event stream for changes and update the UI accordingly.
+    
+    b. The client should POST its changes (while editing the doc from UI)  via /op/id to the server.

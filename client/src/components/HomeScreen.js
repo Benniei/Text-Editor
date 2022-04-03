@@ -18,17 +18,9 @@ function HomeScreen() {
         //     </Box>
         // ))
     }
-    const axiosTest = () => {
-        console.log("click");
-        connect();
-    }
 
     return(
         <div>
-            <Box
-            onClick={axiosTest}>
-                owo
-            </Box>
         </div>
     );
 }

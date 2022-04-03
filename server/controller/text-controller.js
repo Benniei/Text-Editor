@@ -5,7 +5,7 @@ var ops = [];
 
 connect = async (req, res) => {
     // If undefined IDs are passed through, skip function.
-    if(req.params.id === 'undefined') return;
+    if(req.params.id === 'undefined') return res.status(400);
     // Create the HTTP Stream
     const head = {
         'Cache-Control': 'no-cache',
@@ -47,6 +47,7 @@ operation = async (req, res) => {
     const op = req.body.data;
     ops.push(op.ops);
     res.json(op);
+    res.end();
     return sendOpsToAll(op, req.params.id);
 }
 

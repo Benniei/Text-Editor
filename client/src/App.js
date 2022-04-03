@@ -12,7 +12,7 @@ const App = () => {
     <BrowserRouter>
       <GlobalStoreContextProvider>
         <Routes>
-          <Route exact path="/" element={<HomeScreen />} />
+          <Route exact path="/" element={<WorkspaceScreen />} />
           <Route path="/connect/:id" element={<WorkspaceScreen />} />
           <Route exact path="/connect" element={<WorkspaceScreen />} />
         </Routes>
