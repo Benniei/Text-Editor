@@ -23,21 +23,15 @@ function WorkspaceScreen() {
             clientID = uniq;
             let newurl = "/connect/" + uniq.toString();
             navigate(newurl);
+            window.location.reload();
             connect(uniq);
         }
-        /** else {
-                // Create a connection to document with unique ID
-                navigate("/connect/" + id);
-            * THE ABOVE IS NOT NEEDED. IF AN ID IS PARAMS, THE ROUTER WILL
-            * CALL THE CONNECT FUNCTION ANYWAYS
-        }*/
 
         if(!listening) {
             const events = new EventSource('http://' + 'localhost'+ ":4000/api/connect/" + clientID)
 
             events.onmessage = (event) => {
                 const parsedData = JSON.parse(event.data);
-                console.log(parsedData)
                 // Case 1: First time connecting
                 if (parsedData.content) {
                     console.log(parsedData.content.ops)
@@ -45,12 +39,7 @@ function WorkspaceScreen() {
                 }
                 // Case 2: Getting updates
                 else {
-                    let merged = parsedData.flat(1)
-                    let data = {
-                        ops: merged
-                    }
-                    console.log(data);
-                    quill.updateContents(data);
+                    quill.updateContents(parsedData);
                 }
             }
 
