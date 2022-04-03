@@ -16,7 +16,7 @@ function startServer() {
     
     var server = http.createServer(app);
 
-    var wss = new WebSocket.Server({ server }).on('connection', ws => {
+    var wss = new WebSocket.Server({ server: server }).on('connection', ws => {
         const stream = new WebSocketJSONStream(ws);
         ShareDBServer.listen(stream);
     })

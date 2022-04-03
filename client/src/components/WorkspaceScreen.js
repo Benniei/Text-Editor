@@ -40,12 +40,8 @@ function WorkspaceScreen() {
                 console.log(parsedData)
                 // Case 1: First time connecting
                 if (parsedData.content) {
-                    console.log()
-                    let merged = parsedData.content.flat(1)
-                    let data = {
-                        ops: merged
-                    }
-                    quill.setContents(data)
+                    console.log(parsedData.content.ops)
+                    quill.setContents(parsedData.content.ops)
                 }
                 // Case 2: Getting updates
                 else {

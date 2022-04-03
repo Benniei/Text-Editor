@@ -1,6 +1,8 @@
 var ReconnectingWebSocket = require('reconnecting-websocket');
+var richText = require('rich-text');
 var sharedb = require('sharedb/lib/client');
 const WS = require('ws');
+sharedb.types.register(richText.type);
 
 var clients = [];
 
@@ -25,7 +27,7 @@ connect = async (req, res) => {
     };
     res.writeHead(200, head);
 
-    console.log(doc.data)
+    // console.log("Data:", doc.data, req.params.id)
     // Return the contents of the operation
     data = {
         content: doc.data
@@ -48,23 +50,16 @@ connect = async (req, res) => {
     })
 }
 
-rawConnect = async(req, res) => {
-    // Create a unique connection
-    const id = Math.floor(Math.random() * Date.now());
-
-    res.redirect("http://localhost:3000/connect/" + id)
-}
-
 operation = async (req, res) => {
     const op = req.body.data;
     res.json(op);
-    doc.submitOp(op, {source: req.body.id});
+    doc.submitOp(op, {source: req.params.id});
     res.end();
 }
 
 function sendOpsToAll(op, id) {
     data = {
-        data: op.ops
+        data: op
     }
     // clients.map((client) => console.log(client.id))
     console.log(data)
@@ -79,6 +74,13 @@ getdoc = async (req, res) => {
 
 alldoc = async (req, res) => {
 
+}
+
+rawConnect = async(req, res) => {
+    // Create a unique connection
+    const id = Math.floor(Math.random() * Date.now());
+
+    res.redirect("http://localhost:3000/connect/" + id)
 }
 
 module.exports = {
