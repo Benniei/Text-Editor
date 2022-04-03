@@ -23,14 +23,14 @@ function WorkspaceScreen() {
         if(!id){
             let uniq = uniqueID();
             clientID = uniq;
-            let newurl = "/connect/" + uniq.toString();
+            let newurl = "/client/" + uniq.toString();
             navigate(newurl);
             window.location.reload();
             connect(uniq);
         }
 
         if(!listening) {
-            const events = new EventSource('http://' + ip + ':4000/api/connect/' + clientID)
+            const events = new EventSource('http://' + ip + ':4000/connect/' + clientID)
 
             events.onmessage = (event) => {
                 const parsedData = JSON.parse(event.data);
