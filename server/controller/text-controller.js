@@ -16,7 +16,7 @@ doc.subscribe(function(err) {
 
 connect = async (req, res) => {
     // If undefined IDs are passed through, skip function.
-    if(req.params.id === 'undefined') return;
+    if(req.params.id === 'undefined') return res.status(400);
     // Create the HTTP Stream
     const head = {
         'Cache-Control': 'no-cache',
@@ -25,6 +25,7 @@ connect = async (req, res) => {
     };
     res.writeHead(200, head);
 
+    console.log(doc.data)
     // Return the contents of the operation
     data = {
         content: doc.data
@@ -58,6 +59,7 @@ operation = async (req, res) => {
     const op = req.body.data;
     res.json(op);
     doc.submitOp(op, {source: req.body.id});
+    res.end();
 }
 
 function sendOpsToAll(op, id) {
