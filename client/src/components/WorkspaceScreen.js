@@ -36,9 +36,18 @@ function WorkspaceScreen() {
             const events = new EventSource('http://' + 'localhost'+ ":4000/api/connect/" + clientID)
 
             events.onmessage = (event) => {
-                const parsedData = JSON.parse(event.data).data;
-                if (parsedData.length > 2)
-                    parsedData.forEach(op => quill.updateContents(op));
+                const parsedData = JSON.parse(event.data);
+                console.log(parsedData)
+                // Case 1: First time connecting
+                if (parsedData.content) {
+                    console.log()
+                    let merged = parsedData.content.flat(1)
+                    let data = {
+                        ops: merged
+                    }
+                    quill.setContents(data)
+                }
+                // Case 2: Getting updates
                 else {
                     let merged = parsedData.flat(1)
                     let data = {

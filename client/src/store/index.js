@@ -47,19 +47,13 @@ function GlobalStoreContextProvider(props) {
 }
 
 async function connect(id) {
-    let response = await api.connect(id);
-    if(response.data.success){
-        console.log("Connect Success")
-    }
+    await api.connect(id);
 }
 
 async function operations(id,  delta) {
-    let response = await api.operation(id, {
+    await api.operation(id, {
         data: delta
     });
-    if(response.data.success){
-        console.log("Operation Success")
-    }
 }
 
 async function getDoc() {
