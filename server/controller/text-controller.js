@@ -90,7 +90,7 @@ rawConnect = async(req, res) => {
     // Create a unique connection
     const id = Math.floor(Math.random() * Date.now());
 
-    res.redirect("http://" + '209.151.155.105' + ":3000/client/" + id)
+    res.redirect("http://" + '209.151.155.105' + ":3000/connect/" + id)
 }
 
 module.exports = {
