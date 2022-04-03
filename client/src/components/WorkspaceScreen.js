@@ -7,7 +7,7 @@ import 'quill/dist/quill.snow.css';
 
 
 function WorkspaceScreen() {
-    let ip = "209.151.155.105"
+    let ip = '209.151.155.105'
     const [listening, setListening] = useState(false);
     // Used to navigate to other links
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ function WorkspaceScreen() {
         }
 
         if(!listening) {
-            const events = new EventSource('http://' + ip + ":4000/api/connect/" + clientID)
+            const events = new EventSource('http://' + ip + ':4000/api/connect/' + clientID)
 
             events.onmessage = (event) => {
                 const parsedData = JSON.parse(event.data);

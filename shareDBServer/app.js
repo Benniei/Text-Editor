@@ -12,6 +12,7 @@ var ShareDBServer = new ShareDB();
 createDoc(startServer);
 
 function startServer() {
+    ip = '209.151.155.105'
     var app = express();
     app.use(express.static('static'));
     app.use(express.static('node_modules/quill/dist'));
@@ -23,7 +24,7 @@ function startServer() {
         ShareDBServer.listen(stream);
     })
 
-    server.listen(8080, process.env.IP);
+    server.listen(8080, ip);
 }
 
 function createDoc(callback) {

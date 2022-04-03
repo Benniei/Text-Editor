@@ -12,6 +12,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "nodemon": "^2.0.15",
     "quilljs-renderer": "^0.0.8",
     "reconnecting-websocket": "^4.4.0",
     "rich-text": "^4.1.0",

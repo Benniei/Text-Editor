@@ -2,7 +2,7 @@ express = require('express')
 cors = require('cors')
 app = express()
 
-IP = "localhost"
+IP = "209.151.155.105"
 PORT = 4000
 
 // Middleware

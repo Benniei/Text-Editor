@@ -11,9 +11,9 @@ dotenv.config();
 sharedb.types.register(richText.type);
 
 var clients = [];
-
+socketIP = '209.151.155.105'
 // ShareDB Connection
-var socket = new ReconnectingWebSocket('ws://' + process.env.IP + ':8080', [], { WebSocket: WS });
+var socket = new ReconnectingWebSocket('ws://' + socketIP + ':8080', [], { WebSocket: WS });
 var connection = new sharedb.Connection(socket);
 
 var doc = connection.get('text-editor', 'text1');
@@ -68,6 +68,9 @@ function sendOpsToAll(op, id) {
 }
 
 getdoc = async (req, res) => {
+    if(!doc.data){
+        return res.send("<p></p>")
+    }
     let convert = new Converter(doc.data)
     let html = convert.convertTo('html', {
         line: '<p>{content}</p>',
@@ -87,7 +90,7 @@ rawConnect = async(req, res) => {
     // Create a unique connection
     const id = Math.floor(Math.random() * Date.now());
 
-    res.redirect("http://" + process.env.IP + ":3000/connect/" + id)
+    res.redirect("http://" + '209.151.155.105' + ":3000/connect/" + id)
 }
 
 module.exports = {
