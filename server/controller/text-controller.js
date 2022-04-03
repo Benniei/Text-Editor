@@ -1,11 +1,22 @@
-const document = require('../models/document-model.js')
+var ReconnectingWebSocket = require('reconnecting-websocket');
+var sharedb = require('sharedb/lib/client');
+const WS = require('ws');
 
 var clients = [];
-var ops = [];
+
+// ShareDB Connection
+var socket = new ReconnectingWebSocket('ws://localhost:8080', [], { WebSocket: WS });
+var connection = new sharedb.Connection(socket);
+
+var doc = connection.get('text-editor', 'text1');
+doc.subscribe(function(err) {
+    if (err) throw err;
+    doc.on('op', sendOpsToAll);
+});
 
 connect = async (req, res) => {
     // If undefined IDs are passed through, skip function.
-    if(req.params.id === 'undefined') return res.status(400);
+    if(req.params.id === 'undefined') return;
     // Create the HTTP Stream
     const head = {
         'Cache-Control': 'no-cache',
@@ -16,7 +27,7 @@ connect = async (req, res) => {
 
     // Return the contents of the operation
     data = {
-        data: ops
+        content: doc.data
     }
     res.write(`data: ${JSON.stringify(data)}\n\n`);
 
@@ -45,10 +56,8 @@ rawConnect = async(req, res) => {
 
 operation = async (req, res) => {
     const op = req.body.data;
-    ops.push(op.ops);
     res.json(op);
-    res.end();
-    return sendOpsToAll(op, req.params.id);
+    doc.submitOp(op, {source: req.body.id});
 }
 
 function sendOpsToAll(op, id) {

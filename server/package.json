@@ -12,6 +12,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "mongoose": "^6.2.9"
+    "mongoose": "^6.2.9",
+    "reconnecting-websocket": "^4.4.0",
+    "sharedb": "^2.2.5",
+    "ws": "^8.5.0"
   }
 }
