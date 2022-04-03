@@ -16,28 +16,37 @@ function WorkspaceScreen() {
             return Math.floor(Math.random() * Date.now())
         }
 
+        let clientID = id;
         // Route to unique client ID
         if(!id){
             let uniq = uniqueID();
+            clientID = uniq;
             let newurl = "/connect/" + uniq.toString();
             navigate(newurl);
+            connect(uniq);
         }
-        else {
-            // Create a connection to document with unique ID
-            connect(id);
-        }
+        /** else {
+                // Create a connection to document with unique ID
+                navigate("/connect/" + id);
+            * THE ABOVE IS NOT NEEDED. IF AN ID IS PARAMS, THE ROUTER WILL
+            * CALL THE CONNECT FUNCTION ANYWAYS
+        }*/
 
         if(!listening) {
-            const events = new EventSource('http://' + 'localhost'+ ":4000/api/connect/" + id)
-            
+            const events = new EventSource('http://' + 'localhost'+ ":4000/api/connect/" + clientID)
+
             events.onmessage = (event) => {
                 const parsedData = JSON.parse(event.data).data;
-                let merged = parsedData.flat(1)
-                let data = {
-                    ops: merged
+                if (parsedData.length > 2)
+                    parsedData.forEach(op => quill.updateContents(op));
+                else {
+                    let merged = parsedData.flat(1)
+                    let data = {
+                        ops: merged
+                    }
+                    console.log(data);
+                    quill.updateContents(data);
                 }
-                console.log(data);
-                quill.updateContents(data);
             }
 
             setListening(true);

@@ -4,6 +4,8 @@ var clients = [];
 var ops = [];
 
 connect = async (req, res) => {
+    // If undefined IDs are passed through, skip function.
+    if(req.params.id === 'undefined') return;
     // Create the HTTP Stream
     const head = {
         'Cache-Control': 'no-cache',
@@ -13,8 +15,10 @@ connect = async (req, res) => {
     res.writeHead(200, head);
 
     // Return the contents of the operation
-    // const data = `data: ${JSON.stringify(ops)}`
-    // res.write(data);
+    data = {
+        data: ops
+    }
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
 
     // Create a unique connection
     const id = req.params.id;
