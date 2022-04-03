@@ -5,13 +5,15 @@ const WS = require('ws');
 var renderer  = require('quilljs-renderer');
 var Converter  = renderer.Document;
 renderer.loadFormat('html');
+const dotenv = require('dotenv')
+dotenv.config();
 
 sharedb.types.register(richText.type);
 
 var clients = [];
 
 // ShareDB Connection
-var socket = new ReconnectingWebSocket('ws://localhost:8080', [], { WebSocket: WS });
+var socket = new ReconnectingWebSocket('ws://' + process.env.IP + ':8080', [], { WebSocket: WS });
 var connection = new sharedb.Connection(socket);
 
 var doc = connection.get('text-editor', 'text1');
@@ -31,7 +33,6 @@ connect = async (req, res) => {
     };
     res.writeHead(200, head);
 
-    console.log(req.params.id)
     // Return the contents of the operation
     data = {
         content: doc.data
@@ -86,7 +87,7 @@ rawConnect = async(req, res) => {
     // Create a unique connection
     const id = Math.floor(Math.random() * Date.now());
 
-    res.redirect("http://localhost:3000/connect/" + id)
+    res.redirect("http://" + process.env.IP + ":3000/connect/" + id)
 }
 
 module.exports = {

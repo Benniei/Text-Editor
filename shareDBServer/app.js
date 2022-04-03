@@ -4,6 +4,8 @@ var ShareDB = require('sharedb');
 var richText = require('rich-text');
 var WebSocket = require('ws');
 var WebSocketJSONStream = require('@teamwork/websocket-json-stream');
+const dotenv = require('dotenv')
+dotenv.config();
 
 ShareDB.types.register(richText.type);
 var ShareDBServer = new ShareDB();
@@ -21,7 +23,7 @@ function startServer() {
         ShareDBServer.listen(stream);
     })
 
-    server.listen(8080);
+    server.listen(8080, process.env.IP);
 }
 
 function createDoc(callback) {
