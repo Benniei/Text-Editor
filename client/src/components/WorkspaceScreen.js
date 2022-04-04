@@ -41,8 +41,8 @@ function WorkspaceScreen() {
                 }
                 // Case 2: Getting updates
                 else {
-                    console.log(parsedData.data.ops)
-                    let oper = parsedData.data.ops
+                    console.log(parsedData)
+                    let oper = parsedData
                     quill.updateContents(oper);
                 }
             }
