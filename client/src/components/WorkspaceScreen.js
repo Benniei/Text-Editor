@@ -36,12 +36,14 @@ function WorkspaceScreen() {
                 const parsedData = JSON.parse(event.data);
                 // Case 1: First time connecting
                 if (parsedData.content) {
-                    console.log(parsedData.content.ops)
-                    quill.setContents(parsedData.content.ops)
+                    console.log(parsedData)
+                    quill.setContents(parsedData.content)
                 }
                 // Case 2: Getting updates
                 else {
-                    quill.updateContents(parsedData);
+                    console.log(parsedData.data.ops)
+                    let oper = parsedData.data.ops
+                    quill.updateContents(oper);
                 }
             }
 

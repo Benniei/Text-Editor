@@ -25,6 +25,7 @@ function startServer() {
     })
 
     server.listen(8080, ip);
+    console.log("ShareDB Server is running");
 }
 
 function createDoc(callback) {
@@ -34,6 +35,7 @@ function createDoc(callback) {
         if (err) throw err;
         if (doc.type === null) {
             doc.create([], 'rich-text', callback)
+            console.log("Document is created");
             return;
         }
         callback();

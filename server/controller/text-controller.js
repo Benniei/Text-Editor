@@ -2,9 +2,7 @@ var ReconnectingWebSocket = require('reconnecting-websocket');
 var richText = require('rich-text');
 var sharedb = require('sharedb/lib/client');
 const WS = require('ws');
-var renderer  = require('quilljs-renderer');
-var Converter  = renderer.Document;
-renderer.loadFormat('html');
+var QuillDeltaToHtmlConverter = require('quill-delta-to-html').QuillDeltaToHtmlConverter;
 const dotenv = require('dotenv')
 dotenv.config();
 
@@ -19,7 +17,12 @@ var connection = new sharedb.Connection(socket);
 var doc = connection.get('text-editor', 'text1');
 doc.subscribe(function(err) {
     if (err) throw err;
-    doc.on('op', sendOpsToAll);
+    doc.on('op', function(op, id) {
+        console.log("sent from op", op);
+        clients
+            .filter(client => client.id !== id)
+            .forEach(client => client.res.write(`data: ${JSON.stringify(op)}\n\n`))
+    });
 });
 
 connect = async (req, res) => {
@@ -29,18 +32,22 @@ connect = async (req, res) => {
     const head = {
         'Cache-Control': 'no-cache',
         'Connection': 'keep-alive',
-        'Content-Type': 'text/event-stream'
+        'Content-Type': 'text/event-stream',
+        "X-Accel-Buffering": "no"
     };
-    res.writeHead(200, head);
-
+    res.set(head);
     // Return the contents of the operation
-    data = {
-        content: doc.data
-    }
-    res.write(`data: ${JSON.stringify(data)}\n\n`);
+    doc.fetch(function (err){
+        if (err) throw err;
+        data = {
+            content: doc.data.ops
+        }
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+    })
 
     // Create a unique connection
     const id = req.params.id;
+    console.log("Connect: ", id);
     const client = {
         id: id,
         res
@@ -56,30 +63,30 @@ connect = async (req, res) => {
 }
 
 operation = async (req, res) => {
-    const op = req.body.data;
-    doc.submitOp(op, {source: req.params.id});
-    res.end();
-}
-
-function sendOpsToAll(op, id) {
-    clients
-        .filter(client => client.id !== id)
-        .forEach(client => client.res.write(`data: ${JSON.stringify(op)}\n\n`))
+    const op = req.body;
+    
+    if(!op){
+        return res.end();
+    }
+    if(op.length >= 1){
+        op.forEach(operation => doc.submitOp(operation, {source: req.params.id}))
+    }
+    else{
+        doc.submitOp(op, {source: req.params.id});
+    }
+    res.end();    
 }
 
 getdoc = async (req, res) => {
-    if(!doc.data){
-        return res.send("<p></p>")
-    }
-    let convert = new Converter(doc.data)
-    let html = convert.convertTo('html', {
-        line: '<p>{content}</p>',
-        styleTags: {
-            bold: '<strong>{content}</strong>',
-            italic: '<em>{content}</em>'
-        }
+    doc.fetch(function(err) {
+        if (err) throw err;
+        console.log("Getdoc: ", doc.data.ops);
+        var convert = doc.data.ops;
+        var cfg = {};
+        var converted = new QuillDeltaToHtmlConverter(convert, cfg)
+        var html = converted.convert()
+        res.send(html)
     })
-    res.send(html)
 }
 
 alldoc = async (req, res) => {
