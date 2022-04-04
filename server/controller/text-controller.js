@@ -14,15 +14,12 @@ socketIP = '209.151.155.105'
 var socket = new ReconnectingWebSocket('ws://' + socketIP + ':8080', [], { WebSocket: WS });
 var connection = new sharedb.Connection(socket);
 
+var requestBody = null;
+
 var doc = connection.get('text-editor', 'text1');
 doc.subscribe(function(err) {
     if (err) throw err;
-    doc.on('op', function(op, id) {
-        console.log("sent from op", op);
-        clients
-            .filter(client => client.id !== id)
-            .forEach(client => client.res.write(`data: ${JSON.stringify(op)}\n\n`))
-    });
+    doc.on('op', sendOpsToAll);
 });
 
 connect = async (req, res) => {
@@ -37,13 +34,11 @@ connect = async (req, res) => {
     };
     res.set(head);
     // Return the contents of the operation
-    doc.fetch(function (err){
-        if (err) throw err;
-        data = {
-            content: doc.data.ops
-        }
-        res.write(`data: ${JSON.stringify(data)}\n\n`);
-    })
+    data = {
+        content: doc.data.ops
+    }
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+
 
     // Create a unique connection
     const id = req.params.id;
@@ -64,7 +59,8 @@ connect = async (req, res) => {
 
 operation = async (req, res) => {
     const op = req.body;
-    
+    requestBody = req.body
+    console.log("operation", op)
     if(!op){
         return res.end();
     }
@@ -77,16 +73,19 @@ operation = async (req, res) => {
     res.end();    
 }
 
+function sendOpsToAll(op, id) {
+    clients
+        .filter(client => client.id !== id)
+        .forEach(client => client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`))
+}
+
 getdoc = async (req, res) => {
-    doc.fetch(function(err) {
-        if (err) throw err;
-        console.log("Getdoc: ", doc.data.ops);
-        var convert = doc.data.ops;
-        var cfg = {};
-        var converted = new QuillDeltaToHtmlConverter(convert, cfg)
-        var html = converted.convert()
-        res.send(html)
-    })
+    console.log("Getdoc: ", doc.data.ops);
+    var convert = doc.data.ops;
+    var cfg = {};
+    var converted = new QuillDeltaToHtmlConverter(convert, cfg)
+    var html = converted.convert()
+    res.send(html)
 }
 
 alldoc = async (req, res) => {
