@@ -1,8 +1,10 @@
 express = require('express')
 cors = require('cors')
 app = express()
+const dotenv = require('dotenv')
+dotenv.config();
 
-IP = "209.151.155.105"
+IP = process.env.IP
 PORT = 4000
 
 // Middleware

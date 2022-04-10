@@ -12,7 +12,7 @@ var ShareDBServer = new ShareDB();
 createDoc(startServer);
 
 function startServer() {
-    ip = '209.151.155.105'
+    ip = process.env.IP
     var app = express();
     app.use(express.static('static'));
     app.use(express.static('node_modules/quill/dist'));
@@ -25,7 +25,7 @@ function startServer() {
     })
 
     server.listen(8080, ip);
-    console.log("ShareDB Server is running");
+    console.log("ShareDB Server is running on " + ip + " port 8080");
 }
 
 function createDoc(callback) {

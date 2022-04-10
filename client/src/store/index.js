@@ -11,7 +11,8 @@ export const GlobalStoreActionType = {
 
 function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
-        clientID: null
+        clientID: null,
+        ip: "localhost"
     });
 
     const storeReducer = (action) => {
@@ -19,17 +20,20 @@ function GlobalStoreContextProvider(props) {
         switch(type) {
             case GlobalStoreActionType.CONNECT: {
                 return setStore({
-                    clientID: payload
+                    clientID: payload,
+                    ip: store.ip
                 })
             }
             case GlobalStoreActionType.OPERATION: {
                 return setStore({
-                    clientID: store.payload
+                    clientID: store.payload,
+                    ip: store.ip
                 })
             }
             case GlobalStoreActionType.GET_DOC: {
                 return setStore({
-                    clientID: store.payload
+                    clientID: store.payload,
+                    ip: store.ip
                 })
             }
             default:

@@ -1,18 +1,20 @@
 import React from 'react'
-import { useEffect, useState} from 'react'
-import { connect, operations } from '../store'
+import { useEffect, useState, useContext } from 'react'
+import { GlobalStoreContext, connect, operations } from '../store'
 import { useNavigate, useParams } from 'react-router-dom'
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
 
 function WorkspaceScreen() {
-    let ip = '209.151.155.105'
+    const {store} = useContext(GlobalStoreContext);
+
+    let ip = store.ip
     const [listening, setListening] = useState(false);
     // Used to navigate to other links
     const navigate = useNavigate();
     const {id} = useParams();
-
+    console.log(store.ip)
     useEffect(() => {
         function uniqueID() {
             return Math.floor(Math.random() * Date.now())

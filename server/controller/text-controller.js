@@ -4,13 +4,12 @@ var sharedb = require('sharedb/lib/client');
 const WS = require('ws');
 var QuillDeltaToHtmlConverter = require('quill-delta-to-html').QuillDeltaToHtmlConverter;
 const dotenv = require('dotenv')
-dotenv.config();
 
 sharedb.types.register(richText.type);
 
 var clients = [];
-socketIP = '209.151.155.105'
-ip = '209.151.155.105'
+socketIP = process.env.SOCKETIP
+ip = process.env.IP
 // ShareDB Connection
 var socket = new ReconnectingWebSocket('ws://' + socketIP + ':8080', [], { WebSocket: WS });
 var connection = new sharedb.Connection(socket);

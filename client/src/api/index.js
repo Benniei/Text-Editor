@@ -1,6 +1,7 @@
 import axios from 'axios' 
+
 axios.default.withCredentials = true;
-let ip = '209.151.155.105'
+let ip = 'localhost'
 const api = axios.create({
     baseURL: 'http://' + ip + ':4000/'
 })
