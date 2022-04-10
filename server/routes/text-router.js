@@ -1,5 +1,6 @@
 const express = require('express')
 const textController = require('../controller/text-controller')
+const UserController = require('../controller/user-controller')
 const router = express.Router()
 
 // Game
