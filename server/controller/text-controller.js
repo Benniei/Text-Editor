@@ -10,6 +10,7 @@ sharedb.types.register(richText.type);
 
 var clients = [];
 socketIP = '209.151.155.105'
+ip = '209.151.155.105'
 // ShareDB Connection
 var socket = new ReconnectingWebSocket('ws://' + socketIP + ':8080', [], { WebSocket: WS });
 var connection = new sharedb.Connection(socket);
@@ -96,7 +97,7 @@ rawConnect = async(req, res) => {
     // Create a unique connection
     const id = Math.floor(Math.random() * Date.now());
 
-    res.redirect("http://" + '209.151.155.105' + ":3000/client/" + id)
+    res.redirect("http://" + ip + ":3000/client/" + id)
 }
 
 module.exports = {
