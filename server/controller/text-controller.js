@@ -59,7 +59,7 @@ connect = async (req, res) => {
 
 operation = async (req, res) => {
     const op = req.body;
-    requestBody = req.body
+    requestBody = req.body; // used as global variable
     console.log("operation", op)
     if(!op){
         return res.end();

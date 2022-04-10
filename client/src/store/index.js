@@ -55,9 +55,7 @@ async function connect(id) {
 }
 
 async function operations(id,  delta) {
-    await api.operation(id, {
-        data: delta
-    });
+    await api.operation(id, delta.ops);
 }
 
 async function getDoc() {

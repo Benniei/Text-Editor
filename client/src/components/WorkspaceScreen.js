@@ -14,7 +14,6 @@ function WorkspaceScreen() {
     // Used to navigate to other links
     const navigate = useNavigate();
     const {id} = useParams();
-    console.log(store.ip)
     useEffect(() => {
         function uniqueID() {
             return Math.floor(Math.random() * Date.now())
@@ -38,12 +37,10 @@ function WorkspaceScreen() {
                 const parsedData = JSON.parse(event.data);
                 // Case 1: First time connecting
                 if (parsedData.content) {
-                    console.log(parsedData)
                     quill.setContents(parsedData.content)
                 }
                 // Case 2: Getting updates
                 else {
-                    console.log(parsedData)
                     let oper = parsedData
                     quill.updateContents(oper);
                 }
