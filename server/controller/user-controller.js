@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken')
 
 registerUser = async(req, res) => {
     try {
-        const { username, password, email} = req.body;
-        if (!username || !password || !email) {
+        const { name, password, email} = req.body;
+        if (!name || !password || !email) {
             return res
                 .status(200)
                 .json({
@@ -14,8 +14,7 @@ registerUser = async(req, res) => {
                 });
         }
         const existingUser = await User.findOne({ email: email });
-        const existingUser2 = await User.findOne({ username: username });
-        if (existingUser || existingUser2) {
+        if (existingUser) {
             return res
                 .status(200)
                 .json({
@@ -24,17 +23,15 @@ registerUser = async(req, res) => {
                 });
         }
         verified = false
-        userPoint = 0
-        botPoint = 0
-        tied = 0
+        
         const newUser = new User({
-            username, password, email, verified, userPoint, botPoint, tied
+            name, password, email, verified
         });
         const savedUser = await newUser.save();
         await res.status(200).json({
             status: "OK",
             user: {
-                username: savedUser.username,
+                name: savedUser.name,
                 email: savedUser.email,
                 verified: savedUser.verified
             }
@@ -47,8 +44,8 @@ registerUser = async(req, res) => {
 
 loginUser = async(req, res) => {
     try {
-        const {username, password} = req.body
-        if (!username || !password) {
+        const {email, password} = req.body
+        if (!email || !password) {
             return res
                 .status(200)
                 .json({ 
@@ -57,7 +54,7 @@ loginUser = async(req, res) => {
                 });
         }
 
-        let existingUser = await User.findOne({ username });
+        let existingUser = await User.findOne({ email });
         if (!existingUser) {
             return res
                 .status(200)
@@ -90,7 +87,7 @@ loginUser = async(req, res) => {
         return res.status(200).json({
             status: "OK",
             user: {
-                username: existingUser.username,
+                email: existingUser.email,
                 password: existingUser.password
             }
         }).send();

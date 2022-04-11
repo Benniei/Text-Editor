@@ -12,9 +12,8 @@ const App = () => {
     <BrowserRouter>
       <GlobalStoreContextProvider>
         <Routes>
-          <Route exact path="/" element={<WorkspaceScreen />} />
-          <Route path="/client/:id" element={<WorkspaceScreen />} />
-          <Route exact path="/client" element={<WorkspaceScreen />} />
+          <Route exact path="/home" element={<HomeScreen />} />
+          <Route path="/doc/edit/:id" element={<WorkspaceScreen />} />
         </Routes>
       </GlobalStoreContextProvider>
     </BrowserRouter>

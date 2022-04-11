@@ -16,5 +16,12 @@ app.use(cors({ origin:true, credentials:true }));
 const textRouter = require('./routes/text-router')
 app.use('/', textRouter) 
 
+// Init mongoDB Object
+const mongoDB = require('./db/mongoDB.js')
+mongoDB.on('error', console.error.bind(console, 'MongoDB connection error: '))
+
+// Init shareDB Object
+const shareDB = require('./db/mongoDB.js')
+
 // Listen
 app.listen(PORT, IP, () => console.log("Server running on port " + PORT))

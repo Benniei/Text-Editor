@@ -1,19 +1,7 @@
-var ReconnectingWebSocket = require('reconnecting-websocket');
-var richText = require('rich-text');
-var sharedb = require('sharedb/lib/client');
-const WS = require('ws');
 var QuillDeltaToHtmlConverter = require('quill-delta-to-html').QuillDeltaToHtmlConverter;
-const dotenv = require('dotenv')
-
-sharedb.types.register(richText.type);
+var connection = require('../db/shareDB.js')
 
 var clients = [];
-socketIP = process.env.SOCKETIP
-ip = process.env.IP
-// ShareDB Connection
-var socket = new ReconnectingWebSocket('ws://' + socketIP + ':8080', [], { WebSocket: WS });
-var connection = new sharedb.Connection(socket);
-
 var requestBody = null;
 
 var doc = connection.get('text-editor', 'text1');
@@ -88,21 +76,13 @@ getdoc = async (req, res) => {
     res.send(html)
 }
 
-alldoc = async (req, res) => {
+presence = async (req, res) => {
 
-}
-
-rawConnect = async(req, res) => {
-    // Create a unique connection
-    const id = Math.floor(Math.random() * Date.now());
-
-    res.redirect("http://" + ip + ":3000/client/" + id)
 }
 
 module.exports = {
     connect,
-    rawConnect,
     operation,
     getdoc,
-    alldoc
+    presence
 }
