@@ -1,6 +1,7 @@
 var http = require('http');
 var express = require('express');
 var ShareDB = require('sharedb');
+//var MongoDB = require('mongodb');
 var richText = require('rich-text');
 var WebSocket = require('ws');
 var WebSocketJSONStream = require('@teamwork/websocket-json-stream');
@@ -8,7 +9,8 @@ const dotenv = require('dotenv')
 dotenv.config();
 
 ShareDB.types.register(richText.type);
-var ShareDBServer = new ShareDB();
+const db = require('sharedb-mongo')('mongodb://localhost:27017/test', {mongoOptions: {...}});
+var ShareDBServer = new ShareDB({db});
 createDoc(startServer);
 
 function startServer() {
