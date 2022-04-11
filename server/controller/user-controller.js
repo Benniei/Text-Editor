@@ -54,7 +54,7 @@ loginUser = async(req, res) => {
                 });
         }
 
-        let existingUser = await User.findOne({ email });
+        let existingUser = await User.findOne({ email: email });
         if (!existingUser) {
             return res
                 .status(200)
@@ -82,7 +82,9 @@ loginUser = async(req, res) => {
         // username real, password correct
         const token = auth.signToken(existingUser);
          res.cookie("token", token, {
-            httpOnly: false
+            httpOnly: true,
+            secure: true,
+            sameSite: "none"
         })
         return res.status(200).json({
             status: "OK",

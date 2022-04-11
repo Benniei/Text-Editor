@@ -25,14 +25,14 @@ export const getdoc = (id) => api.get('/doc/get/'+id)
 export const getAllDocs = () => api.get('/alldoc')
 
 /* Authentication */
-export const addUser = (payload ) => api.post(`/users/adduser`, payload)
+export const signup = (payload ) => api.post(`/users/signup`, payload, {withCredentials: true})
 .then(response => {
     return response
  })
  .catch(error => {
     return error.response;
  });
-export const loginUser = (payload) => api.post(`/users/login`, payload)
+export const loginUser = (payload) => api.post(`/users/login`, payload, {withCredentials: true})
 .then(response => {
     return response
  })
@@ -61,7 +61,7 @@ const apis = {
     operation,
     getdoc,
     getAllDocs,
-    addUser,
+    signup,
     loginUser,
     logoutUser,
     userLoggedIn

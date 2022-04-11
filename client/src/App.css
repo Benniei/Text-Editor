@@ -33,40 +33,25 @@
 }
 
 #splash-screen {
-  background-image: linear-gradient(to top, #f0fcff, #6a8bd7);
   color: black;
-  font-size: 5.5vw;
-  border-color: black;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 10px;
-  padding-top: 5%;
-  padding-bottom: 5%;
-  height:70%;
+  font-size: 100px;
+  padding-top: 18%;
+  padding-bottom: 3%;
+  height:100%;
   text-align: center;
   vertical-align: center;
 }
 
 .splash-button-outer {
-  background-color: #6B6B76;
   align-items: center;
   height:5%;
-  width:40%;
+  font-size: 16px;
+  width:20%;
   margin: auto;
   margin-bottom: 5px;
   border: 3px solid black;
   padding: 10px;
-}
-
-.splash-button-inner {
-  background-color: #a9a9bc;
-  align-items: center;
-  margin: auto;
-  margin-top: -10px;
-
-  border: 3px solid black;
-  text-align: center;
-  font-size: 2vw;
+  border-radius: 25px;
 }
 
 .splash-button-outer:hover,

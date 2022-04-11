@@ -68,12 +68,8 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.getUser = function() {
-        return auth.user;
-    }
-
     auth.registerUser = async function(userData, store) {
-        const response = await api.registerUser(userData);   
+        const response = await api.signup(userData);  
         if (response.status === 200) {
             authReducer({
                 type: AuthActionType.REGISTER_USER,
@@ -81,7 +77,6 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            //store.loadIdNamePairs(0);
         }
         else if(response.status === 400) {
             auth.setErrorCode(response.data.errorMessage);
@@ -89,7 +84,9 @@ function AuthContextProvider(props) {
     }
 
     auth.loginUser = async function(userData, store) {
+        console.log(userData)
         const response = await api.loginUser(userData);
+        console.log(response) 
         if (response.status === 200) {
             authReducer({
                 type: AuthActionType.REGISTER_USER,
@@ -97,8 +94,8 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            store.loadIdNamePairs(0);
         }
+        // Store.get all list
         else if(response.status === 400) {
             auth.setErrorCode(response.data.errorMessage);
         }

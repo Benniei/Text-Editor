@@ -22,10 +22,8 @@ function RegisterScreen() {
         auth.registerUser({
             email: formData.get('email'),
             password: formData.get('password'),
-            passwordVerify: formData.get('passwordVerify'),
-        }, store);
-
-        
+            name: formData.get('name'),
+        }, store);  
     };
 
     return (
@@ -33,7 +31,7 @@ function RegisterScreen() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: 0,
+                        marginTop: 15,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -44,8 +42,18 @@ function RegisterScreen() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3}}>
                         <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            name="name"
+                                            label="Name"
+                                            type="name"
+                                            id="name"
+                                        />
+                                    </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     required
@@ -64,18 +72,6 @@ function RegisterScreen() {
                                     label="Password"
                                     type="password"
                                     id="password"
-                                    autoComplete="new-password"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    name="passwordVerify"
-                                    label="Password Verify"
-                                    type="password"
-                                    id="passwordVerify"
-                                    autoComplete="new-password"
                                 />
                             </Grid>
                         </Grid>

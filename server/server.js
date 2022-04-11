@@ -10,7 +10,7 @@ PORT = 4000
 // Middleware
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
-app.use(cors({ origin:true, credentials:true }));
+app.use(cors({ origin:["http://" + IP  + ":3000"], credentials:true }));
  
 // Routers
 const textRouter = require('./routes/text-router')
