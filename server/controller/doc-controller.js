@@ -53,7 +53,7 @@ operation = async (req, res) => {
         return res.end();
     }
     if(op.length >= 1){
-        op.forEach(operation => doc.submitOp(operation, {source: req.params.id}))
+        doc.submitOp(op, {source: req.params.id})
     }
     else{
         doc.submitOp(op, {source: req.params.id});

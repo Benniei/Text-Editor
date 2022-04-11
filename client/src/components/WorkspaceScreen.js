@@ -24,7 +24,7 @@ function WorkspaceScreen() {
         if(!id){
             let uniq = uniqueID();
             clientID = uniq;
-            let newurl = "/client/" + uniq.toString();
+            let newurl = "/doc/edit/" + uniq.toString();
             navigate(newurl);
             window.location.reload();
             connect(uniq);
@@ -34,15 +34,16 @@ function WorkspaceScreen() {
             const events = new EventSource('http://' + ip + ':4000/doc/connect/' + clientID)
 
             events.onmessage = (event) => {
-                const parsedData = JSON.parse(event.data);
+                var parsedData = JSON.parse(event.data); 
+
+                console.log(parsedData)
                 // Case 1: First time connecting
                 if (parsedData.content) {
                     quill.setContents(parsedData.content)
                 }
                 // Case 2: Getting updates
                 else {
-                    let oper = parsedData
-                    quill.updateContents(oper);
+                    quill.updateContents(parsedData);
                 }
             }
 
