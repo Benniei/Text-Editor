@@ -7,10 +7,11 @@ const DocController = require('../controller/doc-controller')
 const router = express.Router()
 
 // User Authentication
-router.post('/users/signup', UserController.registerUser)
+router.post('/users/adduser', UserController.registerUser)
 router.post('/users/login', UserController.loginUser)
 router.post('/users/logout', UserController.logoutUser)
 router.post('/users/verify', UserController.verifyUser)
+router.get('/user/loggedIn', UserController.userLoggedIn)
 
 // Collection Creation
 router.post('/collection/create', CollectionController.createCollection)

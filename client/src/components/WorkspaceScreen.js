@@ -31,7 +31,7 @@ function WorkspaceScreen() {
         }
 
         if(!listening) {
-            const events = new EventSource('http://' + ip + ':4000/connect/' + clientID)
+            const events = new EventSource('http://' + ip + ':4000/doc/connect/' + clientID)
 
             events.onmessage = (event) => {
                 const parsedData = JSON.parse(event.data);
