@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom'
 import api from '../api'
 
 const AuthContext = createContext();
@@ -20,8 +21,10 @@ function AuthContextProvider(props) {
     });
 
     useEffect(() => {
-        //auth.userLoggedIn();
+        auth.userLoggedIn();
     }, []);
+
+    const navigate = useNavigate();
 
     const authReducer = (action) => {
         const { type, payload } = action;
@@ -57,7 +60,8 @@ function AuthContextProvider(props) {
 
     auth.userLoggedIn = async function () {
         const response = await api.userLoggedIn();
-        if (response.status === 200) {
+        console.log(response)
+        if (response.data.status !== "ERROR") {
             authReducer({
                 type: AuthActionType.USER_LOGGED_IN,
                 payload: {
@@ -77,6 +81,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
+            navigate('/login');
         }
         else if(response.status === 400) {
             auth.setErrorCode(response.data.errorMessage);
@@ -94,6 +99,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
+            navigate('/')
         }
         // Store.get all list
         else if(response.status === 400) {
@@ -112,10 +118,6 @@ function AuthContextProvider(props) {
                 }
             });
         }
-    }
-
-    auth.verifyUser = async function() {
-        // TODO
     }
 
     auth.setErrorCode = async function(code) {

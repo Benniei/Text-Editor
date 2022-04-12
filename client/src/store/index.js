@@ -4,40 +4,50 @@ import api from '../api'
 export const GlobalStoreContext = createContext({})
 
 export const GlobalStoreActionType = {
-    CONNECT: "CONNECT",
-    OPERATION: "OPERATION",
-    GET_DOC: "GET_DOC"
+    CURRENT_DOC: "CURRENT_DOC",
+    ALL_LIST: "ALL_LIST"
 }
 
 function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         clientID: null,
-        ip: "localhost"
+        ip: "localhost",
+        allDocuments: [],
+        currentDocument: null
     });
 
     const storeReducer = (action) => {
         const {type, payload} = action;
         switch(type) {
-            case GlobalStoreActionType.CONNECT: {
-                return setStore({
-                    clientID: payload,
-                    ip: store.ip
-                })
-            }
-            case GlobalStoreActionType.OPERATION: {
+            case GlobalStoreActionType.CURRENT_DOC: {
                 return setStore({
                     clientID: store.payload,
-                    ip: store.ip
+                    ip: store.ip,
+                    allDocuments: [],
+                    currentDocument: payload
                 })
             }
-            case GlobalStoreActionType.GET_DOC: {
+            case GlobalStoreActionType.ALL_LIST: {
                 return setStore({
                     clientID: store.payload,
-                    ip: store.ip
+                    ip: store.ip,
+                    allDocuments: payload,
+                    currentDocument: null
                 })
             }
             default:
                 return store;
+        }
+    }
+
+    store.loadAllList = async function() {
+        const response = await api.getAllDoc();
+        if(response.data.success) {
+            let allList = response.data.allList;
+            store.reducer({
+                type:GlobalStoreActionType.ALL_LIST,
+                payload: allList
+            })
         }
     }
 

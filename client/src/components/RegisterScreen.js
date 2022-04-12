@@ -23,7 +23,7 @@ function RegisterScreen() {
             email: formData.get('email'),
             password: formData.get('password'),
             name: formData.get('name'),
-        }, store);  
+        }, store);
     };
 
     return (
