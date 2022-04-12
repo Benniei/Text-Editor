@@ -42,7 +42,8 @@ deleteCollection = async (req, res) => {
             db.close();
         });
     });
-    res.status(200);
+    res.status(200).json({  
+    });
 }
 
 listCollection = async (req, res) => {
