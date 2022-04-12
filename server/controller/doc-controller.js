@@ -58,7 +58,7 @@ operation = async (req, res) => {
     else{
         doc.submitOp(op, {source: req.params.id});
     }
-    res.end();    
+    res.end();
 }
 
 function sendOpsToAll(op, id) {

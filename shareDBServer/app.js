@@ -7,10 +7,11 @@ var WebSocket = require('ws');
 var WebSocketJSONStream = require('@teamwork/websocket-json-stream');
 const dotenv = require('dotenv')
 dotenv.config();
-const db = require('sharedb-mongo')('mongodb://localhost:27017/editor_documents');
+const db = require('sharedb-mongo')('mongodb://localhost:27017/editor-text');
 ShareDB.types.register(richText.type);
 
 var ShareDBServer = new ShareDB({db});
+var wss;
 startServer()
 
 function startServer() {
@@ -21,7 +22,7 @@ function startServer() {
     
     var server = http.createServer(app);
 
-    var wss = new WebSocket.Server({ server: server }).on('connection', ws => {
+    wss = new WebSocket.Server({ server: server }).on('connection', ws => {
         const stream = new WebSocketJSONStream(ws);
         ShareDBServer.listen(stream);
     })
@@ -36,8 +37,8 @@ function createDoc(document_name) {
     doc.fetch(err => {
         if (err) throw err;
         if (doc.type === null) {
-            doc.create([], 'rich-text', callback)
-            console.log("Document" + document_name + "is created");
+            doc.create([], 'rich-text')
+            console.log("Document " + document_name + " is created");
             return;
         }
     })
