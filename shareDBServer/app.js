@@ -7,11 +7,11 @@ var WebSocket = require('ws');
 var WebSocketJSONStream = require('@teamwork/websocket-json-stream');
 const dotenv = require('dotenv')
 dotenv.config();
-
+const db = require('sharedb-mongo')('mongodb://localhost:27017/editor_documents');
 ShareDB.types.register(richText.type);
-const db = require('sharedb-mongo')('mongodb://localhost:27017/test');
+
 var ShareDBServer = new ShareDB({db});
-createDoc(startServer);
+startServer()
 
 function startServer() {
     ip = process.env.IP
@@ -30,16 +30,15 @@ function startServer() {
     console.log("ShareDB Server is running on " + ip + " port 8080");
 }
 
-function createDoc(callback) {
+function createDoc(document_name) {
     var connection = ShareDBServer.connect();
     var doc = connection.get('text-editor', 'text1');
     doc.fetch(err => {
         if (err) throw err;
         if (doc.type === null) {
             doc.create([], 'rich-text', callback)
-            console.log("Document is created");
+            console.log("Document" + document_name + "is created");
             return;
         }
-        callback();
     })
 }
