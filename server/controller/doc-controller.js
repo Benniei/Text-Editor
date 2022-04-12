@@ -12,7 +12,7 @@ doc.subscribe(function(err) {
 
 connect = async (req, res) => {
     // If undefined IDs are passed through, skip function.
-    if(req.params.id === 'undefined') return res.status(400);
+    if(req.params.docid === 'undefined') return res.status(400);
     // Create the HTTP Stream
     const head = {
         'Cache-Control': 'no-cache',
@@ -29,7 +29,7 @@ connect = async (req, res) => {
 
 
     // Create a unique connection
-    const id = req.params.id;
+    const id = req.params.docid;
     console.log("Connect: ", id);
     const client = {
         id: id,
@@ -53,10 +53,10 @@ operation = async (req, res) => {
         return res.end();
     }
     if(op.length >= 1){
-        doc.submitOp(op, {source: req.params.id})
+        doc.submitOp(op, {source: req.params.docid})
     }
     else{
-        doc.submitOp(op, {source: req.params.id});
+        doc.submitOp(op, {source: req.params.docid});
     }
     res.end();
 }
@@ -68,7 +68,6 @@ function sendOpsToAll(op, id) {
 }
 
 getdoc = async (req, res) => {
-    console.log("Getdoc: ", doc.data.ops);
     var convert = doc.data.ops;
     var cfg = {};
     var converted = new QuillDeltaToHtmlConverter(convert, cfg)
