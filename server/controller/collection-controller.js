@@ -18,7 +18,7 @@ createCollection = async (req, res) => {
     doc.fetch(err => {
         if (err) throw err;
         if (doc.type === null) {
-            doc.create({name: "hello"})
+            doc.create({name: name})
             console.log("Document " + name + " is created");
             return;
         }
@@ -30,23 +30,38 @@ createCollection = async (req, res) => {
 
 deleteCollection = async (req, res) => {
     const {docid} = req.body
-    var query = {d: 'text1'}
+    var textquery = {_id: docid}
+    var opquery = {d: docid}
     MongoClient.connect(uri, function(err, db) {
         if (err) throw err;
         var dbo = db.db("editor-text");
         textEditor = dbo.collection("text-editor")
         operationsText = dbo.collection("o_text-editor")
-        operationsText.deleteOne(query, function(err, obj) {
+        textEditor.deleteOne(textquery, function(err, obj) {
             if (err) throw err;
-            console.log("1 document deleted");
+        });
+        operationsText.deleteOne(opquery, function(err, obj) {
+            if (err) throw err;
             db.close();
         });
     });
-    res.status(200).json({  
-    });
+    res.status(200).json({});
 }
 
 listCollection = async (req, res) => {
+    finalList = []
+    MongoClient.connect(uri, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("editor-text");
+        textEditor = dbo.collection("text-editor")
+        var sort = textEditor.find().sort({"_m.ctime": -1}).limit(10).toArray(function(err, result) {
+            result.forEach(res => finalList.push({name: res.name, id: res._id}))
+            res.status(200)
+            res.write(`data: ${JSON.stringify(finalList)}\n\n`);
+            db.close();
+            res.end()
+        });
+    });
 }
 
 module.exports = {

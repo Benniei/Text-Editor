@@ -16,17 +16,17 @@ router.get('/user/loggedIn', UserController.userLoggedIn)
 // Collection Creation
 router.post('/collection/create', CollectionController.createCollection)
 router.post('/collection/delete', CollectionController.deleteCollection)
-router.post('/collection/list', CollectionController.listCollection)
+router.get('/collection/list', CollectionController.listCollection)
 
 // Media Controller
 router.post('/media/upload', MediaController.uploadMedia)
-router.post('/media/access/:id', MediaController.accessMedia)
+router.get('/media/access/:id', MediaController.accessMedia)
 
 // Document Editing
 router.get('/doc/connect/:id', DocController.connect)
 router.post('/doc/op/:id', DocController.operation)
 router.get('/doc/get/:id', DocController.getdoc)
-router.get('/doc/presence/:id', DocController.presence)
+router.post('/doc/presence/:id', DocController.presence)
 
 
 
