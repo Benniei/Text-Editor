@@ -1,18 +1,13 @@
 var QuillDeltaToHtmlConverter = require('quill-delta-to-html').QuillDeltaToHtmlConverter;
 var connection = require('../db/shareDB.js')
 
-var clients = [];
+var clients = {};
 var requestBody = null;
-
-var doc = connection.get('text-editor', 'text1');
-doc.subscribe(function(err) {
-    if (err) throw err;
-    doc.on('op', sendOpsToAll);
-});
 
 connect = async (req, res) => {
     // If undefined IDs are passed through, skip function.
-    if(req.params.docid === 'undefined') return res.status(400);
+    if(req.params.uid === 'undefined') return res.status(400);
+    const {docid, uid} = req.params;
     // Create the HTTP Stream
     const head = {
         'Cache-Control': 'no-cache',
@@ -27,37 +22,47 @@ connect = async (req, res) => {
     }
     res.write(`data: ${JSON.stringify(data)}\n\n`);
 
-
-    // Create a unique connection
-    const id = req.params.docid;
-    console.log("Connect: ", id);
     const client = {
-        id: id,
+        uid: uid,
         res
     };
+    // Checking if the connection to document exist
+    if(clients[docid] !== undefined){
+        // Add client to list of clients
+        clients[docid] = clients[docid].filter(client => (client.id !== uid) || (!client.uid))
+        clients.push(client)
+    }
+    // Make new list of clients for the document
+    else{
+        clients[docid] = []
+        clients[docid].push(client)
+    }
 
-    clients = clients.filter(client => (client.id !== id) || (!client.id))
-    clients.push(client)
+    var doc = connection.get('text-editor', docid);
+    doc.subscribe(function(err) {
+        if (err) throw err;
+        doc.on('op', sendOpsToAll);
+    });
 
     // Handle connection closing
     req.on('close', () => {
-        clients = clients.filter(client => client.id !== id);
+        clients[docid] = clients[docid].filter(client => client.uid !== uid);
     })
 }
 
 operation = async (req, res) => {
     const op = req.body;
+    const {docid, uid} = req.params;
     requestBody = req.body; // used as global variable
+
+    var doc = connection.get('text-editor', docid);
     console.log("operation", op)
     if(!op){
         return res.end();
     }
-    if(op.length >= 1){
-        doc.submitOp(op, {source: req.params.docid})
-    }
-    else{
-        doc.submitOp(op, {source: req.params.docid});
-    }
+
+    doc.submitOp(op, {source: docid})
+
     res.end();
 }
 
