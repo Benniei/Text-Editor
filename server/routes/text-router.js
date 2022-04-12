@@ -10,7 +10,7 @@ const router = express.Router()
 router.post('/users/signup', UserController.registerUser)
 router.post('/users/login', UserController.loginUser)
 router.post('/users/logout', UserController.logoutUser)
-router.post('/users/verify', UserController.verifyUser)
+router.get('/users/verify', UserController.verifyUser)
 router.get('/user/loggedIn', UserController.userLoggedIn)
 
 // Collection Creation

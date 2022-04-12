@@ -1,6 +1,13 @@
 const auth = require('../auth')
 const User = require('../models/user-model')
 const jwt = require('jsonwebtoken')
+const url = require('url')
+const dotenv = require('dotenv')
+dotenv.config();
+
+function uniqueID() {
+    return Math.floor(Math.random() * Date.now()).toString(36).slice(2)
+}
 
 registerUser = async(req, res) => {
     try {
@@ -23,11 +30,13 @@ registerUser = async(req, res) => {
                 });
         }
         verified = false
-        
+        verifyKey = uniqueID()
+        var verifyURL = "http://" + process.env.IP + ":4000/users/verify?email=" + email + "&" + "key=" + verifyKey
         const newUser = new User({
-            name, password, email, verified
+            name, password, email, verified, verifyKey
         });
         const savedUser = await newUser.save();
+        console.log(verifyURL)
         await res.status(200).json({
             status: "OK",
             user: {
@@ -89,8 +98,7 @@ loginUser = async(req, res) => {
         return res.status(200).json({
             status: "OK",
             user: {
-                email: existingUser.email,
-                password: existingUser.password
+                email: existingUser.email
             }
         }).send();
 
@@ -114,25 +122,30 @@ logoutUser = async(req, res) => {
 
 verifyUser = async(req, res) => {
     try {
-        const { email, key } = req.body;
-        if (key === "abracadabra") {
-            const existingUser = await User.findOne({ email: email });
-            existingUser.verified = true;
-            existingUser.save().then(() => {
-                return res.status(200).json({
-                    status: "OK",
-                    email: email,
-                    message: 'User updated!'
+        console.log(req.url)
+        const email = url.parse(req.url, true).query.email;
+        const key = url.parse(req.url, true).query.key;
+        console.log(email, key)
+        const existingUser = await User.findOne({ email: email });
+        if(existingUser){
+            console.log(existingUser)
+            if(existingUser.verifyKey === key){
+                existingUser.verified = true;
+                console.log(existingUser)
+                existingUser.save().then(() => {
+                    return res.status(200).json({
+                        status: "OK",
+                        email: email,
+                        message: 'User updated!'
+                    })
                 })
-            })
-            .catch(error => {
-                return res.status(200).json({
-                    error,
-                    message: 'User not updated!'
-                })
-            })
+            }else{
+                res.status(200).json({
+                    status: "ERROR",
+                }).send()
+            }
         }
-        else {
+        else{
             res.status(200).json({
                 status: "ERROR",
             }).send()
@@ -145,16 +158,23 @@ verifyUser = async(req, res) => {
 
 userLoggedIn = async (req, res) => {
     try{
-        auth.verify(req, res, async function () {
-            const loggedInUser = await User.findOne({ _id: req.userId });
+        if(req.userId || req.cookies){
+            auth.verify(req, res, async function () {
+                const loggedInUser = await User.findOne({ _id: req.userId });
+                return res.status(200).json({
+                    loggedIn: true,
+                    user: {
+                        name: loggedInUser.name,
+                        email: loggedInUser.email
+                    }
+                });
+            })
+        }
+        else{
             return res.status(200).json({
-                loggedIn: true,
-                user: {
-                    name: loggedInUser.name,
-                    email: loggedInUser.email
-                }
-            });
-        })
+                status: "ERROR",
+            })
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send();
