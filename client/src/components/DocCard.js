@@ -49,7 +49,7 @@ function DocCard(props) {
             <Box sx={{width: '150%'}}>{docName}</Box>
             <Box sx={{width: '200%'}}>Last modified: {date} ({docTime})</Box>
             <Box sx={{width: '70%'}}><Button
-                    onClick={function(){/* Function to delete collection*/}}>
+                    onClick={function() {store.deleteDocument(docID)}}>
                 Delete
             </Button></Box>
             

@@ -51,8 +51,21 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    store.deleteDocument = async function () {
-
+    store.deleteDocument = async function (docid) {
+        const response = await api.deleteCollection({docid: docid});
+        if(response.status === 200) {
+            console.log(docid)
+            let list = store.allDocuments
+            console.log(list)
+            list = list.filter(function(value, index, arr){
+                return value.id !== docid
+            })
+            console.log(list)
+            storeReducer({
+                type:GlobalStoreActionType.ALL_LIST,
+                payload: list
+            })
+        }
     }
 
     return (
