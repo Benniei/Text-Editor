@@ -17,6 +17,12 @@ connect = async (req, res) => {
     };
     res.set(head);
     // Return the contents of the operation
+    var doc = connection.get('text-editor', docid);
+    doc.subscribe(function(err) {
+        if (err) throw err;
+        doc.on('op', sendOpsToAll);
+    });
+    
     data = {
         content: doc.data.ops
     }
@@ -38,11 +44,7 @@ connect = async (req, res) => {
         clients[docid].push(client)
     }
 
-    var doc = connection.get('text-editor', docid);
-    doc.subscribe(function(err) {
-        if (err) throw err;
-        doc.on('op', sendOpsToAll);
-    });
+    
 
     // Handle connection closing
     req.on('close', () => {

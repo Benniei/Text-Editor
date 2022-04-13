@@ -3,11 +3,21 @@ const User = require('../models/user-model')
 const jwt = require('jsonwebtoken')
 const url = require('url')
 const dotenv = require('dotenv')
+// const nodemailer = require('nodemailer')
 dotenv.config();
 
 function uniqueID() {
     return Math.floor(Math.random() * Date.now()).toString(36).slice(2)
 }
+
+// var transport = nodemailer.createTransport({
+//     host: "smtp.mailtrap.io",
+//     port: 2525,
+//     auth: {
+//       user: "d34ee7fb72463e",
+//       pass: "2c9ba98f07b09d"
+//     }
+//   });
 
 registerUser = async(req, res) => {
     try {
@@ -37,6 +47,21 @@ registerUser = async(req, res) => {
         });
         const savedUser = await newUser.save();
         console.log(verifyURL)
+        const buildHTML = "<a href=" + verifyURL + ">" + verifyURL + "</a> "
+        // Send Email
+        // const message = {
+        //     from: 'CSE356@cs.com', // Sender address
+        //     to: 'bennie.chen@stonybrook.edu',         // List of recipients
+        //     subject: 'Verification key', // Subject line
+        //     html: buildHTML// Plain text body
+        // };
+        // transport.sendMail(message, function(err, info) {
+        //     if (err) {
+        //       console.log(err)
+        //     } else {
+        //       console.log(info);
+        //     }
+        // });
         await res.status(200).json({
             status: "OK",
             user: {
