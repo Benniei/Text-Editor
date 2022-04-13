@@ -14,7 +14,7 @@ export const connect = (id) => api.get('/doc/connect/'+id)
  .catch(error => {
     return error.response;
  });
-export const operation = (id, payload) => api.post('/doc/op/'+id, payload)
+export const operation = (docid, uid, payload) => api.post('/doc/op/'+ docid + '/' + uid, payload)
 .then(response => {
     return response
  })

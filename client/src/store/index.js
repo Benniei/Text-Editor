@@ -1,4 +1,5 @@
 import { createContext, useState} from 'react';
+import { useNavigate } from 'react-router-dom'
 import api from '../api'
 
 export const GlobalStoreContext = createContext({})
@@ -10,26 +11,25 @@ export const GlobalStoreActionType = {
 
 function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
-        clientID: null,
         ip: "localhost",
         allDocuments: [],
         currentDocument: null
     });
+
+    const navigate = useNavigate();
 
     const storeReducer = (action) => {
         const {type, payload} = action;
         switch(type) {
             case GlobalStoreActionType.CURRENT_DOC: {
                 return setStore({
-                    clientID: store.payload,
                     ip: store.ip,
-                    allDocuments: [],
+                    allDocuments: store.allDocuments,
                     currentDocument: payload
                 })
             }
             case GlobalStoreActionType.ALL_LIST: {
                 return setStore({
-                    clientID: store.payload,
                     ip: store.ip,
                     allDocuments: payload,
                     currentDocument: null
@@ -44,11 +44,13 @@ function GlobalStoreContextProvider(props) {
         const response = await api.listCollection();
         if(response.status === 200) {
             let allList = JSON.parse(response.data.substring(5));
+            navigate("/home", {replace: true})
             storeReducer({
                 type:GlobalStoreActionType.ALL_LIST,
                 payload: allList
             })
         }
+        
     }
 
     store.createDocument = async function (name) {
@@ -77,14 +79,16 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    function uniqueID() {
-        return Math.floor(Math.random() * Date.now())
-    }
-
     store.setCurrentDocument = async function (docid) {
         // Create UID
-        let uid = uniqueID();
-        // Send to backend
+        let currDoc = store.allDocuments.find(x => x.docid === docid)
+        console.log(currDoc)
+        // Set to Workspace Screen
+        storeReducer({
+            type: GlobalStoreActionType.CURRENT_DOC,
+            payload: currDoc
+        })
+        navigate("/doc/edit/" + docid, {replace: true})
     }
 
     return (
@@ -96,11 +100,17 @@ function GlobalStoreContextProvider(props) {
     );
 }
 
-async function operations(id,  delta) {
-    await api.operation(id, delta.ops);
+async function connect(docid, uid) {
+    console.log(docid, uid)
+    await api.connect(docid, uid);
+}
+
+async function operations(docid, uid, delta) {
+    await api.operation(docid, uid, delta.ops);
 }
 
 export {
+    connect,
     operations
 }
 

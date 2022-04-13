@@ -5,8 +5,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button'
 import ListItem from '@mui/material/ListItem';
 
-import { Typography } from '@mui/material';
-
 
 /*
     
@@ -56,7 +54,9 @@ function DocCard(props) {
             <Box sx={{width: '150%'}}>Name: {docName} (ID: {docid})</Box>
             <Box sx={{width: '200%'}}>Last modified: {date}</Box>
             <Box sx={{width: '70%'}}><Button
-                    onClick={function() {store.deleteDocument(docid)}}>
+                    onClick={function(event) {
+                        event.stopPropagation();
+                        store.deleteDocument(docid)}}>
                 Delete
             </Button></Box>
             

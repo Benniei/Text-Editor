@@ -1,7 +1,8 @@
 import React from 'react'
 import { useEffect, useState, useContext } from 'react'
-import { GlobalStoreContext, operations } from '../store'
-import { useNavigate, useParams } from 'react-router-dom'
+import { GlobalStoreContext, connect, operations } from '../store'
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
@@ -10,15 +11,24 @@ function WorkspaceScreen() {
     const {store} = useContext(GlobalStoreContext);
 
     let ip = store.ip
+    
     const [listening, setListening] = useState(false);
-    // Used to navigate to other links
-    const navigate = useNavigate();
-    const {uid} = useParams();
+    
+    var uid;
     useEffect(() => {
-        
+        var docid = store.currentDocument.docid
+
+        function uniqueID() {
+            return Math.floor(Math.random() * Date.now())
+        }
+        if(!uid){
+            uid = uniqueID();
+            connect(docid, uid)
+        }
+
 
         // if(!listening) {
-        //     const events = new EventSource('http://' + ip + ':4000/doc/connect/' + clientID)
+        //     const events = new EventSource('http://' + ip + ':4000/doc/connect/' + docid + '/' + uid)
 
         //     events.onmessage = (event) => {
         //         var parsedData = JSON.parse(event.data); 
@@ -48,16 +58,25 @@ function WorkspaceScreen() {
 
         quill.on('text-change', function (delta, oldDelta, source) {
             if (source !== 'user') return;
-            operations(uid, delta);
+            operations(docid, uid, delta);
         });
 
-    }, [navigate])
-    
+    }, [])
    
 
     return (
-        <div style={{ margin: '5%', border: '1px solid' }}>
-            <div id='editor'></div>
+        <div>
+            <Stack direction="row" mb={-10} mt={5} ml={9}>
+                <h1 style={{ marginleft: '5%'}}>{store.currentDocument.name} ({store.currentDocument.docid})</h1>
+                <Button id="create-doc-button"
+                            onClick={function(){store.loadAllList()}}>
+                        Back
+                    </Button>
+            </Stack>
+            
+            <div style={{ margin: '5%', border: '1px solid' }}>
+                <div id='editor'></div>
+            </div>
         </div>
     );
 }

@@ -15,12 +15,15 @@ function HomeScreen() {
     const [text, setText] = useState("");
 
     useEffect(() => {
+        if(!auth) {
+            auth.userLoggedIn()
+        }
+        console.log(auth)
         store.loadAllList();
     }, []);
 
     let name = auth.userLoggedIn().loggedIn ? auth.user.name : "owo" // For testing purposes
     let docCards = "";
-    console.log(store.allDocuments);
     if (store) {
         docCards = 
             <Box sx={{}}> 

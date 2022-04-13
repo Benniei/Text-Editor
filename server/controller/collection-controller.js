@@ -68,7 +68,7 @@ listCollection = async (req, res) => {
             'docid': { $in: idList}
         }, function(err, docs){
             for (var i=0; i < docs.length; i++){
-                finalList.push({name: docs[i].name, docid: result[i]._id, time: result[i]._m.ctime})
+                finalList.push({name: docs[i].name, docid: result[i]._id, time: result[i]._m.mtime})
             }
             res.status(200);
             res.write(`data: ${JSON.stringify(finalList)}\n\n`);
