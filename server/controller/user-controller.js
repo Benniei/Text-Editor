@@ -47,8 +47,8 @@ registerUser = async(req, res) => {
         });
         const savedUser = await newUser.save();
         console.log(verifyURL)
-        const buildHTML = "<a href=" + verifyURL + ">" + verifyURL + "</a> "
         // Send Email
+        // const buildHTML = "<a href=" + verifyURL + ">" + verifyURL + "</a> "
         // const message = {
         //     from: 'CSE356@cs.com', // Sender address
         //     to: 'bennie.chen@stonybrook.edu',         // List of recipients

@@ -2,6 +2,11 @@ var connection = require('../db/shareDB.js')
 var MongoClient = require('mongodb').MongoClient;
 
 const uri = "mongodb://127.0.0.1:27017/";
+var myDb;
+MongoClient.connect(uri, function(err, database) {
+    if(err) throw err;
+    myDb = database;
+})
 
 const id = function() {
     return Math.random()
@@ -32,19 +37,13 @@ deleteCollection = async (req, res) => {
     const {docid} = req.body
     var textquery = {_id: docid}
     var opquery = {d: docid}
-    MongoClient.connect(uri, function(err, db) {
+    myDb.db("editor-text").collection("text-editor").deleteOne(textquery, function(err, obj) {
         if (err) throw err;
-        var dbo = db.db("editor-text");
-        textEditor = dbo.collection("text-editor")
-        operationsText = dbo.collection("o_text-editor")
-        textEditor.deleteOne(textquery, function(err, obj) {
-            if (err) throw err;
-        });
-        operationsText.deleteOne(opquery, function(err, obj) {
-            if (err) throw err;
-            db.close();
-        });
     });
+    myDb.db("editor-text").collection("o_text-editor").deleteOne(opquery, function(err, obj) {
+        if (err) throw err;
+    });
+    console.log("Delete: " + docid)
     res.status(200).json({});
 }
 
