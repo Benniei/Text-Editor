@@ -1,5 +1,6 @@
 var connection = require('../db/shareDB.js')
 var MongoClient = require('mongodb').MongoClient;
+const Text = require('../models/text-model')
 
 const uri = "mongodb://127.0.0.1:27017/";
 var myDb;
@@ -21,11 +22,15 @@ createCollection = async (req, res) => {
     doc.fetch(err => {
         if (err) throw err;
         if (doc.type === null) {
-            doc.create({name: name})
-            console.log("Document " + name + " is created");
+            doc.create({name: name}, 'rich-text')
+            new Text({
+                name: name,
+                id: newID
+            }).save()
             return;
         }
     })
+    
     res.status(200).json({
         status: "OK",
         docid: doc.id,
@@ -37,6 +42,9 @@ deleteCollection = async (req, res) => {
     const {docid} = req.body
     var textquery = {_id: docid}
     var opquery = {d: docid}
+    Text.findOneAndDelete({ id: docid }, () => {
+        
+    })
     myDb.db("editor-text").collection("text-editor").deleteOne(textquery, function(err, obj) {
         if (err) throw err;
     });
@@ -51,15 +59,19 @@ deleteCollection = async (req, res) => {
 
 listCollection = async (req, res) => {
     finalList = []
-    MongoClient.connect(uri, function(err, db) {
-        if (err) throw err;
-        var dbo = db.db("editor-text");
-        textEditor = dbo.collection("text-editor")
-        var sort = textEditor.find().sort({"_m.ctime": -1}).limit(10).toArray(function(err, result) {
-            result.forEach(res => finalList.push({name: res.name, docid: res._id, time: res._m.ctime}))
-            res.status(200)
+    idList = []
+    textEditor = myDb.db("editor-text").collection("text-editor")
+
+    var sort = textEditor.find().sort({"_m.ctime": -1}).limit(10).toArray(function(err, result) {
+        result.forEach(key => idList.push(key.docid))
+        Text.find({
+            'docid': { $in: idList}
+        }, function(err, docs){
+            for (var i=0; i < docs.length; i++){
+                finalList.push({name: docs[i].name, docid: result[i]._id, time: result[i]._m.ctime})
+            }
+            res.status(200);
             res.write(`data: ${JSON.stringify(finalList)}\n\n`);
-            db.close();
             res.end()
         });
     });

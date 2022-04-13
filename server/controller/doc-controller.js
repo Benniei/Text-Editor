@@ -8,6 +8,7 @@ connect = async (req, res) => {
     // If undefined IDs are passed through, skip function.
     if(req.params.uid === 'undefined') return res.status(400);
     const {docid, uid} = req.params;
+    console.log(docid, uid)
     // Create the HTTP Stream
     const head = {
         'Cache-Control': 'no-cache',
@@ -22,11 +23,15 @@ connect = async (req, res) => {
         if (err) throw err;
         doc.on('op', sendOpsToAll);
     });
+    await doc.fetch(err => {
+        if (err) throw err;
+        data = {
+            content: doc.data.ops
+        }
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+        return;
+    })
     
-    data = {
-        content: doc.data.ops
-    }
-    res.write(`data: ${JSON.stringify(data)}\n\n`);
 
     const client = {
         uid: uid,
@@ -54,6 +59,7 @@ connect = async (req, res) => {
 operation = async (req, res) => {
     const op = req.body;
     const {docid, uid} = req.params;
+    console.log(docid, uid)
     requestBody = req.body; // used as global variable
 
     var doc = connection.get('text-editor', docid);
