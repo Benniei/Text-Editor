@@ -27,7 +27,9 @@ createCollection = async (req, res) => {
         }
     })
     res.status(200).json({
-        docid: doc.id
+        status: "OK",
+        docid: doc.id,
+        name: name
     })
 }
 
@@ -42,7 +44,9 @@ deleteCollection = async (req, res) => {
         if (err) throw err;
     });
     console.log("Delete: " + docid)
-    res.status(200).json({});
+    res.status(200).json({
+        status: "OK"
+    });
 }
 
 listCollection = async (req, res) => {
@@ -52,7 +56,7 @@ listCollection = async (req, res) => {
         var dbo = db.db("editor-text");
         textEditor = dbo.collection("text-editor")
         var sort = textEditor.find().sort({"_m.ctime": -1}).limit(10).toArray(function(err, result) {
-            result.forEach(res => finalList.push({name: res.name, id: res._id, time: res._m.ctime}))
+            result.forEach(res => finalList.push({name: res.name, docid: res._id, time: res._m.ctime}))
             res.status(200)
             res.write(`data: ${JSON.stringify(finalList)}\n\n`);
             db.close();

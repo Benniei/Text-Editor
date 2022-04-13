@@ -27,8 +27,8 @@ function HomeScreen() {
             {
                 store.allDocuments.map((doc) => (
                    <DocCard 
-                        key={doc.id}
-                        docID={doc.id}
+                        key={doc.docid}
+                        docid={doc.docid}
                         docName={doc.name}
                         docTime={doc.time} 
                     />  
@@ -59,7 +59,7 @@ function HomeScreen() {
                 <TextField id="doc-name-textfield"
                            onChange={function(e) {setText(e.target.value)}}></TextField>
                 <Button id="create-doc-button"
-                        onClick={function(){createCollection({name: text})}}>
+                        onClick={function(){store.createDocument(text)}}>
                     Create Document
                 </Button>
             </Box>

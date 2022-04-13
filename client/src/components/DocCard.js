@@ -14,42 +14,49 @@ import { Typography } from '@mui/material';
 function DocCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
-    const { docID, docName, docTime } = props;
+    const { docid, docName, docTime } = props;
 
     /** BOX 1: NAME
      *  BOX 2: LIKE, DISLIKE (only shows if logged in), DELETE (only shows if logged in user owns list)
      */
-     let d = new Date(docTime);
-     const months = [
-         'Jan',
-         'Feb',
-         'Mar',
-         'Apr',
-         'May',
-         'June',
-         'July',
-         'Aug',
-         'Sep',
-         'Oct',
-         'Nov',
-         'Dec'
-       ]
-     let date = months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
-
+    let d = new Date(docTime);
+    const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'June',
+    'July',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+    ]
+    let date = months[d.getMonth()] + " " + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+    
+    const classlist = "list-item " + docid;
     let cardElement =
         <ListItem
-            id={docID}
+            id={docid}
             shape={{borderRadius: 8}}
             style={{
                 width: '100%',
                 borderCollapse: 'separate',
                 border: '1px solid black'
-            }} 
+            }}
+            className={classlist}
+            onClick={function(event) {
+                if(!event.target.disabled) {
+                    store.setCurrentDocument(docid)
+                }
+            }}
         >
-            <Box sx={{width: '150%'}}>{docName}</Box>
-            <Box sx={{width: '200%'}}>Last modified: {date} ({docTime})</Box>
+            <Box sx={{width: '150%'}}>Name: {docName} (ID: {docid})</Box>
+            <Box sx={{width: '200%'}}>Last modified: {date}</Box>
             <Box sx={{width: '70%'}}><Button
-                    onClick={function() {store.deleteDocument(docID)}}>
+                    onClick={function() {store.deleteDocument(docid)}}>
                 Delete
             </Button></Box>
             

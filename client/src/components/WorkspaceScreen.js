@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState, useContext } from 'react'
-import { GlobalStoreContext, connect, operations } from '../store'
+import { GlobalStoreContext, operations } from '../store'
 import { useNavigate, useParams } from 'react-router-dom'
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
@@ -13,42 +13,29 @@ function WorkspaceScreen() {
     const [listening, setListening] = useState(false);
     // Used to navigate to other links
     const navigate = useNavigate();
-    const {id} = useParams();
+    const {uid} = useParams();
     useEffect(() => {
-        function uniqueID() {
-            return Math.floor(Math.random() * Date.now())
-        }
+        
 
-        let clientID = id;
-        // Route to unique client ID
-        if(!id){
-            let uniq = uniqueID();
-            clientID = uniq;
-            let newurl = "/doc/edit/" + uniq.toString();
-            navigate(newurl);
-            window.location.reload();
-            connect(uniq);
-        }
+        // if(!listening) {
+        //     const events = new EventSource('http://' + ip + ':4000/doc/connect/' + clientID)
 
-        if(!listening) {
-            const events = new EventSource('http://' + ip + ':4000/doc/connect/' + clientID)
+        //     events.onmessage = (event) => {
+        //         var parsedData = JSON.parse(event.data); 
 
-            events.onmessage = (event) => {
-                var parsedData = JSON.parse(event.data); 
+        //         console.log(parsedData)
+        //         // Case 1: First time connecting
+        //         if (parsedData.content) {
+        //             quill.setContents(parsedData.content)
+        //         }
+        //         // Case 2: Getting updates
+        //         else {
+        //             quill.updateContents(parsedData);
+        //         }
+        //     }
 
-                console.log(parsedData)
-                // Case 1: First time connecting
-                if (parsedData.content) {
-                    quill.setContents(parsedData.content)
-                }
-                // Case 2: Getting updates
-                else {
-                    quill.updateContents(parsedData);
-                }
-            }
-
-            setListening(true);
-        }
+        //     setListening(true);
+        // }
 
         const toolbarOptions = ['bold', 'italic', 'image'];
         const options = {
@@ -61,10 +48,10 @@ function WorkspaceScreen() {
 
         quill.on('text-change', function (delta, oldDelta, source) {
             if (source !== 'user') return;
-            operations(id, delta);
+            operations(uid, delta);
         });
 
-    }, [id, navigate])
+    }, [navigate])
     
    
 

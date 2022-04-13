@@ -51,21 +51,40 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    store.deleteDocument = async function (docid) {
-        const response = await api.deleteCollection({docid: docid});
+    store.createDocument = async function (name) {
+        const response = await api.createCollection({name: name});
         if(response.status === 200) {
-            console.log(docid)
             let list = store.allDocuments
-            console.log(list)
-            list = list.filter(function(value, index, arr){
-                return value.id !== docid
-            })
-            console.log(list)
+            list.unshift(response.data)
             storeReducer({
                 type:GlobalStoreActionType.ALL_LIST,
                 payload: list
             })
         }
+    }
+
+    store.deleteDocument = async function (docid) {
+        const response = await api.deleteCollection({docid: docid});
+        if(response.status === 200) {
+            let list = store.allDocuments
+            list = list.filter(function(value, index, arr){
+                return value.docid !== docid
+            })
+            storeReducer({
+                type:GlobalStoreActionType.ALL_LIST,
+                payload: list
+            })
+        }
+    }
+
+    function uniqueID() {
+        return Math.floor(Math.random() * Date.now())
+    }
+
+    store.setCurrentDocument = async function (docid) {
+        // Create UID
+        let uid = uniqueID();
+        // Send to backend
     }
 
     return (
@@ -77,32 +96,12 @@ function GlobalStoreContextProvider(props) {
     );
 }
 
-async function connect(id) {
-    await api.connect(id);
-}
-
 async function operations(id,  delta) {
     await api.operation(id, delta.ops);
 }
 
-async function createCollection(name) {
-    await api.createCollection(name);
-}
-
-async function getDoc() {
-
-}
-
-async function getAllDoc() {
-
-}
-
 export {
-    connect,
-    operations,
-    createCollection,
-    getDoc,
-    getAllDoc
+    operations
 }
 
 export default GlobalStoreContext;

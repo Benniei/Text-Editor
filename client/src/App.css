@@ -59,6 +59,10 @@
   cursor: pointer;
 }
 
+.list-item:hover {
+  background-color:rgb(215, 246, 236);
+}
+
 .splash-link,
 .splash-link:visited {
   text-decoration: none;
