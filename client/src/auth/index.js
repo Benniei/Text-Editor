@@ -60,7 +60,6 @@ function AuthContextProvider(props) {
 
     auth.userLoggedIn = async function () {
         const response = await api.userLoggedIn();
-        console.log(response)
         if (response.data.status !== "ERROR") {
             authReducer({
                 type: AuthActionType.USER_LOGGED_IN,
@@ -89,17 +88,15 @@ function AuthContextProvider(props) {
     }
 
     auth.loginUser = async function(userData, store) {
-        console.log(userData)
         const response = await api.loginUser(userData);
-        console.log(response) 
-        if (response.status === 200) {
+        if (response.data.status !== "ERROR") {
             authReducer({
                 type: AuthActionType.REGISTER_USER,
                 payload: {
                     user: response.data.user
                 }
             })
-            navigate('/')
+            navigate('/home')
         }
         // Store.get all list
         else if(response.status === 400) {
@@ -110,6 +107,7 @@ function AuthContextProvider(props) {
     auth.logoutUser = async function() {
         const response = await api.logoutUser();
         if (response.status === 200) {
+            console.log(response)
             authReducer({
                 type: AuthActionType.SET_LOGGED_OUT,
                 payload: {
@@ -117,6 +115,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             });
+            navigate('/')
         }
     }
 

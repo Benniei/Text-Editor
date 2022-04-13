@@ -115,12 +115,11 @@ loginUser = async(req, res) => {
         }
         // username real, password correct
         const token = auth.signToken(existingUser);
-         res.cookie("token", token, {
+        return res.cookie("token", token, {
             httpOnly: true,
             secure: true,
             sameSite: "none"
-        })
-        return res.status(200).json({
+        }).status(200).json({
             status: "OK",
             user: {
                 email: existingUser.email
@@ -135,10 +134,7 @@ loginUser = async(req, res) => {
 
 logoutUser = async(req, res) => {
     try {
-        if(req.cookies.token)
-            return res.clearCookie('token').status(200).json({status: "OK"}).send();
-        else
-            return res.status(200).json({status: "OK"}).send();
+        return res.clearCookie('token').status(200).json({status: "OK"}).send();
     }catch(err){
         console.error(err);
         res.status(500).send();
