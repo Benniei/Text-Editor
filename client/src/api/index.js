@@ -7,7 +7,7 @@ const api = axios.create({
 })
 
 /* Text Editing */
-export const connect = (id) => api.get('/doc/connect/'+id)
+export const connect = (docid, uid) => api.get('/doc/connect/'+ docid + '/' + uid)
 .then(response => {
     return response
  })

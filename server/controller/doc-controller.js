@@ -3,12 +3,11 @@ var connection = require('../db/shareDB.js')
 
 var clients = {};
 var requestBody = null;
-
+var flag = false;
 connect = async (req, res) => {
     // If undefined IDs are passed through, skip function.
     if(req.params.uid === 'undefined') return res.status(400);
     const {docid, uid} = req.params;
-    console.log(docid, uid)
     // Create the HTTP Stream
     const head = {
         'Cache-Control': 'no-cache',
@@ -17,7 +16,7 @@ connect = async (req, res) => {
         "X-Accel-Buffering": "no"
     };
     res.set(head);
-    // Return the contents of the operation
+    console.log(docid, uid);
     var doc = connection.get('text-editor', docid);
     doc.subscribe(function(err) {
         if (err) throw err;
@@ -25,13 +24,13 @@ connect = async (req, res) => {
     });
     await doc.fetch(err => {
         if (err) throw err;
+        
         data = {
             content: doc.data.ops
         }
         res.write(`data: ${JSON.stringify(data)}\n\n`);
         return;
     })
-    
 
     const client = {
         uid: uid,
@@ -49,7 +48,7 @@ connect = async (req, res) => {
         clients[docid] = {}
         clients[docid][uid] = client
     }
-
+    
     // Handle connection closing
     req.on('close', () => {
         delete clients[docid][uid]
@@ -59,9 +58,8 @@ connect = async (req, res) => {
 operation = async (req, res) => {
     const op = req.body;
     const {docid, uid} = req.params;
-    console.log(docid, uid)
     requestBody = req.body; // used as global variable
-
+    flag = true
     var doc = connection.get('text-editor', docid);
     console.log("operation", op)
     if(!op){
@@ -69,21 +67,23 @@ operation = async (req, res) => {
     }
     const ids = [docid, uid]
     doc.submitOp(op, {source: ids})
-
     res.end();
 }
 
-function sendOpsToAll(op, id) {
+function sendOpsToAll(op, ids) {
     // clients
     //     .filter(client => client.id !== id)
     //     .forEach(client => client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`))
-    let conns = clients[id[0]] // gets the map for all clients with document ID
-    for (const key in conns) {
-        if(conns === id[1])
-            continue
-        client = conns[key]
-        client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
+    if(flag === true){
+        let conns = clients[ids[0]] // gets the map for all clients with document ID
+        for (const key in conns) {
+            if(key === ids[1])
+                continue
+            client = conns[key]
+            client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
+        }
     }
+    flag = false
 }
 
 getdoc = async (req, res) => {

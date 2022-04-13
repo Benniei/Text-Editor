@@ -79,16 +79,21 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    function uniqueID() {
+        return Math.floor(Math.random() * Date.now())
+    }
+
     store.setCurrentDocument = async function (docid) {
         // Create UID
         let currDoc = store.allDocuments.find(x => x.docid === docid)
-        console.log(currDoc)
+        currDoc["uid"] = uniqueID()
         // Set to Workspace Screen
+        navigate("/doc/edit/" + docid, {replace: true})
         storeReducer({
             type: GlobalStoreActionType.CURRENT_DOC,
             payload: currDoc
         })
-        navigate("/doc/edit/" + docid, {replace: true})
+        
     }
 
     return (

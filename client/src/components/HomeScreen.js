@@ -62,7 +62,9 @@ function HomeScreen() {
                 <TextField id="doc-name-textfield"
                            onChange={function(e) {setText(e.target.value)}}></TextField>
                 <Button id="create-doc-button"
-                        onClick={function(){store.createDocument(text)}}>
+                        onClick={function(){
+                            if(text !== "")
+                                store.createDocument(text)}}>
                     Create Document
                 </Button>
             </Box>

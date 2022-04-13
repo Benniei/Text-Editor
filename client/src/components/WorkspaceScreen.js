@@ -13,39 +13,32 @@ function WorkspaceScreen() {
     let ip = store.ip
     
     const [listening, setListening] = useState(false);
-    
-    var uid;
+
+    var docid = store.currentDocument.docid
+    var uid = store.currentDocument.uid
+    connect(docid, uid)
+
     useEffect(() => {
-        var docid = store.currentDocument.docid
+        if(!listening) {
+            
+            const events = new EventSource('http://' + ip + ':4000/doc/connect/' + docid + '/' + uid)
 
-        function uniqueID() {
-            return Math.floor(Math.random() * Date.now())
+            events.onmessage = (event) => {
+                var parsedData = JSON.parse(event.data); 
+
+                console.log(parsedData)
+                // Case 1: First time connecting
+                if (parsedData.content) {
+                    quill.setContents(parsedData.content)
+                }
+                // Case 2: Getting updates
+                else {
+                    quill.updateContents(parsedData);
+                }
+            }
+
+            setListening(true);
         }
-        if(!uid){
-            uid = uniqueID();
-            connect(docid, uid)
-        }
-
-
-        // if(!listening) {
-        //     const events = new EventSource('http://' + ip + ':4000/doc/connect/' + docid + '/' + uid)
-
-        //     events.onmessage = (event) => {
-        //         var parsedData = JSON.parse(event.data); 
-
-        //         console.log(parsedData)
-        //         // Case 1: First time connecting
-        //         if (parsedData.content) {
-        //             quill.setContents(parsedData.content)
-        //         }
-        //         // Case 2: Getting updates
-        //         else {
-        //             quill.updateContents(parsedData);
-        //         }
-        //     }
-
-        //     setListening(true);
-        // }
 
         const toolbarOptions = ['bold', 'italic', 'image'];
         const options = {
@@ -67,7 +60,7 @@ function WorkspaceScreen() {
     return (
         <div>
             <Stack direction="row" mb={-10} mt={5} ml={9}>
-                <h1 style={{ marginleft: '5%'}}>{store.currentDocument.name} ({store.currentDocument.docid})</h1>
+                <h1 style={{ marginleft: '5%'}}>{store.currentDocument.name} ({store.currentDocument.docid}) ({uid})</h1>
                 <Button id="create-doc-button"
                             onClick={function(){store.loadAllList()}}>
                         Back

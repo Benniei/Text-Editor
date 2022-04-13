@@ -80,7 +80,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            navigate('/login');
+            navigate('/login',  {replace: true});
         }
         else if(response.status === 400) {
             auth.setErrorCode(response.data.errorMessage);
@@ -96,7 +96,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            navigate('/home')
+            navigate('/home',  {replace: true})
         }
         // Store.get all list
         else if(response.status === 400) {
@@ -115,7 +115,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             });
-            navigate('/')
+            navigate('/',  {replace: true})
         }
     }
 
