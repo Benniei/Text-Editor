@@ -30,25 +30,24 @@ connect = async (req, res) => {
 
     const client = {
         uid: uid,
+        doc: doc,
+        docid: docid,
         res
     };
     // Checking if the connection to document exist
     if(clients[docid] !== undefined){
         // Add client to list of clients
-        clients[docid] = clients[docid].filter(client => (client.id !== uid) || (!client.uid))
-        clients.push(client)
+        clients[docid][uid] = client
     }
     // Make new list of clients for the document
     else{
-        clients[docid] = []
-        clients[docid].push(client)
+        clients[docid] = {}
+        clients[docid][uid] = client
     }
-
-    
 
     // Handle connection closing
     req.on('close', () => {
-        clients[docid] = clients[docid].filter(client => client.uid !== uid);
+        delete clients[docid][uid]
     })
 }
 
@@ -62,19 +61,27 @@ operation = async (req, res) => {
     if(!op){
         return res.end();
     }
-
-    doc.submitOp(op, {source: docid})
+    const ids = [docid, uid]
+    doc.submitOp(op, {source: ids})
 
     res.end();
 }
 
 function sendOpsToAll(op, id) {
-    clients
-        .filter(client => client.id !== id)
-        .forEach(client => client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`))
+    // clients
+    //     .filter(client => client.id !== id)
+    //     .forEach(client => client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`))
+    let conns = clients[id[0]] // gets the map for all clients with document ID
+    for (const key in conns) {
+        if(conns === id[1])
+            continue
+        client = conns[key]
+        client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
+    }
 }
 
 getdoc = async (req, res) => {
+    const {docid, uid} = req.params;
     var convert = doc.data.ops;
     var cfg = {};
     var converted = new QuillDeltaToHtmlConverter(convert, cfg)
