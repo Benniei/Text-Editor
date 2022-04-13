@@ -122,6 +122,7 @@ loginUser = async(req, res) => {
         }).status(200).json({
             status: "OK",
             user: {
+                name: existingUser.name,
                 email: existingUser.email
             }
         }).send();

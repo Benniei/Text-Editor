@@ -61,6 +61,7 @@ function AuthContextProvider(props) {
     auth.userLoggedIn = async function () {
         const response = await api.userLoggedIn();
         if (response.data.status !== "ERROR") {
+            console.log(response.data.user)
             authReducer({
                 type: AuthActionType.USER_LOGGED_IN,
                 payload: {

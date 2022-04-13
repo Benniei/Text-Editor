@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {useContext, useEffect} from 'react'
-import {GlobalStoreContext, createCollection} from '../store'
+import {GlobalStoreContext} from '../store'
 import AuthContext from '../auth/index.js'
 import DocCard from './DocCard.js'
 import Box from '@mui/material/Box';
@@ -15,14 +15,11 @@ function HomeScreen() {
     const [text, setText] = useState("");
 
     useEffect(() => {
-        if(!auth) {
-            auth.userLoggedIn()
-        }
-        console.log(auth)
+        auth.userLoggedIn();
         store.loadAllList();
     }, []);
 
-    let name = auth.userLoggedIn().loggedIn ? auth.user.name : "owo" // For testing purposes
+    let name = auth.user ? auth.user.name : "owo" // For testing purposes
     let docCards = "";
     if (store) {
         docCards = 

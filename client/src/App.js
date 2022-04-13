@@ -18,11 +18,10 @@ const App = () => {
       <AuthContextProvider>
         <GlobalStoreContextProvider>
           <Routes>
-            <Route path="/" element={<HomeWrapper />} />
+            <Route path="/home" element={<HomeWrapper />} />
             <Route path="/register/" element={<RegisterScreen />} />
             <Route path="/login/" element={<LoginScreen />} />
             <Route path="/doc/edit/:docid" element={<WorkspaceScreen />} />
-            <Route path="/home" element={<HomeScreen />} />
           </Routes>
         </GlobalStoreContextProvider>
       </AuthContextProvider>
