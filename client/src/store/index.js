@@ -44,7 +44,6 @@ function GlobalStoreContextProvider(props) {
         const response = await api.listCollection();
         if(response.status === 200) {
             let allList = JSON.parse(response.data.substring(5));
-            navigate("/home", {replace: true})
             storeReducer({
                 type:GlobalStoreActionType.ALL_LIST,
                 payload: allList

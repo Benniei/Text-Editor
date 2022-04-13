@@ -21,7 +21,7 @@ function AuthContextProvider(props) {
     });
 
     useEffect(() => {
-        auth.userLoggedIn();
+        auth.getLoggedIn();
     }, []);
 
     const navigate = useNavigate();
@@ -58,17 +58,19 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.userLoggedIn = async function () {
-        const response = await api.userLoggedIn();
-        if (response.data.status !== "ERROR") {
-            console.log(response.data.user)
-            authReducer({
-                type: AuthActionType.USER_LOGGED_IN,
-                payload: {
-                    loggedIn: response.data.loggedIn,
-                    user: response.data.user
-                }
-            });
+    auth.getLoggedIn = async function () {
+        const response = await api.getLoggedIn();
+        if(response.status  === 200){
+            if (response.data.status !== "ERROR") {
+                
+                authReducer({
+                    type: AuthActionType.USER_LOGGED_IN,
+                    payload: {
+                        loggedIn: response.data.loggedIn,
+                        user: response.data.user
+                    }
+                });
+            }
         }
     }
 
@@ -91,6 +93,8 @@ function AuthContextProvider(props) {
     auth.loginUser = async function(userData, store) {
         const response = await api.loginUser(userData);
         if (response.data.status !== "ERROR") {
+            console.log("owo")
+            console.log(response)
             authReducer({
                 type: AuthActionType.REGISTER_USER,
                 payload: {
@@ -108,7 +112,6 @@ function AuthContextProvider(props) {
     auth.logoutUser = async function() {
         const response = await api.logoutUser();
         if (response.status === 200) {
-            console.log(response)
             authReducer({
                 type: AuthActionType.SET_LOGGED_OUT,
                 payload: {
@@ -116,7 +119,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             });
-            navigate('/',  {replace: true})
+            navigate('/home',  {replace: true})
         }
     }
 
