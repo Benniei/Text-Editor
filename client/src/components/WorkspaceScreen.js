@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
+import { ImageUpload } from 'quill-image-upload';
 
 
 function WorkspaceScreen() {
@@ -19,6 +20,7 @@ function WorkspaceScreen() {
     var docid = store.currentDocument.docid
     var uid = store.currentDocument.uid
 
+    Quill.register('modules/imageUpload', ImageUpload);
 
     useEffect(() => {
 
@@ -47,6 +49,18 @@ function WorkspaceScreen() {
         theme: 'snow',
         modules: {
             toolbar: toolbarOptions,
+            imageUpload: {
+                url: '', 
+                method: 'POST', 
+                name: 'image', 
+                withCredentials: true, 
+                callbackOK: (serverResponse, next) => {
+                    next(serverResponse);
+                },
+                callbackKO: serverError => {
+                    alert(serverError);
+                }
+            }
         }
         };
         let quill = new Quill('#editor', options);
