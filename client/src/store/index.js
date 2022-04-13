@@ -40,7 +40,7 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    store.loadAllList = async function() {
+    store.loadAllList = async function () {
         const response = await api.listCollection();
         if(response.status === 200) {
             let allList = JSON.parse(response.data.substring(5));
@@ -49,6 +49,10 @@ function GlobalStoreContextProvider(props) {
                 payload: allList
             })
         }
+    }
+
+    store.deleteDocument = async function () {
+
     }
 
     return (

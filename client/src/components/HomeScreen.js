@@ -27,8 +27,10 @@ function HomeScreen() {
             {
                 store.allDocuments.map((doc) => (
                    <DocCard 
+                        key={doc.id}
                         docID={doc.id}
                         docName={doc.name}
+                        docTime={doc.time} 
                     />  
                 ))
             }

@@ -4,11 +4,13 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import {GlobalStoreContextProvider} from './store'
 import { AuthContextProvider } from './auth';
 import {
-    WorkspaceScreen
+    WorkspaceScreen,
+    HomeWrapper,
+    RegisterScreen,
+    LoginScreen,
+    HomeScreen
 } from './components';
-import HomeWrapper from './components/HomeWrapper';
-import RegisterScreen from './components/RegisterScreen';
-import LoginScreen from './components/LoginScreen';
+
 
 const App = () => {
   return (
@@ -20,6 +22,7 @@ const App = () => {
             <Route path="/register/" element={<RegisterScreen />} />
             <Route path="/login/" element={<LoginScreen />} />
             <Route path="/doc/edit/:id" element={<WorkspaceScreen />} />
+            <Route path="/home" element={<HomeScreen />} />
           </Routes>
         </GlobalStoreContextProvider>
       </AuthContextProvider>

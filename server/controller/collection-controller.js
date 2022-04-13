@@ -54,7 +54,7 @@ listCollection = async (req, res) => {
         var dbo = db.db("editor-text");
         textEditor = dbo.collection("text-editor")
         var sort = textEditor.find().sort({"_m.ctime": -1}).limit(10).toArray(function(err, result) {
-            result.forEach(res => finalList.push({name: res.name, id: res._id}))
+            result.forEach(res => finalList.push({name: res.name, id: res._id, time: res._m.ctime}))
             res.status(200)
             res.write(`data: ${JSON.stringify(finalList)}\n\n`);
             db.close();
