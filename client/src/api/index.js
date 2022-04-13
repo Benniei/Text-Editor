@@ -24,6 +24,25 @@ export const operation = (id, payload) => api.post('/doc/op/'+id, payload)
 export const getdoc = (id) => api.get('/doc/get/'+id)
 export const getAllDocs = () => api.get('/alldoc')
 
+/* Collection */
+export const createCollection = (payload) => api.post(`/collection/create`, payload)
+.then(response => {
+   return response
+})
+.catch(error => {
+   return error.response;
+});
+
+export const deleteCollection = (payload) => api.post(`/collection/delete`, payload)
+.then(response => {
+   return response
+})
+.catch(error => {
+   return error.response;
+});
+
+export const listCollection = () => api.get(`/collection/list`)
+
 /* Authentication */
 export const signup = (payload ) => api.post(`/users/signup`, payload, {withCredentials: true})
 .then(response => {
@@ -61,6 +80,9 @@ const apis = {
     operation,
     getdoc,
     getAllDocs,
+    createCollection,
+    deleteCollection,
+    listCollection,
     signup,
     loginUser,
     logoutUser,

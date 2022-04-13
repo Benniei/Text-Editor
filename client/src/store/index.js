@@ -41,10 +41,10 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.loadAllList = async function() {
-        const response = await api.getAllDoc();
-        if(response.data.success) {
-            let allList = response.data.allList;
-            store.reducer({
+        const response = await api.listCollection();
+        if(response.status === 200) {
+            let allList = JSON.parse(response.data.substring(5));
+            storeReducer({
                 type:GlobalStoreActionType.ALL_LIST,
                 payload: allList
             })
@@ -68,6 +68,10 @@ async function operations(id,  delta) {
     await api.operation(id, delta.ops);
 }
 
+async function createCollection(name) {
+    await api.createCollection(name);
+}
+
 async function getDoc() {
 
 }
@@ -79,6 +83,7 @@ async function getAllDoc() {
 export {
     connect,
     operations,
+    createCollection,
     getDoc,
     getAllDoc
 }
