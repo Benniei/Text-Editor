@@ -28,6 +28,7 @@ connect = async (req, res) => {
         data = {
             content: doc.data.ops
         }
+        console.log(data)
         res.write(`data: ${JSON.stringify(data)}\n\n`);
         return;
     })
@@ -48,7 +49,9 @@ connect = async (req, res) => {
         clients[docid] = {}
         clients[docid][uid] = client
     }
-    
+    for(const key in clients[docid]){
+        console.log(key)
+    }
     // Handle connection closing
     req.on('close', () => {
         delete clients[docid][uid]

@@ -16,11 +16,11 @@ function WorkspaceScreen() {
 
     var docid = store.currentDocument.docid
     var uid = store.currentDocument.uid
-    connect(docid, uid)
+
 
     useEffect(() => {
+
         if(!listening) {
-            
             const events = new EventSource('http://' + ip + ':4000/doc/connect/' + docid + '/' + uid)
 
             events.onmessage = (event) => {
