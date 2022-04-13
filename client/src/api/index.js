@@ -1,9 +1,9 @@
 import axios from 'axios' 
 
-axios.default.withCredentials = true;
+axios.defaults.withCredentials = true;
 let ip = 'localhost'
 const api = axios.create({
-    baseURL: 'http://' + ip + ':4000/'
+    baseURL: 'http://' + ip + ':4000'
 })
 
 /* Text Editing */
@@ -44,14 +44,14 @@ export const deleteCollection = (payload) => api.post(`/collection/delete`, payl
 export const listCollection = () => api.get(`/collection/list`)
 
 /* Authentication */
-export const signup = (payload ) => api.post(`/users/signup`, payload, {withCredentials: true})
+export const signup = (payload ) => api.post(`/users/signup`, payload)
 .then(response => {
     return response
  })
  .catch(error => {
     return error.response;
  });
-export const loginUser = (payload) => api.post(`/users/login`, payload, {withCredentials: true})
+export const loginUser = (payload) => api.post(`/users/login`, payload)
 .then(response => {
     return response
  })
@@ -66,7 +66,7 @@ export const logoutUser = (payload) => api.post(`/users/logout`, payload)
     return error.response
  });
 
-export const userLoggedIn = () => api.get(`/user/loggedIn`)
+export const getLoggedIn = () => api.get(`/user/loggedIn`)
 .then(response => {
     return response
  })
@@ -76,17 +76,17 @@ export const userLoggedIn = () => api.get(`/user/loggedIn`)
 
 
 const apis = {
-    connect,
-    operation,
-    getdoc,
-    getAllDocs,
-    createCollection,
-    deleteCollection,
-    listCollection,
-    signup,
-    loginUser,
-    logoutUser,
-    userLoggedIn
+   connect,
+   operation,
+   getdoc,
+   getAllDocs,
+   createCollection,
+   deleteCollection,
+   listCollection,
+   signup,
+   loginUser,
+   logoutUser,
+   getLoggedIn
 }
 
 export default apis

@@ -15,7 +15,7 @@ function HomeScreen() {
     const [text, setText] = useState("");
 
     useEffect(() => {
-        auth.userLoggedIn();
+        auth.getLoggedIn();
         store.loadAllList();
     }, []);
 

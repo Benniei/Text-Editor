@@ -115,6 +115,7 @@ loginUser = async(req, res) => {
         }
         // username real, password correct
         const token = auth.signToken(existingUser);
+
         return res.cookie("token", token, {
             httpOnly: true,
             secure: true,
@@ -179,10 +180,23 @@ verifyUser = async(req, res) => {
 }
 
 userLoggedIn = async (req, res) => {
-    try{
-        if(req.userId || req.cookies){
-            auth.verify(req, res, async function () {
-                const loggedInUser = await User.findOne({ _id: req.userId });
+    console.log(req.cookies.token)
+    if(req.email || req.cookies.token){
+        auth.verify(req, res, async function () {
+            let verified = null;
+            let loggedInUser = null;
+            if(req.cookies.token) {
+                verified = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+                console.log(verified)
+                loggedInUser = await User.findOne({ email: verified.email });
+                if(!loggedInUser){
+                    loggedInUser = await User.findOne({ email: req.email });
+                }
+            }
+            else{
+                loggedInUser = await User.findOne({ _id: req.userId });
+            }
+            if(loggedInUser){
                 return res.status(200).json({
                     loggedIn: true,
                     user: {
@@ -190,16 +204,13 @@ userLoggedIn = async (req, res) => {
                         email: loggedInUser.email
                     }
                 });
-            })
-        }
-        else{
-            return res.status(200).json({
-                status: "ERROR",
-            })
-        }
-    } catch (err) {
-        console.error(err);
-        res.status(500).send();
+            }
+        })
+    }
+    else{
+        return res.status(400).json({
+            errorMessage: "Not Logged In"
+        }).send();
     }
 }
 

@@ -2,6 +2,7 @@ express = require('express')
 cors = require('cors')
 app = express()
 const dotenv = require('dotenv')
+const cookieParser = require('cookie-parser')
 dotenv.config();
 
 IP = process.env.IP
@@ -10,7 +11,10 @@ PORT = 4000
 // Middleware
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
-app.use(cors({ origin:true, credentials:true }));
+app.use(cors({ origin: ["http://localhost:3000"],
+         credentials:true 
+}));
+app.use(cookieParser())
  
 // Routers
 const textRouter = require('./routes/text-router')
