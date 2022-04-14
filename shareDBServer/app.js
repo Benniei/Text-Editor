@@ -28,7 +28,7 @@ function startServer() {
     })
 
     server.listen(4001, ip);
-    console.log("ShareDB Server is running on " + ip + " port 8080");
+    console.log("ShareDB Server is running on " + ip + " port 4001");
 }
 
 function createDoc(document_name) {
