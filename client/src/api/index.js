@@ -81,6 +81,17 @@ export const getLoggedIn = () => api.get(`/user/loggedIn`)
     return error.response
  });
 
+ /* Media */
+ export const uploadMedia = (payload) => api.post(`/media/upload`, payload)
+ .then(response => {
+    return response
+ })
+ .catch(error => {
+    return error.response;
+ });
+ 
+ export const accessMedia = (id) => api.get('/media/access/'+id);
+
 
 const apis = {
    connect,
@@ -94,7 +105,9 @@ const apis = {
    signup,
    loginUser,
    logoutUser,
-   getLoggedIn
+   getLoggedIn,
+   uploadMedia,
+   accessMedia
 }
 
 export default apis

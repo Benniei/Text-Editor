@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState, useContext } from 'react'
-import { GlobalStoreContext, connect, operations, presence } from '../store'
+import { GlobalStoreContext, accessMedia, operations, presence } from '../store'
 import AuthContext from '../auth/index.js'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -32,12 +32,21 @@ function WorkspaceScreen() {
         modules: {
             toolbar: toolbarOptions,
             imageUpload: {
-                url: '', 
+                url: 'http://' + ip + '/media/upload', 
                 method: 'POST', 
                 name: 'image', 
                 withCredentials: true, 
-                callbackOK: (serverResponse, next) => {
-                    next(serverResponse);
+                callbackOK: async (serverResponse, next) => {
+                    let response = await accessMedia(serverResponse.id);
+                    if(response){
+                        var binary = '';
+                        var bytes = new Uint8Array( response.data );
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            binary += String.fromCharCode( bytes[ i ] );
+                        }
+                        let bin = 'data:image/png;base64,' + window.btoa( binary );
+                        next(bin);
+                    }
                 },
                 callbackKO: serverError => {
                     alert(serverError);

@@ -4,20 +4,23 @@ app = express()
 const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
 const path = require("path");
+const fileupload = require('express-fileupload')
 dotenv.config();
 
 IP = process.env.IP
 PORT = 4000
 
 // Middleware
-app.use(express.urlencoded({extended: true}))
-app.use(express.json())
+app.use(express.urlencoded({extended: true, limit: '10mb'}))
+app.use(express.json({limit: '10mb'}))
 app.use(cors({ origin: ["http://localhost:3000"],
          credentials:true 
 }));
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "..", "client", "build")));
 app.use(express.static("public"));
+app.use(express.json());
+app.use(fileupload());
  
 // Routers
 const textRouter = require('./routes/text-router')

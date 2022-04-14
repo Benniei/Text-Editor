@@ -130,10 +130,16 @@ async function presence(docid, uid, index, length, name) {
     await api.presence(docid, uid, payload);
 }
 
+async function accessMedia(id) {
+    let response = await api.accessMedia(id);
+    if(response.status === 200) return response.data.image;
+}
+
 export {
     connect,
     operations,
-    presence
+    presence,
+    accessMedia
 }
 
 export default GlobalStoreContext;
