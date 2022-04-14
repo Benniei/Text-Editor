@@ -119,6 +119,7 @@ function sendPrescenceToAll(presence, ids) {
 
 getdoc = async (req, res) => {
     const {docid, uid} = req.params;
+    var doc = connection.get('text-editor', docid);
     var convert = doc.data.ops;
     var cfg = {};
     var converted = new QuillDeltaToHtmlConverter(convert, cfg)
