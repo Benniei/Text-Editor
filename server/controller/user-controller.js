@@ -3,21 +3,20 @@ const User = require('../models/user-model')
 const jwt = require('jsonwebtoken')
 const url = require('url')
 const dotenv = require('dotenv')
-// const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer')
 dotenv.config();
 
 function uniqueID() {
     return Math.floor(Math.random() * Date.now()).toString(36).slice(2)
 }
 
-// var transport = nodemailer.createTransport({
-//     host: "smtp.mailtrap.io",
-//     port: 2525,
-//     auth: {
-//       user: "d34ee7fb72463e",
-//       pass: "2c9ba98f07b09d"
-//     }
-//   });
+let transporter = nodemailer.createTransport({
+    sendmail = true,
+    auth: {
+        user: cse356cloudpeek,
+        pass: Cloudpeek
+    }
+})
 
 registerUser = async(req, res) => {
     try {
@@ -47,6 +46,15 @@ registerUser = async(req, res) => {
         });
         const savedUser = await newUser.save();
         console.log(verifyURL)
+        
+        let info = await transporter.sendMail({
+            from: '"Scallion Frog" <mail@example.com>',
+            to: email,
+            subject: "Verification key",
+            text: verifyURL
+        });
+        console.log("Email sent", info.messageId);
+        
         // Send Email
         // const buildHTML = "<a href=" + verifyURL + ">" + verifyURL + "</a> "
         // const message = {
