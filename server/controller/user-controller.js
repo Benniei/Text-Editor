@@ -145,16 +145,13 @@ logoutUser = async(req, res) => {
 
 verifyUser = async(req, res) => {
     try {
-        console.log(req.url)
         const email = url.parse(req.url, true).query.email;
         const key = url.parse(req.url, true).query.key;
-        console.log(email, key)
         const existingUser = await User.findOne({ email: email });
         if(existingUser){
             console.log(existingUser)
             if(existingUser.verifyKey === key){
                 existingUser.verified = true;
-                console.log(existingUser)
                 existingUser.save().then(() => {
                     return res.status(200).json({
                         status: "OK",
@@ -180,14 +177,12 @@ verifyUser = async(req, res) => {
 }
 
 userLoggedIn = async (req, res) => {
-    console.log(req.cookies.token)
     if(req.email || req.cookies.token){
         auth.verify(req, res, async function () {
             let verified = null;
             let loggedInUser = null;
             if(req.cookies.token) {
                 verified = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-                console.log(verified)
                 loggedInUser = await User.findOne({ email: verified.email });
                 if(!loggedInUser){
                     loggedInUser = await User.findOne({ email: req.email });

@@ -18,13 +18,16 @@ function WorkspaceScreen() {
     const [listening, setListening] = useState(false);
 
     var docid = store.currentDocument.docid
-    var uid = store.currentDocument.uid
 
     Quill.register('modules/imageUpload', ImageUpload);
 
     useEffect(() => {
-
+        function uniqueID() {
+            return Math.floor(Math.random() * Date.now())
+        }
+        var uid;
         if(!listening) {
+            uid = uniqueID()
             const events = new EventSource('http://' + ip + ':4000/doc/connect/' + docid + '/' + uid)
 
             events.onmessage = (event) => {
@@ -76,10 +79,10 @@ function WorkspaceScreen() {
     return (
         <div>
             <Stack direction="row" mb={-10} mt={5} ml={9}>
-                <h1 style={{ marginleft: '5%'}}>{store.currentDocument.name} ({store.currentDocument.docid}) ({uid})</h1>
+                <h1 style={{ marginleft: '5%'}}>{store.currentDocument.name} ({store.currentDocument.docid})</h1>
                 <h2>User: {auth.user.name}</h2>
                 <Button id="create-doc-button"
-                            onClick={function(){store.loadAllList()}}>
+                            onClick={function(){store.homePage()}}>
                         Back
                     </Button>
                 

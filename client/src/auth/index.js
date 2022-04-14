@@ -93,8 +93,6 @@ function AuthContextProvider(props) {
     auth.loginUser = async function(userData, store) {
         const response = await api.loginUser(userData);
         if (response.data.status !== "ERROR") {
-            console.log("owo")
-            console.log(response)
             authReducer({
                 type: AuthActionType.REGISTER_USER,
                 payload: {

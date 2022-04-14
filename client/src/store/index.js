@@ -49,7 +49,14 @@ function GlobalStoreContextProvider(props) {
                 payload: allList
             })
         }
-        
+    }
+
+    store.homePage = async function () {
+        navigate("/home", {replace: true});
+        storeReducer({
+            type: GlobalStoreActionType.ALL_LIST,
+            payload: store.allDocuments
+        })
     }
 
     store.createDocument = async function (name) {
@@ -78,14 +85,11 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    function uniqueID() {
-        return Math.floor(Math.random() * Date.now())
-    }
+    
 
     store.setCurrentDocument = async function (docid) {
         // Create UID
         let currDoc = store.allDocuments.find(x => x.docid === docid)
-        currDoc["uid"] = uniqueID()
         // Set to Workspace Screen
         navigate("/doc/edit/" + docid, {replace: true})
         storeReducer({
