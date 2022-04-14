@@ -113,14 +113,19 @@ async function connect(docid, uid) {
     await api.connect(docid, uid);
 }
 
-async function operations(docid, uid, delta) {
-    await api.operation(docid, uid, delta.ops);
+async function operations(docid, uid, delta, versionData) {
+    const data = {
+        version: versionData,
+        op: delta.ops 
+    }
+    await api.operation(docid, uid, data);
 }
 
-async function presence(docid, uid, index, length) {
+async function presence(docid, uid, index, length, name) {
     const payload = {
         index: index,
-        length: length
+        length: length,
+        name: name
     }
     await api.presence(docid, uid, payload);
 }

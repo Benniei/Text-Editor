@@ -3,6 +3,7 @@ var connection = require('../db/shareDB.js')
 
 var clients = {};
 var requestBody = null;
+var flag = false;
 connect = async (req, res) => {
     // If undefined IDs are passed through, skip function.
     if(req.params.uid === 'undefined') return res.status(400);
@@ -31,7 +32,9 @@ connect = async (req, res) => {
         if (err) throw err;
         
         data = {
-            content: doc.data.ops
+            content: doc.data.ops,
+            version: doc.version,
+            first: true
         }
         res.write(`data: ${JSON.stringify(data)}\n\n`);
         return;
@@ -60,27 +63,43 @@ connect = async (req, res) => {
 }
 
 operation = async (req, res) => {
-    const op = req.body;
+    const {op, version} = req.body;
     const {docid, uid} = req.params;
-    requestBody = req.body; // used as global variable
+    
+
+    flag = true
     var doc = connection.get('text-editor', docid);
+    var docVersion = doc.version;
+
+    // if(docVersion > version) {
+    //     return res.status(200).json({
+    //         status: "retry"
+    //     })
+    // }
+    console.log(version)
+    requestBody = {content: req.body.op, version: doc.version, first: false}; // used as global variable
     console.log("operation", op)
     if(!op){
         return res.end();
     }
     const ids = [docid, uid]
     doc.submitOp(op, {source: ids})
-    res.end();
+    return res.status(200).json({
+        status: "OK"
+    })
 }
 
 function sendOpsToAll(op, ids) {
-    let conns = clients[ids[0]] // gets the map for all clients with document ID
-    for (const key in conns) {
-        if(key === ids[1])
-            continue
-        client = conns[key]
-        client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
+    if(flag === true){
+        let conns = clients[ids[0]] // gets the map for all clients with document ID
+        for (const key in conns) {
+            if(key === ids[1])
+                continue
+            client = conns[key]
+            client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
+        }
     }
+    flag = false
 }
 
 function sendPrescenceToAll(presence, ids) {
@@ -108,14 +127,17 @@ getdoc = async (req, res) => {
 }
 
 presence = async (req, res) => {
-    const {docid, uid} = req.params;
-    const {index, length} = req.body;
-
     // var presenceConnection = connection.getDocPresence('text-editor', docid);
     // const localPresence = presenceConnection.create()
     // console.log(data)
     // localPresence.submit(data)
-    sendPrescenceToAll(req.body, req.params)
+    data = {
+        index: req.body.index,
+        length: req.body.length,
+        name: req.body.name,
+        uid: req.params.uid
+    }
+    sendPrescenceToAll(data, req.params)
     res.end();
 }
 
