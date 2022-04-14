@@ -3,6 +3,7 @@ cors = require('cors')
 app = express()
 const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
+const path = require("path");
 dotenv.config();
 
 IP = process.env.IP
@@ -15,10 +16,17 @@ app.use(cors({ origin: ["http://localhost:3000"],
          credentials:true 
 }));
 app.use(cookieParser())
+app.use(express.static(path.join(__dirname, "..", "client", "build")));
+app.use(express.static("public"));
  
 // Routers
 const textRouter = require('./routes/text-router')
 app.use('/', textRouter) 
+app.use((req, res, next) => {
+    console.log(path.join(__dirname, "..", "client", "build", "index.html"))
+    res.sendFile(path.join(__dirname, ".", "build", "index.html"));
+});
+  
 
 // Init mongoDB Object
 const mongoose = require('./db/mongoose.js')
