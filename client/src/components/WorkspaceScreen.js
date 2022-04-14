@@ -55,10 +55,10 @@ function WorkspaceScreen() {
             return Math.floor(Math.random() * Date.now())
         }
 
-        // function random_rgba() {
-        //     var o = Math.round, r = Math.random, s = 255;
-        //     return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
-        // }
+        function random_rgba() {
+            var o = Math.round, r = Math.random, s = 255;
+            return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+        }
 
         var uid;
         var versionData;
@@ -72,11 +72,11 @@ function WorkspaceScreen() {
                 
                 console.log(parsedData)
                 // First time connecting
-                if (parsedData.first) {
+                if (parsedData.content && parsedData.first) {
                     versionData = parsedData.version
                     quill.setContents(parsedData.content)
                 }
-                else if (!parsedData.first){
+                else if (parsedData.content && !parsedData.first){
                     versionData = parsedData.version
                     quill.updateContents(parsedData.content);
                 }
@@ -89,9 +89,10 @@ function WorkspaceScreen() {
                         
                     // }
                     // else{
-                        // const cursor = quill.getModule('cursors');
-                        // cursor.createCursor('cursor', cur_name, 'red');
-                        // setTimeout(() => cursor.moveCursor('cursor', presenceData.index), 1000);
+                    // const cursor = quill.getModule('cursors');
+                    // cursor.createCursor('cursor', cur_name, 'red');
+                    // console.log(cursor)
+                    // cursor.moveCursor('cursor', presenceData.index)
                     // }
                 }
                 // Getting updates
