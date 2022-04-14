@@ -3,7 +3,7 @@ let media = {}
 uploadMedia = async (req, res) => {
     const image = req.files.image;
     let imageID = Math.floor(Math.random() * Date.now());
-    const path = "C:/Users/brand/Downloads/images/" + image.name;
+    const path = "./images" + image.name;
     media[imageID] = path;
 
     image.mv(path, (error) => {
