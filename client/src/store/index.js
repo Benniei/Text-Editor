@@ -11,7 +11,7 @@ export const GlobalStoreActionType = {
 
 function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
-        ip: "localhost",
+        ip: "209.151.154.192",
         allDocuments: [],
         currentDocument: null
     });
