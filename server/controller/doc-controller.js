@@ -3,7 +3,6 @@ var connection = require('../db/shareDB.js')
 
 var clients = {};
 var requestBody = null;
-var flag = false;
 connect = async (req, res) => {
     // If undefined IDs are passed through, skip function.
     if(req.params.uid === 'undefined') return res.status(400);
@@ -18,10 +17,16 @@ connect = async (req, res) => {
     res.set(head);
     console.log(docid, uid);
     var doc = connection.get('text-editor', docid);
+    // var presenceConnection = connection.getDocPresence('text-editor', docid);
     doc.subscribe(function(err) {
         if (err) throw err;
         doc.on('op', sendOpsToAll);
     });
+    // presenceConnection.subscribe( function(err){
+    //     if(err) throw err;
+    //     presenceConnection.on('presence', sendPrescenceToAll);
+    // })
+
     await doc.fetch(err => {
         if (err) throw err;
         
@@ -58,7 +63,6 @@ operation = async (req, res) => {
     const op = req.body;
     const {docid, uid} = req.params;
     requestBody = req.body; // used as global variable
-    flag = true
     var doc = connection.get('text-editor', docid);
     console.log("operation", op)
     if(!op){
@@ -70,19 +74,28 @@ operation = async (req, res) => {
 }
 
 function sendOpsToAll(op, ids) {
-    // clients
-    //     .filter(client => client.id !== id)
-    //     .forEach(client => client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`))
-    if(flag === true){
-        let conns = clients[ids[0]] // gets the map for all clients with document ID
-        for (const key in conns) {
-            if(key === ids[1])
-                continue
-            client = conns[key]
-            client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
-        }
+    let conns = clients[ids[0]] // gets the map for all clients with document ID
+    for (const key in conns) {
+        if(key === ids[1])
+            continue
+        client = conns[key]
+        client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
     }
-    flag = false
+}
+
+function sendPrescenceToAll(presence, ids) {
+    
+    let conns = clients[ids["docid"]] // gets the map for all clients with document ID
+    for (const key in conns) {
+        if(key === ids["uid"])
+            continue
+        client = conns[key]
+        data = {
+            presence: presence
+        }
+        client.res.write(`data: ${JSON.stringify(data)}\n\n`)
+    }
+
 }
 
 getdoc = async (req, res) => {
@@ -95,7 +108,15 @@ getdoc = async (req, res) => {
 }
 
 presence = async (req, res) => {
+    const {docid, uid} = req.params;
+    const {index, length} = req.body;
 
+    // var presenceConnection = connection.getDocPresence('text-editor', docid);
+    // const localPresence = presenceConnection.create()
+    // console.log(data)
+    // localPresence.submit(data)
+    sendPrescenceToAll(req.body, req.params)
+    res.end();
 }
 
 module.exports = {

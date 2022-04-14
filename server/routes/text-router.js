@@ -25,8 +25,9 @@ router.get('/media/access/:id', MediaController.accessMedia)
 // Document Editing
 router.get('/doc/connect/:docid/:uid', DocController.connect)
 router.post('/doc/op/:docid/:uid', DocController.operation)
-router.get('/doc/get/:docid/:uid', DocController.getdoc)
 router.post('/doc/presence/:docid/:uid', DocController.presence)
+router.get('/doc/get/:docid/:uid', DocController.getdoc)
+
 
 
 

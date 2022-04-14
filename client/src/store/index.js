@@ -117,9 +117,18 @@ async function operations(docid, uid, delta) {
     await api.operation(docid, uid, delta.ops);
 }
 
+async function presence(docid, uid, index, length) {
+    const payload = {
+        index: index,
+        length: length
+    }
+    await api.presence(docid, uid, payload);
+}
+
 export {
     connect,
-    operations
+    operations,
+    presence
 }
 
 export default GlobalStoreContext;

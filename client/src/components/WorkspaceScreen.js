@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState, useContext } from 'react'
-import { GlobalStoreContext, connect, operations } from '../store'
+import { GlobalStoreContext, connect, operations, presence } from '../store'
 import AuthContext from '../auth/index.js'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -72,6 +72,21 @@ function WorkspaceScreen() {
             if (source !== 'user') return;
             operations(docid, uid, delta);
         });
+
+        quill.on('selection-change', function(range, oldRange, source) {
+            if (range) {
+            //   if (range.length == 0) {
+            //     console.log('User cursor is on', range.index);
+            //   } else {
+            //     var text = quill.getText(range.index, range.length);
+            //     console.log('User has highlighted', text);
+            //   }
+                presence(docid, uid, range.index, range.length)
+            } 
+            // else {
+            //   console.log('Cursor not in the editor');
+            // }
+          });
 
     }, [])
    

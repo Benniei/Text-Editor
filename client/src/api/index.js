@@ -21,6 +21,13 @@ export const operation = (docid, uid, payload) => api.post('/doc/op/'+ docid + '
  .catch(error => {
     return error.response;
  });
+ export const presence = (docid, uid, payload) => api.post('/doc/presence/'+ docid + '/' + uid, payload)
+.then(response => {
+    return response
+ })
+ .catch(error => {
+    return error.response;
+ });
 export const getdoc = (id) => api.get('/doc/get/'+id)
 export const getAllDocs = () => api.get('/alldoc')
 
@@ -78,6 +85,7 @@ export const getLoggedIn = () => api.get(`/user/loggedIn`)
 const apis = {
    connect,
    operation,
+   presence,
    getdoc,
    getAllDocs,
    createCollection,
