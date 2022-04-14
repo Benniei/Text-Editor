@@ -11,10 +11,10 @@ function uniqueID() {
 }
 
 let transporter = nodemailer.createTransport({
-    sendmail = true,
+    sendmail: true,
     auth: {
-        user: cse356cloudpeek,
-        pass: Cloudpeek
+        user: "cse356cloudpeek",
+        pass: "Cloudpeek"
     }
 })
 
@@ -40,7 +40,7 @@ registerUser = async(req, res) => {
         }
         verified = false
         verifyKey = uniqueID()
-        var verifyURL = "http://" + process.env.IP + ":4000/users/verify?email=" + email + "&" + "key=" + verifyKey
+        var verifyURL = "http://" + process.env.SERVERIP + "/users/verify?email=" + email + "&" + "key=" + verifyKey
         const newUser = new User({
             name, password, email, verified, verifyKey
         });
@@ -157,7 +157,6 @@ verifyUser = async(req, res) => {
         const key = url.parse(req.url, true).query.key;
         const existingUser = await User.findOne({ email: email });
         if(existingUser){
-            console.log(existingUser)
             if(existingUser.verifyKey === key){
                 existingUser.verified = true;
                 existingUser.save().then(() => {

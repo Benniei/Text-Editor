@@ -3,7 +3,7 @@ import axios from 'axios'
 axios.defaults.withCredentials = true;
 let ip = '209.151.154.192'
 const api = axios.create({
-    baseURL: 'http://' + ip + ':4000'
+    baseURL: 'http://' + ip 
 })
 
 /* Text Editing */

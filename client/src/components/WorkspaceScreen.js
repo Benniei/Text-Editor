@@ -28,7 +28,7 @@ function WorkspaceScreen() {
         var uid;
         if(!listening) {
             uid = uniqueID()
-            const events = new EventSource('http://' + ip + ':4000/doc/connect/' + docid + '/' + uid)
+            const events = new EventSource('http://' + ip + '/doc/connect/' + docid + '/' + uid)
 
             events.onmessage = (event) => {
                 var parsedData = JSON.parse(event.data); 

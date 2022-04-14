@@ -23,8 +23,7 @@ app.use(express.static("public"));
 const textRouter = require('./routes/text-router')
 app.use('/', textRouter) 
 app.use((req, res, next) => {
-    console.log(path.join(__dirname, "..", "client", "build", "index.html"))
-    res.sendFile(path.join(__dirname, ".", "build", "index.html"));
+    res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
 });
   
 
