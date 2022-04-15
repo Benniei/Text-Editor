@@ -64,7 +64,7 @@ listCollection = async (req, res) => {
     finalList = []
     idList = []
     textEditor = myDb.db("editor-text").collection("text-editor")
-
+    
     var sort = textEditor.find().sort({"_m.mtime": -1}).limit(10).toArray(function(err, result) {
         result.forEach(key => idList.push(key.docid))
         Text.find({
@@ -75,8 +75,7 @@ listCollection = async (req, res) => {
                 finalList.push({name: cors.name, docid: result[i]._id, time: result[i]._m.mtime})
             }
 
-            return res.status(200).json(finalList).end();
-            
+            res.status(200).json(finalList).end();
         });
     });
 }

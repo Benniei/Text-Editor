@@ -103,9 +103,7 @@ loginUser = async(req, res) => {
         }
         // username real, password correct
         const token = auth.signToken(existingUser);
-
-        return res.cookie("token", token, {
-        }).status(200).json({
+        return res.cookie("token", token).status(200).json({
             status: "OK",
             name: existingUser.name,
             user: {

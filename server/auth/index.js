@@ -4,7 +4,7 @@ function authManager() {
     verify = function (req, res, next) {
         try {
             const token = req.cookies.token;
-            console.log(token)
+            // console.log("auth", req.cookies, req.path)
             if (!token) {
                 return res.status(401).json({
                     error: true,

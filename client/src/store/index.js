@@ -43,6 +43,7 @@ function GlobalStoreContextProvider(props) {
     store.loadAllList = async function () {
         const response = await api.listCollection();
         if(response.status === 200) {
+            console.log(response)
             let allList = response.data;
             console.log(allList)
             storeReducer({
@@ -78,12 +79,11 @@ function GlobalStoreContextProvider(props) {
         // Create UID
         let currDoc = store.allDocuments.find(x => x.docid === docid)
         // Set to Workspace Screen
-        navigate("/doc/edit/" + docid, {replace: true})
         storeReducer({
             type: GlobalStoreActionType.CURRENT_DOC,
             payload: currDoc
         })
-        
+        navigate("/doc/edit/" + docid, {replace: true})
     }
 
     return (
@@ -108,7 +108,7 @@ async function operations(docid, uid, delta, versionData) {
     console.log("data", data)
     let response = await api.operation(docid, uid, data);
 //     if(response.data.)
-// }
+}
 
 async function presence(docid, uid, index, length, name) {
     const payload = {

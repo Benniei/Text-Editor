@@ -27,15 +27,17 @@ connect = async (req, res) => {
     //     if(err) throw err;
     //     presenceConnection.on('presence', sendPrescenceToAll);
     // })
-    if(!clients[docid] || !clients[docid][uid]) {
-        doc.subscribe(function(err) {
-            if (err) throw err;
-            doc.on('op', sendOpsToAll);
-        });
-        versionGlo[docid] = doc.version
-    }
+
+    doc.subscribe(function(err) {
+        if (err) throw err;
+        doc.on('op', sendOpsToAll);
+    });
+    
+
     doc.fetch(err => {
         if (err) throw err;
+        if(!versionGlo[docid])
+            versionGlo[docid] = doc.version
         var back = {
             content: doc.data.ops,
             version: versionGlo[docid]
@@ -76,14 +78,9 @@ operation = async (req, res) => {
     var doc = connection.get('text-editor', docid);
     var docVersion = versionGlo[docid];
     
-    // console.log("operation", docid, uid, op, version, docVersion)
+    console.log("operation", docid, uid, op, version, docVersion)
     if(docVersion > version) {
-        const failed = {
-            status: "retry",
-            ack: op,
-            version: docVersion
-        }
-        return res.json({status: "retry", ack: op})
+        return res.json({status: "retry", ack: op, version: docVersion})
     }
     else {
         const success = {
@@ -98,28 +95,20 @@ operation = async (req, res) => {
         doc.submitOp(op, {source: ids})
         versionGlo[docid] = versionGlo[docid] + 1;
 
+        return res.json({status: "ok", ack: op, version: docVersion})
+    }
+}
+
+function sendOpsToAll(op, ids) {
+    if(flag === true){
         let conns = clients[ids[0]] // gets the map for all clients with document ID
         for (const key in conns) {
             if(key === ids[1])
                 continue
             client = conns[key]
-            client.res.write(`data: ${JSON.stringify(op)}\n\n`)
+            client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
         }
-        
-        return res.json({status: "ok", ack: op})
     }
-}
-
-function sendOpsToAll(op, ids) {
-    // if(flag === true){
-    //     let conns = clients[ids[0]] // gets the map for all clients with document ID
-    //     for (const key in conns) {
-    //         if(key === ids[1])
-    //             continue
-    //         client = conns[key]
-    //         client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
-    //     }
-    // }
     flag = false
 }
 
