@@ -29,15 +29,15 @@ registerUser = async(req, res) => {
                     errorMessage: "Please enter all required fields."
                 });
         }
-        const existingUser = await User.findOne({ email: email });
-        if (existingUser) {
-            return res
-                .status(200)
-                .json({
-                    status: "ERROR",
-                    errorMessage: "An account with this username / email address already exists."
-                });
-        }
+        // const existingUser = await User.findOne({ email: email });
+        // if (existingUser) {
+        //     return res
+        //         .status(200)
+        //         .json({
+        //             status: "ERROR",
+        //             errorMessage: "An account with this username / email address already exists."
+        //         });
+        // }
         verified = false
         verifyKey = uniqueID()
         var verifyURL = "http://" + process.env.SERVERIP + "/users/verify?email=" + email + "&" + "key=" + verifyKey
@@ -91,6 +91,7 @@ loginUser = async(req, res) => {
             return res
                 .status(200)
                 .json({ 
+                    error: true,
                     status: "ERROR",
                     errorMessage: "Please enter all required fields." 
                 });
@@ -101,6 +102,7 @@ loginUser = async(req, res) => {
             return res
                 .status(200)
                 .json({ 
+                    error: true,
                     status: "ERROR",
                     errorMessage: "No such username." 
                 });
@@ -109,6 +111,7 @@ loginUser = async(req, res) => {
             return res
                 .status(200)
                 .json({ 
+                    error: true,
                     status: "ERROR",
                     errorMessage: "Wrong password." 
                 });
@@ -117,6 +120,7 @@ loginUser = async(req, res) => {
             return res
                 .status(200)
                 .json({ 
+                    error: true,
                     status: "ERROR",
                     errorMessage: "User not verified." 
                 });
@@ -126,8 +130,6 @@ loginUser = async(req, res) => {
 
         return res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none"
         }).status(200).json({
             status: "OK",
             user: {

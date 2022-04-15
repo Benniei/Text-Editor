@@ -6,6 +6,7 @@ function authManager() {
             const token = req.cookies.token;
             if (!token) {
                 return res.status(401).json({
+                    error: true,
                     status: "ERROR",
                     loggedIn: false,
                     user: null,
@@ -20,6 +21,7 @@ function authManager() {
         } catch (err) {
             console.error(err);
             return res.status(401).json({
+                error:true,
                 status: "ERROR",
                 errorMessage: "Unauthorized"
             });
