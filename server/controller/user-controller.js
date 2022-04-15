@@ -13,7 +13,7 @@ function uniqueID() {
 let transporter = nodemailer.createTransport({
     sendmail: true,
     auth: {
-        user: "cse356cloudpeek",
+        user: "cse356cloudpeek@outlook.com",
         pass: "Cloudpeek"
     }
 })
@@ -48,7 +48,7 @@ registerUser = async(req, res) => {
         console.log(verifyURL)
         
         let info = await transporter.sendMail({
-            from: '"Scallion Frog" <mail@example.com>',
+            from: '"Scallion Frog" <cloudpeek@pain.com>',
             to: email,
             subject: "Verification key",
             text: verifyURL
