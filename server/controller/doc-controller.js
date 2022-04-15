@@ -1,7 +1,10 @@
 var QuillDeltaToHtmlConverter = require('quill-delta-to-html').QuillDeltaToHtmlConverter;
 var connection = require('../db/shareDB.js')
+const auth = require('../auth')
+const jwt = require('jsonwebtoken')
 
 var clients = {};
+var versionGlo = {};
 var requestBody = null;
 var flag = false;
 connect = async (req, res) => {
@@ -20,21 +23,27 @@ connect = async (req, res) => {
     console.log(docid, uid);
     var doc = connection.get('text-editor', docid);
     // var presenceConnection = connection.getDocPresence('text-editor', docid);
-    doc.subscribe(function(err) {
-        if (err) throw err;
-        doc.on('op', sendOpsToAll);
-    });
     // presenceConnection.subscribe( function(err){
     //     if(err) throw err;
     //     presenceConnection.on('presence', sendPrescenceToAll);
     // })
-
+    if(!clients[docid] || !clients[docid][uid]) {
+        doc.subscribe(function(err) {
+            if (err) throw err;
+            doc.on('op', sendOpsToAll);
+        });
+        versionGlo[docid] = doc.version
+    }
     doc.fetch(err => {
         if (err) throw err;
-        console.log(doc.data.ops)
-        res.write(`data: ${JSON.stringify(doc.data.ops)}\n\n`);
+        var back = {
+            content: doc.data.ops,
+            version: versionGlo[docid]
+        }
+        res.write(`data: ${JSON.stringify(back)}\n\n`);
         return;
     })
+
 
     const client = {
         uid: uid,
@@ -65,41 +74,52 @@ operation = async (req, res) => {
     
     flag = true
     var doc = connection.get('text-editor', docid);
-    var docVersion = doc.version;
+    var docVersion = versionGlo[docid];
+    
+    // console.log("operation", docid, uid, op, version, docVersion)
     if(docVersion > version) {
         const failed = {
             status: "retry",
+            ack: op,
+            version: docVersion
+        }
+        return res.json({status: "retry", ack: op})
+    }
+    else {
+        const success = {
+            status: "ok",
             ack: op
         }
-        clients[docid][uid].res.write(`data: ${JSON.stringify(failed)}\n\n`);
-    }
-    const success = {
-        status: "ok",
-        ack: op,
-        version: doc.version
-    }
-    clients[docid][uid].res.write(`data: ${JSON.stringify(success)}\n\n`);
+        clients[docid][uid].res.write(`data: ${JSON.stringify(success)}\n\n`);
+        requestBody = req.body.op; // used as global variable
 
-    requestBody = {content: req.body.op, version: doc.version, first: false}; // used as global variable
-    console.log("operation", op)
-    if(!op){
-        return res.end();
-    }
-    const ids = [docid, uid]
-    doc.submitOp(op, {source: ids})
-    return res.json({status: "ok"}).end()
-}
+        const ids = [docid, uid]
+        
+        doc.submitOp(op, {source: ids})
+        versionGlo[docid] = versionGlo[docid] + 1;
 
-function sendOpsToAll(op, ids) {
-    if(flag === true){
         let conns = clients[ids[0]] // gets the map for all clients with document ID
         for (const key in conns) {
             if(key === ids[1])
                 continue
             client = conns[key]
-            client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
+            client.res.write(`data: ${JSON.stringify(op)}\n\n`)
         }
+        
+        return res.json({status: "ok", ack: op})
     }
+}
+
+function sendOpsToAll(op, ids) {
+    // if(flag === true){
+    //     let conns = clients[ids[0]] // gets the map for all clients with document ID
+    //     for (const key in conns) {
+    //         if(key === ids[1])
+    //             continue
+    //         client = conns[key]
+    //         client.res.write(`data: ${JSON.stringify(requestBody)}\n\n`)
+    //     }
+    // }
     flag = false
 }
 
@@ -110,12 +130,20 @@ function sendPrescenceToAll(presence, ids) {
         if(key === ids["uid"])
             continue
         client = conns[key]
-        data = {
-            presence: presence
+        const pres = {
+            index: presence.index,
+            length: presence.length,
+            name: presence.name
         }
-        client.res.write(`data: ${JSON.stringify(data)}\n\n`)
+        data = {
+            id: presence.uid,
+            cursor: pres
+        }
+        const finalpresence = {
+            presence: data
+        }
+        client.res.write(`data: ${JSON.stringify(finalpresence)}\n\n`)
     }
-
 }
 
 getdoc = async (req, res) => {
@@ -135,15 +163,23 @@ presence = async (req, res) => {
     // const localPresence = presenceConnection.create()
     // console.log(data)
     // localPresence.submit(data)
+    var userName;
+    auth.verify(req, res, async function () {
+        let verified = null;
+        let loggedInUser = null;
+        if(req.cookies.token) {
+            verified = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+            userName = verified.name;
+        }})
     data = {
         index: req.body.index,
         length: req.body.length,
-        name: req.body.name,
+        name: userName,
         uid: req.params.uid
     }
     sendPrescenceToAll(data, req.params)
     return res.status(200).json({
-        status: "OK",
+        status: "ok",
         ack: req.body
     }).end()
 }

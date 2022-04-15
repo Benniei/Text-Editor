@@ -93,16 +93,6 @@ function WorkspaceScreen() {
                 else if (parsedData.presence) {
                     let presenceData = parsedData.presence
                     let cur_name = presenceData.name? presenceData.name: presenceData.uid
-                    // console.log(cur_name)
-                    // if(cursor[presenceData.uid]){
-                        
-                    // }
-                    // else{
-                    // const cursor = quill.getModule('cursors');
-                    // cursor.createCursor('cursor', cur_name, 'red');
-                    // console.log(cursor)
-                    // cursor.moveCursor('cursor', presenceData.index)
-                    // }
                 }
                 // Getting updates
                 

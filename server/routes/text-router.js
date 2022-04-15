@@ -24,10 +24,10 @@ router.post('/media/upload', auth.verify, MediaController.uploadMedia)
 router.get('/media/access/:id', auth.verify, MediaController.accessMedia)
 
 // Document Editing
-router.get('/doc/connect/:docid/:uid', DocController.connect)
-router.post('/doc/op/:docid/:uid', DocController.operation)
-router.get('/doc/get/:docid/:uid', DocController.getdoc)
-router.post('/doc/presence/:docid/:uid', DocController.presence)
+router.get('/doc/connect/:docid/:uid', auth.verify, DocController.connect)
+router.post('/doc/op/:docid/:uid', auth.verify, DocController.operation)
+router.get('/doc/get/:docid/:uid', auth.verify, DocController.getdoc)
+router.post('/doc/presence/:docid/:uid', auth.verify, DocController.presence)
 
 
 

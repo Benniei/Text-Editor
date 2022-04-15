@@ -105,8 +105,10 @@ async function operations(docid, uid, delta, versionData) {
         version: versionData,
         op: delta.ops 
     }
-    await api.operation(docid, uid, data);
-}
+    console.log("data", data)
+    let response = await api.operation(docid, uid, data);
+//     if(response.data.)
+// }
 
 async function presence(docid, uid, index, length, name) {
     const payload = {

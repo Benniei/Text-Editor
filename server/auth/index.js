@@ -31,7 +31,8 @@ function authManager() {
 
     signToken = function (user) {
         return jwt.sign({
-            email: user.email
+            email: user.email,
+            name: user.name
         }, process.env.JWT_SECRET);
     }
 
