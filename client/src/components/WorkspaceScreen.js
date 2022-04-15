@@ -1,5 +1,6 @@
 import React from 'react'
 import { useEffect, useState, useContext } from 'react'
+import { useParams } from 'react-router-dom'
 import { GlobalStoreContext, accessMedia, operations, presence } from '../store'
 import AuthContext from '../auth/index.js'
 import Button from '@mui/material/Button';
@@ -16,14 +17,14 @@ function WorkspaceScreen() {
     const {store} = useContext(GlobalStoreContext);
     const {auth} = useContext(AuthContext);
 
-    let ip = store.ip
+    let ip = "209.151.154.192"
     
     const [listening, setListening] = useState(false);
-    const [user, setUser] = useState("");
 
-    var docid = store.currentDocument.docid
-
-    
+    console.log(auth)
+    var name = store.currentDocument ? store.currentDocument.name: "N/A";
+    var docid = useParams().docid;
+    var loginuser = auth.user ? auth.user.name: "N/A"
 
     useEffect(() => {
         const toolbarOptions = ['bold', 'italic', 'image'];
@@ -34,7 +35,7 @@ function WorkspaceScreen() {
             imageUpload: {
                 url: 'http://' + ip + '/media/upload', 
                 method: 'POST', 
-                name: 'image', 
+                name: 'file', 
                 withCredentials: true, 
                 callbackOK: async (serverResponse, next) => {
                     let response = await accessMedia(serverResponse.mediaid);
@@ -74,7 +75,6 @@ function WorkspaceScreen() {
         var versionData;
         if(!listening) {
             uid = uniqueID()
-            setUser(uid)
             const events = new EventSource('http://' + ip + '/doc/connect/' + docid + '/' + uid)
 
             events.onmessage = (event) => {
@@ -132,9 +132,8 @@ function WorkspaceScreen() {
     return (
         <div>
             <Stack direction="row" mb={-10} mt={5} ml={9}>
-                <h1 style={{ marginleft: '5%'}}>{store.currentDocument.name} ({store.currentDocument.docid})</h1>
-                <h2>User: {auth.user.name}</h2>
-                <h2>{user}</h2>
+                <h1 style={{ marginleft: '5%'}}>{name} ({docid})</h1>
+                <h2>User: {loginuser}</h2>
                 <Button id="create-doc-button"
                             onClick={function(){store.homePage()}}>
                         Back

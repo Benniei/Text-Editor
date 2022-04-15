@@ -120,8 +120,9 @@ async function presence(docid, uid, index, length, name) {
 async function accessMedia(id) {
     console.log(id)
     let response = await api.accessMedia(id);
-    console.log(response.data)
-    if(response.status === 200) return response.data.image;
+    const picture = response.data
+    const webpath = "http://209.151.154.192/images/" + picture.name;
+    if(response.status === 200) return webpath;
 }
 
 export {

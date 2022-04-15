@@ -80,7 +80,11 @@ operation = async (req, res) => {
         }
         clients[docid][uid].res.write(`data: ${JSON.stringify(failed)}\n\n`);
     }
-    
+    const success = {
+        ack: op
+    }
+    clients[docid][uid].res.write(`data: ${JSON.stringify(success)}\n\n`);
+
     requestBody = {content: req.body.op, version: doc.version, first: false}; // used as global variable
     console.log("operation", op)
     if(!op){
@@ -88,10 +92,7 @@ operation = async (req, res) => {
     }
     const ids = [docid, uid]
     doc.submitOp(op, {source: ids})
-    const success = {
-        ack: op
-    }
-    clients[docid][uid].res.write(`data: ${JSON.stringify(success)}\n\n`);
+    return res.json({status: "ok"}).end()
 }
 
 function sendOpsToAll(op, ids) {
@@ -124,14 +125,13 @@ function sendPrescenceToAll(presence, ids) {
 
 getdoc = async (req, res) => {
     console.log("-------------getdoc")
-    console.log("getdoc")
     const {docid, uid} = req.params;
     var doc = connection.get('text-editor', docid);
     var convert = doc.data.ops;
     var cfg = {};
     var converted = new QuillDeltaToHtmlConverter(convert, cfg)
     var html = converted.convert()
-    res.send(html)
+    res.send(html);
 }
 
 presence = async (req, res) => {
@@ -149,7 +149,7 @@ presence = async (req, res) => {
     return res.status(200).json({
         status: "OK",
         ack: req.body
-    })
+    }).end()
 }
 
 module.exports = {

@@ -3,10 +3,14 @@ let media = {}
 
 uploadMedia = async (req, res) => {
     console.log("-------------uploadMedia")
-    const image = req.files.image;
+    console.log(req.files.file)
+    var image = req.files.file;
+    if(image.minetype !== 'image/jpeg' || image.minetype !== 'image/png'){
+        return res.status(200).json({error: true, status: 'error'})
+    }
     let imageID = Math.floor(Math.random() * Date.now());
     const normpath = "./public/images/" + image.name;
-    media[imageID] = image.name;
+    media[imageID] = image;
     console.log(imageID, media[imageID])
     image.mv(normpath, (error) => {
         if (error) {
@@ -15,8 +19,7 @@ uploadMedia = async (req, res) => {
             res.end();
             return;
         }
-        res.status(200).json({ status: 'ok', mediaid: imageID });
-        res.end();
+        return res.status(200).json({ status: 'ok', mediaid: imageID }).end();
     })
 }
 
@@ -25,18 +28,19 @@ accessMedia = async (req, res) => {
     const id = req.params.id;
     console.log(id)
     var fs = require('fs');
-
-    const normpath = "./public/images/" + media[id];
-    const webpath = "http://209.151.154.192/images/" + media[id];
+    const picture = media[id]
+    const normpath = "./public/images/" + picture.name;
     const image = fs.readFileSync(normpath);
-    
-    if(media[id] !== false) {
-        res.status(200).json({status: 'ok', image: webpath});
+
+    if(picture !== false) {
+        res.setHeader('content-type', picture.mimetype)
+        res.send(picture);
         res.end();
-        return;
     }
-    res.status(404).json({status: 'error', message: '404 NOT FOUND'})
-    res.end();
+    else{
+        res.status(404).json({status: 'error', message: '404 NOT FOUND'})
+        res.end();
+    }
 }
 
 module.exports = {

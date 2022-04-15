@@ -74,9 +74,8 @@ listCollection = async (req, res) => {
                 var cors = docs.find(element => element.id === result[i]._id);
                 finalList.push({name: cors.name, docid: result[i]._id, time: result[i]._m.mtime})
             }
-            res.status(200);
-            res.json(finalList)
-            res.end()
+            return res.status(200).json(finalList).end();
+            
         });
     });
 }
