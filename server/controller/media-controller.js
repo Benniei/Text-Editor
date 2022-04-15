@@ -31,7 +31,7 @@ accessMedia = async (req, res) => {
     const picture = media[id]
     if(!picture)
     var normpath = "./public/images/" + picture.name;
-    console.log(picture)
+    console.log("Image: ", id, picture.name)
     if(picture !== false) {
         res.setHeader('content-type', picture.mimetype)
         res.send(picture);

@@ -32,12 +32,9 @@ connect = async (req, res) => {
         if (err) throw err;
         doc.on('op', sendOpsToAll);
     });
-    
 
     doc.fetch(err => {
         if (err) throw err;
-        if(!versionGlo[docid])
-            versionGlo[docid] = doc.version
         var back = {
             content: doc.data.ops,
             version: versionGlo[docid]
@@ -62,6 +59,7 @@ connect = async (req, res) => {
     else{
         clients[docid] = {}
         clients[docid][uid] = client
+        versionGlo[docid] = 1
     }
     // Handle connection closing
     req.on('close', () => {
