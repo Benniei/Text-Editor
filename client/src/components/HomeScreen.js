@@ -19,7 +19,7 @@ function HomeScreen() {
         store.loadAllList();
     }, []);
 
-    let name = auth.user ? auth.user.name : "owo" // For testing purposes
+    let name = auth.user.name// For testing purposes
     let docCards = "";
     if (store) {
         docCards = 

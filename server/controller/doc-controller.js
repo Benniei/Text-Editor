@@ -5,6 +5,7 @@ var clients = {};
 var requestBody = null;
 var flag = false;
 connect = async (req, res) => {
+    console.log("-------------connect")
     // If undefined IDs are passed through, skip function.
     if(req.params.uid === 'undefined') return res.status(400);
     const {docid, uid} = req.params;
@@ -63,20 +64,23 @@ connect = async (req, res) => {
 }
 
 operation = async (req, res) => {
+    console.log("-------------operation")
     const {op, version} = req.body;
     const {docid, uid} = req.params;
     
-
+    console.log(op, version, docid, uid)
     flag = true
     var doc = connection.get('text-editor', docid);
     var docVersion = doc.version;
-
-    // if(docVersion > version) {
-    //     return res.status(200).json({
-    //         status: "retry"
-    //     })
-    // }
-    console.log(version)
+    console.log(docVersion)
+    if(docVersion > version) {
+        const failed = {
+            status: "retry",
+            ack: op
+        }
+        clients[docid][uid].res.write(`data: ${JSON.stringify(failed)}\n\n`);
+    }
+    
     requestBody = {content: req.body.op, version: doc.version, first: false}; // used as global variable
     console.log("operation", op)
     if(!op){
@@ -84,9 +88,10 @@ operation = async (req, res) => {
     }
     const ids = [docid, uid]
     doc.submitOp(op, {source: ids})
-    return res.status(200).json({
-        status: "OK"
-    })
+    const success = {
+        ack: op
+    }
+    clients[docid][uid].res.write(`data: ${JSON.stringify(success)}\n\n`);
 }
 
 function sendOpsToAll(op, ids) {
@@ -118,6 +123,8 @@ function sendPrescenceToAll(presence, ids) {
 }
 
 getdoc = async (req, res) => {
+    console.log("-------------getdoc")
+    console.log("getdoc")
     const {docid, uid} = req.params;
     var doc = connection.get('text-editor', docid);
     var convert = doc.data.ops;
@@ -139,7 +146,10 @@ presence = async (req, res) => {
         uid: req.params.uid
     }
     sendPrescenceToAll(data, req.params)
-    res.end();
+    return res.status(200).json({
+        status: "OK",
+        ack: req.body
+    })
 }
 
 module.exports = {

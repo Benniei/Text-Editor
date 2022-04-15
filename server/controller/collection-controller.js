@@ -15,6 +15,7 @@ const id = function() {
   
 
 createCollection = async (req, res) => {
+    console.log("-------------createCollection")
     const {name} = req.body
     // need to do name to ID mapping
     newID = id()
@@ -39,6 +40,7 @@ createCollection = async (req, res) => {
 }
 
 deleteCollection = async (req, res) => {
+    console.log("-------------deleteCollection")
     const {docid} = req.body
     var textquery = {_id: docid}
     var opquery = {d: docid}
@@ -58,20 +60,22 @@ deleteCollection = async (req, res) => {
 }
 
 listCollection = async (req, res) => {
+    console.log("-------------listCollection")
     finalList = []
     idList = []
     textEditor = myDb.db("editor-text").collection("text-editor")
 
-    var sort = textEditor.find().sort({"_m.ctime": -1}).limit(10).toArray(function(err, result) {
+    var sort = textEditor.find().sort({"_m.mtime": -1}).limit(10).toArray(function(err, result) {
         result.forEach(key => idList.push(key.docid))
         Text.find({
             'docid': { $in: idList}
         }, function(err, docs){
-            for (var i=0; i < docs.length; i++){
-                finalList.push({name: docs[i].name, docid: result[i]._id, time: result[i]._m.mtime})
+            for (var i=0; i < result.length; i++){
+                var cors = docs.find(element => element.id === result[i]._id);
+                finalList.push({name: cors.name, docid: result[i]._id, time: result[i]._m.mtime})
             }
             res.status(200);
-            res.write(`data: ${JSON.stringify(finalList)}\n\n`);
+            res.json(finalList)
             res.end()
         });
     });

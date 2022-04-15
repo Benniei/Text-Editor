@@ -43,7 +43,8 @@ function GlobalStoreContextProvider(props) {
     store.loadAllList = async function () {
         const response = await api.listCollection();
         if(response.status === 200) {
-            let allList = JSON.parse(response.data.substring(5));
+            let allList = response.data;
+            console.log(allList)
             storeReducer({
                 type:GlobalStoreActionType.ALL_LIST,
                 payload: allList
@@ -62,30 +63,16 @@ function GlobalStoreContextProvider(props) {
     store.createDocument = async function (name) {
         const response = await api.createCollection({name: name});
         if(response.status === 200) {
-            let list = store.allDocuments
-            list.unshift(response.data)
-            storeReducer({
-                type:GlobalStoreActionType.ALL_LIST,
-                payload: list
-            })
+            store.loadAllList()
         }
     }
 
     store.deleteDocument = async function (docid) {
         const response = await api.deleteCollection({docid: docid});
         if(response.status === 200) {
-            let list = store.allDocuments
-            list = list.filter(function(value, index, arr){
-                return value.docid !== docid
-            })
-            storeReducer({
-                type:GlobalStoreActionType.ALL_LIST,
-                payload: list
-            })
+            store.loadAllList()
         }
     }
-
-    
 
     store.setCurrentDocument = async function (docid) {
         // Create UID
@@ -131,7 +118,9 @@ async function presence(docid, uid, index, length, name) {
 }
 
 async function accessMedia(id) {
+    console.log(id)
     let response = await api.accessMedia(id);
+    console.log(response.data)
     if(response.status === 200) return response.data.image;
 }
 

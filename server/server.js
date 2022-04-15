@@ -13,19 +13,20 @@ PORT = 4000
 // Middleware
 app.use(express.urlencoded({extended: true, limit: '10mb'}))
 app.use(express.json({limit: '10mb'}))
-app.use(cors({ origin: ["http://localhost:3000"],
+app.use(cors({ origin: true,
          credentials:true 
 }));
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "..", "client", "build")));
-app.use(express.static("public"));
 app.use(express.json());
 app.use(fileupload());
+app.use('/images', express.static(path.join(__dirname, ".", "public", "images")));
  
 // Routers
 const textRouter = require('./routes/text-router')
 app.use('/', textRouter) 
 app.use((req, res, next) => {
+    console.log('Request Type:', req.method, req.path);
     res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
 });
   

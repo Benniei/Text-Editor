@@ -29,15 +29,7 @@ registerUser = async(req, res) => {
                     errorMessage: "Please enter all required fields."
                 });
         }
-        // const existingUser = await User.findOne({ email: email });
-        // if (existingUser) {
-        //     return res
-        //         .status(200)
-        //         .json({
-        //             status: "ERROR",
-        //             errorMessage: "An account with this username / email address already exists."
-        //         });
-        // }
+
         verified = false
         verifyKey = uniqueID()
         var verifyURL = "http://" + process.env.SERVERIP + "/users/verify?email=" + email + "&" + "key=" + verifyKey
@@ -53,23 +45,7 @@ registerUser = async(req, res) => {
             subject: "Verification key",
             text: verifyURL
         });
-        console.log("Email sent", info.messageId);
-        
-        // Send Email
-        // const buildHTML = "<a href=" + verifyURL + ">" + verifyURL + "</a> "
-        // const message = {
-        //     from: 'CSE356@cs.com', // Sender address
-        //     to: 'bennie.chen@stonybrook.edu',         // List of recipients
-        //     subject: 'Verification key', // Subject line
-        //     html: buildHTML// Plain text body
-        // };
-        // transport.sendMail(message, function(err, info) {
-        //     if (err) {
-        //       console.log(err)
-        //     } else {
-        //       console.log(info);
-        //     }
-        // });
+
         await res.status(200).json({
             status: "OK",
             user: {
@@ -132,6 +108,7 @@ loginUser = async(req, res) => {
             httpOnly: true,
         }).status(200).json({
             status: "OK",
+            name: existingUser.name,
             user: {
                 name: existingUser.name,
                 email: existingUser.email
@@ -154,34 +131,30 @@ logoutUser = async(req, res) => {
 }
 
 verifyUser = async(req, res) => {
-    try {
-        const email = url.parse(req.url, true).query.email;
-        const key = url.parse(req.url, true).query.key;
-        const existingUser = await User.findOne({ email: email });
-        if(existingUser){
-            if(existingUser.verifyKey === key){
-                existingUser.verified = true;
-                existingUser.save().then(() => {
-                    return res.status(200).json({
-                        status: "OK",
-                        email: email,
-                        message: 'User updated!'
-                    })
+    var email = url.parse(req.url, true).query.email;
+    const key = url.parse(req.url, true).query.key;
+    email = email.replace(" ","+")
+    const existingUser = await User.findOne({ email: email });
+    if(existingUser){
+        if(existingUser.verifyKey === key){
+            existingUser.verified = true;
+            existingUser.save().then(() => {
+                return res.status(200).json({
+                    status: "OK",
+                    email: email,
+                    message: 'User updated!'
                 })
-            }else{
-                res.status(200).json({
-                    status: "ERROR",
-                }).send()
-            }
-        }
-        else{
-            res.status(200).json({
+            })
+        }else{
+            return res.status(200).json({
                 status: "ERROR",
             }).send()
         }
     }
-    catch (err) {
-        res.status(200).send();
+    else{
+        return res.status(200).json({
+            status: "ERROR",
+        }).send()
     }
 }
 

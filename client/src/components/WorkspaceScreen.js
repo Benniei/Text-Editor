@@ -37,15 +37,16 @@ function WorkspaceScreen() {
                 name: 'image', 
                 withCredentials: true, 
                 callbackOK: async (serverResponse, next) => {
-                    let response = await accessMedia(serverResponse.id);
+                    let response = await accessMedia(serverResponse.mediaid);
                     if(response){
-                        var binary = '';
-                        var bytes = new Uint8Array( response.data );
-                        for (var i = 0; i < bytes.byteLength; i++) {
-                            binary += String.fromCharCode( bytes[ i ] );
-                        }
-                        let bin = 'data:image/png;base64,' + window.btoa( binary );
-                        next(bin);
+                        // var binary = '';
+                        // var bytes = new Uint8Array( response.data );
+                        // for (var i = 0; i < bytes.byteLength; i++) {
+                        //     binary += String.fromCharCode( bytes[ i ] );
+                        // }
+                        // let bin = 'data:image/png;base64,' + window.btoa( binary );
+
+                        next(response);
                     }
                 },
                 callbackKO: serverError => {
