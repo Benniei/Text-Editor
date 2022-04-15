@@ -29,13 +29,15 @@ accessMedia = async (req, res) => {
     console.log(id)
     var fs = require('fs');
     const picture = media[id]
-    if(!picture)
-    var normpath = "./public/images/" + picture.name;
-    console.log("Image: ", id, picture.name)
+    var pathToFile = path.join(__dirname, "..", "public", "images", picture.name)
+    console.log(pathToFile)
+    console.log(picture)
     if(picture !== false) {
-        res.setHeader('content-type', picture.mimetype)
-        res.send(picture);
-        res.end();
+        res.sendFile(pathToFile, (err) => {
+            if (err) console.log(err)
+            console.log('Sent:', picture.name); //Outputs "Sent: example-text.txt" in the console
+            res.end();
+        });
     }
     else{
         res.status(404).json({status: 'error', message: '404 NOT FOUND'})
