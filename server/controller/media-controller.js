@@ -3,18 +3,18 @@ let media = {}
 
 uploadMedia = async (req, res) => {
     console.log("-------------uploadMedia")
-    console.log(req.files.file)
     var image = req.files.file;
-    if(image.minetype !== 'image/jpeg' || image.minetype !== 'image/png'){
+    if(image.mimetype !== 'image/jpeg' && image.mimetype !== 'image/png'){
         return res.status(200).json({error: true, status: 'error'})
     }
+    console.log(image)
     let imageID = Math.floor(Math.random() * Date.now());
     const normpath = "./public/images/" + image.name;
     media[imageID] = image;
     console.log(imageID, media[imageID])
     image.mv(normpath, (error) => {
-        if (error) {
-            console.error(error)
+        if (error) {err
+            console.error(or)
             res.status(200).json({ status: 'error', message: error });
             res.end();
             return;
@@ -29,8 +29,9 @@ accessMedia = async (req, res) => {
     console.log(id)
     var fs = require('fs');
     const picture = media[id]
-    const normpath = "./public/images/" + picture.name;
-    const image = fs.readFileSync(normpath);
+    console.log(picture)
+    if(!picture)
+    var normpath = "./public/images/" + picture.name;
 
     if(picture !== false) {
         res.setHeader('content-type', picture.mimetype)
