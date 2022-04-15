@@ -105,7 +105,6 @@ loginUser = async(req, res) => {
         const token = auth.signToken(existingUser);
 
         return res.cookie("token", token, {
-            httpOnly: true,
         }).status(200).json({
             status: "OK",
             name: existingUser.name,

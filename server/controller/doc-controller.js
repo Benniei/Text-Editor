@@ -29,15 +29,10 @@ connect = async (req, res) => {
     //     presenceConnection.on('presence', sendPrescenceToAll);
     // })
 
-    await doc.fetch(err => {
+    doc.fetch(err => {
         if (err) throw err;
-        
-        data = {
-            content: doc.data.ops,
-            version: doc.version,
-            first: true
-        }
-        res.write(`data: ${JSON.stringify(data)}\n\n`);
+        console.log(doc.data.ops)
+        res.write(`data: ${JSON.stringify(doc.data.ops)}\n\n`);
         return;
     })
 
@@ -68,11 +63,9 @@ operation = async (req, res) => {
     const {op, version} = req.body;
     const {docid, uid} = req.params;
     
-    console.log(op, version, docid, uid)
     flag = true
     var doc = connection.get('text-editor', docid);
     var docVersion = doc.version;
-    console.log(docVersion)
     if(docVersion > version) {
         const failed = {
             status: "retry",
@@ -81,7 +74,9 @@ operation = async (req, res) => {
         clients[docid][uid].res.write(`data: ${JSON.stringify(failed)}\n\n`);
     }
     const success = {
-        ack: op
+        status: "ok",
+        ack: op,
+        version: doc.version
     }
     clients[docid][uid].res.write(`data: ${JSON.stringify(success)}\n\n`);
 
@@ -131,6 +126,7 @@ getdoc = async (req, res) => {
     var cfg = {};
     var converted = new QuillDeltaToHtmlConverter(convert, cfg)
     var html = converted.convert()
+    console.log(html)
     res.send(html);
 }
 

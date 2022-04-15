@@ -13,8 +13,8 @@ uploadMedia = async (req, res) => {
     media[imageID] = image;
     console.log(imageID, media[imageID])
     image.mv(normpath, (error) => {
-        if (error) {err
-            console.error(or)
+        if (error) {
+            console.error(error)
             res.status(200).json({ status: 'error', message: error });
             res.end();
             return;
@@ -29,7 +29,6 @@ accessMedia = async (req, res) => {
     console.log(id)
     var fs = require('fs');
     const picture = media[id]
-    console.log(picture)
     if(!picture)
     var normpath = "./public/images/" + picture.name;
 

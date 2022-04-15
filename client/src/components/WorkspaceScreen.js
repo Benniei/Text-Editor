@@ -52,7 +52,7 @@ function WorkspaceScreen() {
                 },
                 callbackKO: serverError => {
                     alert(serverError);
-                }
+                },
             },
             cursors:{
                 transformOnTextChange: true,
@@ -82,11 +82,10 @@ function WorkspaceScreen() {
                 
                 console.log(parsedData)
                 // First time connecting
-                if (parsedData.content && parsedData.first) {
-                    versionData = parsedData.version
-                    quill.setContents(parsedData.content)
+                if (Array.isArray(parsedData)) {
+                    quill.updateContents(parsedData)
                 }
-                else if (parsedData.content && !parsedData.first){
+                else if (parsedData.content){
                     versionData = parsedData.version
                     quill.updateContents(parsedData.content);
                 }
@@ -122,7 +121,7 @@ function WorkspaceScreen() {
 
         quill.on('selection-change', function(range, oldRange, source) {
             if (range) {
-                presence(docid, uid, range.index, range.length, auth.user.name)
+                presence(docid, uid, range.index, range.length, name)
             } 
         });
 
