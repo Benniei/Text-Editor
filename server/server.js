@@ -19,7 +19,7 @@ app.use(cors({ origin: ['http://cloud-peak.cse356.compas.cs.stonybrook.edu', 'ht
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "..", "client", "build")));
 app.use(express.json());
-app.use(fileupload({ safeFileNames: true, preserveExtension: true }))
+app.use(fileupload())
 app.use('/images', express.static(path.join(__dirname, ".", "public", "images")));
 
 // Routers
