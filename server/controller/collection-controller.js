@@ -70,8 +70,8 @@ listCollection = async (req, res) => {
         Text.find({
             'docid': { $in: idList}
         }, function(err, docs){
-            for (var i=0; i < result.length; i++){
-                var cors = docs.find(element => element.id === result[i]._id);
+            for (var i=0; i < docs.length; i++){
+                var cors = docs.find(element => element.id === docs[i].id);
                 finalList.push({name: cors.name, docid: result[i]._id, time: result[i]._m.mtime})
             }
 
