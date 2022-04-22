@@ -3,6 +3,7 @@ const UserController = require('../controller/user-controller')
 const CollectionController = require('../controller/collection-controller')
 const MediaController = require('../controller/media-controller')
 const DocController = require('../controller/doc-controller')
+const SearchController = require('../controller/index-controller')
 
 const router = express.Router()
 
@@ -28,9 +29,8 @@ router.post('/doc/op/:docid/:uid', DocController.operation)
 router.post('/doc/presence/:docid/:uid', DocController.presence)
 router.get('/doc/get/:docid/:uid', DocController.getdoc)
 
-
-
-
-
+// Index Search
+router.get('/index/search', SearchController.search)
+router.get('/index/suggest', SearchController.suggest)
 
 module.exports = router

@@ -11,7 +11,6 @@ export const GlobalStoreActionType = {
 
 function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
-        ip: "209.151.154.192",
         allDocuments: [],
         currentDocument: null
     });
@@ -120,10 +119,10 @@ async function presence(docid, uid, index, length, name) {
 }
 
 async function accessMedia(id) {
-    console.log(id)
+    let ip = "localhost:4000"
     let response = await api.accessMedia(id);
     const picture = response.data
-    const webpath = "http://209.151.154.192/images/" + picture.name;
+    const webpath = "http://" + ip + "/images/" + picture.name;
     if(response.status === 200) return webpath;
 }
 

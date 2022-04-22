@@ -32,7 +32,7 @@ registerUser = async(req, res) => {
 
         verified = false
         verifyKey = uniqueID()
-        var verifyURL = "http://" + process.env.SERVERIP + "/users/verify?email=" + email + "&" + "key=" + verifyKey
+        var verifyURL = "http://" + process.env.BACKENDIP + "/users/verify?email=" + email + "&" + "key=" + verifyKey
         const newUser = new User({
             name, password, email, verified, verifyKey
         });
