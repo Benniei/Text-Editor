@@ -13,6 +13,9 @@ Located in File
 3. client/src/store/index.js
    1. Connect to end media
    2. Let IP = "" in function accessMedia
+4. Images
+   1. client/src/components/WorkspaceScreen
+   2. Connect to backend Images database
 
 ## Server
 

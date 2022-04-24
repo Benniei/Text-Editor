@@ -7,11 +7,9 @@ uploadMedia = async (req, res) => {
     if(image.mimetype !== 'image/jpeg' && image.mimetype !== 'image/png'){
         return res.status(200).json({error: true, status: 'error'})
     }
-    console.log(image)
     let imageID = Math.floor(Math.random() * Date.now());
     const normpath = "./public/images/" + image.name;
     media[imageID] = image;
-    console.log(imageID, media[imageID])
     image.mv(normpath, (error) => {
         if (error) {
             console.error(error)
@@ -19,7 +17,7 @@ uploadMedia = async (req, res) => {
             res.end();
             return;
         }
-        return res.status(200).json({ status: 'ok', mediaid: imageID }).end();
+        return res.status(200).json({ status: 'ok', mediaid: imageID, name: image.name }).end();
     })
 }
 
@@ -28,10 +26,9 @@ accessMedia = async (req, res) => {
     const id = req.params.id;
     console.log(id)
     var fs = require('fs');
+    console.log(media)
     const picture = media[id]
     var pathToFile = path.join(__dirname, "..", "public", "images", picture.name)
-    console.log(pathToFile)
-    console.log(picture)
     if(picture !== false) {
         res.sendFile(pathToFile, (err) => {
             if (err) console.log(err)

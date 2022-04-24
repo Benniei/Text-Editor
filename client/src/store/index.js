@@ -106,7 +106,10 @@ async function operations(docid, uid, delta, versionData) {
     }
     console.log("data", data)
     let response = await api.operation(docid, uid, data);
-//     if(response.data.)
+    while(response.data.status === "retry"){
+        data.version = data.version + 1
+        response = await api.operation(docid, uid, data);
+    }
 }
 
 async function presence(docid, uid, index, length, name) {
@@ -122,8 +125,7 @@ async function accessMedia(id) {
     let ip = "localhost:4000"
     let response = await api.accessMedia(id);
     const picture = response.data
-    const webpath = "http://" + ip + "/images/" + picture.name;
-    if(response.status === 200) return webpath;
+    if(response.status === 200) return picture;
 }
 
 export {
