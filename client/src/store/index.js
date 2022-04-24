@@ -100,16 +100,19 @@ async function connect(docid, uid) {
 }
 
 async function operations(docid, uid, delta, versionData) {
-    const data = {
+    let data;
+
+    data = {
         version: versionData,
         op: delta.ops 
     }
-    console.log("data", data)
+
     let response = await api.operation(docid, uid, data);
     while(response.data.status === "retry"){
-        data.version = data.version + 1
+        data.version = response.data.version
         response = await api.operation(docid, uid, data);
     }
+    return response.data.version + 1
 }
 
 async function presence(docid, uid, index, length, name) {

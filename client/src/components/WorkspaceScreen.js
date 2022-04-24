@@ -91,7 +91,8 @@ function WorkspaceScreen() {
 
         quill.on('text-change', function (delta, oldDelta, source) {
             if (source !== 'user') return;
-            operations(docid, uid, delta, versionData);;
+            operations(docid, uid, delta, versionData);
+            // console.log("versionData: " + versionData)
         });
 
         quill.on('selection-change', function(range, oldRange, source) {
