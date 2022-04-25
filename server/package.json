@@ -25,6 +25,7 @@
     "reconnecting-websocket": "^4.4.0",
     "rich-text": "^4.1.0",
     "sharedb": "^2.2.5",
+    "tslib": "^2.4.0",
     "ws": "^8.5.0"
   }
 }

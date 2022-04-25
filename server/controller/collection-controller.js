@@ -67,6 +67,9 @@ listCollection = async (req, res) => {
     
     var sort = textEditor.find().sort({"_m.mtime": -1}).limit(10).toArray(function(err, result) {
         result.forEach(key => idList.push(key.docid))
+        // Text.search({}, function(err, results) {
+        //     console.log(results)
+        // })
         Text.find({
             'docid': { $in: idList}
         }, function(err, docs){
