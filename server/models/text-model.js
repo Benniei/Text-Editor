@@ -15,7 +15,46 @@ DocumentSchema.plugin(mongoosastic)
 
 let Document = mongoose.model('Text', DocumentSchema)
 
-Document.createMapping(function(err, mapping){
+Document.createMapping({
+  "settings":{
+     "analysis":{
+        "analyzer":{
+           "myanal":{ 
+              "type":"custom",
+              "tokenizer":"standard",
+              "filter":[
+                 "lowercase"
+              ]
+           },
+           "stopanal":{ 
+              "type":"custom",
+              "tokenizer":"standard",
+              "filter":[
+                 "lowercase",
+                 "english_stop",
+                 "stemmer"
+              ]
+           }
+        },
+        "filter":{
+           "english_stop":{
+              "type":"stop",
+              "stopwords":"_english_"
+           }
+        }
+     }
+  },
+  "mappings":{
+      "properties":{
+         "title": {
+            "type":"text",
+            "analyzer":"myanal", 
+            "search_analyzer":"stopanal", 
+            "search_quote_analyzer":"myanal" 
+        }
+     }
+  }
+}, function(err, mapping){
     console.log("create mapping")
     if(err){
       console.log('error creating mapping (you can safely ignore this)');
@@ -26,9 +65,6 @@ Document.createMapping(function(err, mapping){
     }
 });
 
-let stream = Document.synchronize(), count = 0;
-stream.on('data', function(err, doc){
-  count++;
-});
+let stream = Document.synchronize();
 
 module.exports = Document

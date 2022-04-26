@@ -161,15 +161,15 @@ getdoc = async (req, res) => {
         var cfg = {};
         var converted = new QuillDeltaToHtmlConverter(convert, cfg)
         var html = converted.convert()
-        console.log(html)
-        console.log(docid)
+        var item = html.replace(/<(.|\n)*?>/g, '');
+        console.log(item)
         Text.findOne({id: docid}, (err, result) => {
             // if(err) return err
-            result.content = html
+            result.content = item
             result.save()
         })
   }
-  setTimeout( dequeueChanges, 5000 );
+  setTimeout( dequeueChanges, 500 );
 })();
 
 presence = async (req, res) => {
