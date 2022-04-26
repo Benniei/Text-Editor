@@ -6,7 +6,7 @@ var DocumentSchema = new Schema(
     {
         name: { type: String, required: true, es_indexed: true},
         id: {type:String, required: true, es_indexed: true},
-        content: {type: String, es_indexed: true}
+        content: {type: String, es_indexed:true}
     },
     {timestamps: true}
 )
