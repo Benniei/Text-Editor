@@ -2,9 +2,11 @@ var QuillDeltaToHtmlConverter = require('quill-delta-to-html').QuillDeltaToHtmlC
 var connection = require('../db/shareDB.js')
 const auth = require('../auth')
 const jwt = require('jsonwebtoken')
+const Text = require('../models/text-model')
 
 var clients = {};
 var versionGlo = {};
+var changedDocuments = [];
 var requestBody = null;
 var flag = false;
 connect = async (req, res) => {
@@ -93,6 +95,10 @@ operation = async (req, res) => {
         doc.submitOp(op, {source: ids})
         versionGlo[docid] = versionGlo[docid] + 1;
 
+        // Add item to queue
+        if(changedDocuments.indexOf(docid) < 0){
+            changedDocuments.push(docid);
+        }
         return res.json({status: "ok", ack: op, version: docVersion})
     }
 }
@@ -141,9 +147,30 @@ getdoc = async (req, res) => {
     var cfg = {};
     var converted = new QuillDeltaToHtmlConverter(convert, cfg)
     var html = converted.convert()
-    console.log(html)
     res.send(html);
 }
+
+// // async function to add keys to elastic search
+(function dequeueChanges() {
+  // Dequeue from array
+  var docid;
+  if((docid = changedDocuments.shift())){
+        console.log("something changed in " + docid)
+        var doc = connection.get('text-editor', docid);
+        var convert = doc.data.ops;
+        var cfg = {};
+        var converted = new QuillDeltaToHtmlConverter(convert, cfg)
+        var html = converted.convert()
+        console.log(html)
+        console.log(docid)
+        Text.findOne({id: docid}, (err, result) => {
+            // if(err) return err
+            result.content = html
+            result.save()
+        })
+  }
+  setTimeout( dequeueChanges, 5000 );
+})();
 
 presence = async (req, res) => {
     // var presenceConnection = connection.getDocPresence('text-editor', docid);

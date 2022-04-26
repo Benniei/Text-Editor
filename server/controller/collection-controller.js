@@ -44,13 +44,12 @@ deleteCollection = async (req, res) => {
     const {docid} = req.body
     var textquery = {_id: docid}
     var opquery = {d: docid}
-    Text.findOneAndDelete({ id: docid }, () => {
-        
-    })
+    const document = await Text.findOneAndDelete({ id: docid })
+    document.remove();
     myDb.db("editor-text").collection("text-editor").deleteOne(textquery, function(err, obj) {
         if (err) throw err;
     });
-    myDb.db("editor-text").collection("o_text-editor").deleteOne(opquery, function(err, obj) {
+    myDb.db("editor-text").collection("o_text-editor").deleteMany(opquery, function(err, obj) {
         if (err) throw err;
     });
     console.log("Delete: " + docid)
@@ -73,8 +72,8 @@ listCollection = async (req, res) => {
         Text.find({
             'docid': { $in: idList}
         }, function(err, docs){
-            for (var i=0; i < docs.length; i++){
-                var cors = docs.find(element => element.id === docs[i].id);
+            for (var i=0; i < result.length; i++){
+                var cors = docs.find(element => element.id === result[i]._id);
                 finalList.push({name: cors.name, docid: result[i]._id, time: result[i]._m.mtime})
             }
 

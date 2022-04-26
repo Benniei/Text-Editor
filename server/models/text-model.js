@@ -26,4 +26,9 @@ Document.createMapping(function(err, mapping){
     }
 });
 
+let stream = Document.synchronize(), count = 0;
+stream.on('data', function(err, doc){
+  count++;
+});
+
 module.exports = Document
