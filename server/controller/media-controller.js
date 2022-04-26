@@ -4,7 +4,7 @@ let media = {}
 uploadMedia = async (req, res) => {
     console.log("-------------uploadMedia")
     var image = req.files.file;
-    if(image.mimetype !== 'image/jpeg' && image.mimetype !== 'image/png'){
+    if(image.mimetype !== 'image/jpeg' && image.mimetype !== 'image/png' && image.mimetype !== 'image/gif'){
         return res.status(200).json({error: true, status: 'error'})
     }
     let imageID = Math.floor(Math.random() * Date.now());
