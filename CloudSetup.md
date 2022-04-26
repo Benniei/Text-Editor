@@ -19,6 +19,8 @@
 # Restarting Server
 1. Restart mongod
 
+Github Issues
+`git remote set-url origin https://<token>@github.com/<username>/<repo>`
 
 Create new client build
 `npm run build`
