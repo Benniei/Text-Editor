@@ -6,7 +6,6 @@ const WS = require('ws');
 sharedb.types.register(richText.type);
 
 socketIP = process.env.SOCKETIP
-ip = process.env.IP
 // ShareDB Connection
 var socket = new ReconnectingWebSocket('ws://' + socketIP + ':4001', [], { WebSocket: WS });
 console.log("Connected to shareDB on " + 'ws://' + socketIP + ':4001')
