@@ -15,7 +15,7 @@ function WorkspaceScreen() {
     const {store} = useContext(GlobalStoreContext);
     const {auth} = useContext(AuthContext);
 
-    let ip = "localhost:4000"
+    let ip = "209.151.152.59"
     
     const [listening, setListening] = useState(false);
 
@@ -63,7 +63,7 @@ function WorkspaceScreen() {
         var versionData;
         if(!listening) {
             uid = uniqueID()
-            const events = new EventSource('http://localhost:4000/doc/connect/' + docid + '/' + uid)
+            const events = new EventSource('http://209.151.152.59/doc/connect/' + docid + '/' + uid)
 
             events.onmessage = (event) => {
                 var parsedData = JSON.parse(event.data); 

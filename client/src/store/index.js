@@ -125,7 +125,6 @@ async function presence(docid, uid, index, length, name) {
 }
 
 async function accessMedia(id) {
-    let ip = "localhost:4000"
     let response = await api.accessMedia(id);
     const picture = response.data
     if(response.status === 200) return picture;
