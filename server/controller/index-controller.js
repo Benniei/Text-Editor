@@ -5,11 +5,11 @@ search = async (req, res) => {
         query_string: {
             query: "Albert is simple"
         },
-        "highlight": {
-            "number_of_fragments" : 1,
-            "fragment_size" : 100,
-            "fields" : {
-              "body" : { "pre_tags" : ["<em>"], "post_tags" : ["</em>"] }
+        highlight: {
+            number_of_fragments : 1,
+            fragment_size : 100,
+            fields : {
+              body : { pre_tags : ["<em>"], post_tags : ["</em>"] }
             }
         }
     })
