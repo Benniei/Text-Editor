@@ -16,7 +16,6 @@ connect = async (req, res) => {
     const {docid, uid} = req.params;
     // Create the HTTP Stream
     const head = {
-        'Cache-Control': 'no-cache',
         'Connection': 'keep-alive',
         'Content-Type': 'text/event-stream',
         "X-Accel-Buffering": "no"
