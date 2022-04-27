@@ -47,7 +47,7 @@ Document.createMapping({
          "tokenizer": {
            "nGram_token": {
                  "type": "edge_ngram",
-                 "min_gram": 4,
+                 "min_gram": 3,
                  "max_gram": 10,
                  "token_chars": [
                    "letter",
