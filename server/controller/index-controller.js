@@ -30,11 +30,12 @@ search = async (req, res) => {
         }
         finalResult.push(data)
     }
-    res.json(finalResult).end()
+    res.status(200).json(finalResult).end()
 }
 
 suggest = async (req, res) => {
-    
+    var queryContent = url.parse(req.url, true).query.q;
+    var suggest = []
 }
 
 module.exports = {

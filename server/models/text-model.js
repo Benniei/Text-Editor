@@ -16,45 +16,60 @@ DocumentSchema.plugin(mongoosastic)
 let Document = mongoose.model('Text', DocumentSchema)
 
 Document.createMapping({
-  "settings":{
-     "analysis":{
-        "analyzer":{
-           "myanal":{ 
-              "type":"custom",
-              "tokenizer":"standard",
-              "filter":[
-                 "lowercase"
-              ]
-           },
-           "stopanal":{ 
-              "type":"custom",
-              "tokenizer":"standard",
-              "filter":[
-                 "lowercase",
-                 "english_stop",
-                 "stemmer"
-              ]
-           }
-        },
-        "filter":{
-           "english_stop":{
-              "type":"stop",
-              "stopwords":"_english_"
-           }
-        }
+   "settings":{
+      "analysis":{
+         "analyzer":{
+            "nGram_anal":{ 
+               "type":"custom",
+               "tokenizer":"nGram_token",
+               "filter":[
+                  "lowercase",
+                  "asciifolding"
+               ]
+            },
+            "stop_anal":{ 
+               "type":"custom",
+               "tokenizer":"whitespace",
+               "filter":[
+                  "lowercase",
+                  "english_stop",
+                  "stemmer",
+                  "asciifolding"
+               ]
+            }
+         },
+         "filter":{
+            "english_stop":{
+               "type":"stop",
+               "stopwords":"_english_"
+            }
+         },
+         "tokenizer": {
+           "nGram_token": {
+                 "type": "edge_ngram",
+                 "min_gram": 4,
+                 "max_gram": 10,
+                 "token_chars": [
+                   "letter",
+                   "digit"
+                 ]
+            }
+         }
+      }
+   },
+   "mappings":{
+     "properties":{
+       "name": {
+         "type": "text",
+         "analyzer": "nGram_anal"
+       },
+       "content": {
+         "type": "text",
+         "analyzer": "nGram_anal"
+       }
      }
-  },
-  "mappings":{
-      "properties":{
-         "title": {
-            "type":"text",
-            "analyzer":"myanal", 
-            "search_analyzer":"stopanal", 
-            "search_quote_analyzer":"myanal" 
-        }
-     }
-  }
-}, function(err, mapping){
+   }
+ }, function(err, mapping){
     console.log("create mapping")
     if(err){
       console.log('error creating mapping (you can safely ignore this)');
