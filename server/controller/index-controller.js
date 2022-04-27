@@ -20,7 +20,7 @@ search = async (req, res) => {
     var finalResult = []
     for(var i = 0; i < Math.min(10, results.length); i++){
         const item = results[i]._source
-        const finalString = results[i].highlight.content ;
+        const finalString = "<em>" + results[i].highlight.content + "</em>";
         var data = {
             docid: item.id,
             name: item.name,
