@@ -13,7 +13,7 @@ search = async (req, res) => {
         number_of_fragments : 1,
         fragment_size: 100,
         fields: {
-            content: {analyzer: "english"}
+            content: {}
         }
     }})
     results = searchRes.body.hits.hits
