@@ -13,14 +13,14 @@ search = async (req, res) => {
         number_of_fragments : 1,
         fragment_size: 100,
         fields: {
-            "content": {}
+            content: {analyzer: "english"}
         }
     }})
     results = searchRes.body.hits.hits
     var finalResult = []
     for(var i = 0; i < Math.min(10, results.length); i++){
         const item = results[i]._source
-        const finalString = "<em>" + results[i].highlight.content + "</em>";
+        const finalString = results[i].highlight.content ;
         var data = {
             docid: item.id,
             name: item.name,
