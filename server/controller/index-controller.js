@@ -10,8 +10,6 @@ search = async (req, res) => {
     },
     {
     highlight: {
-        pre_tags: ["<em>"],
-        post_tags: ["</em>"],
         number_of_fragments : 1,
         fragment_size: 100,
         fields: {
@@ -22,7 +20,7 @@ search = async (req, res) => {
     var finalResult = []
     for(var i = 0; i < Math.min(10, results.length); i++){
         const item = results[i]._source
-        const finalString = results[i].highlight.content;
+        const finalString = results[i].highlight.content ;
         var data = {
             docid: item.id,
             name: item.name,

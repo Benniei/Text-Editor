@@ -144,9 +144,11 @@ getdoc = async (req, res) => {
     const {docid, uid} = req.params;
     var doc = connection.get('text-editor', docid);
     var convert = doc.data.ops;
+    console.log(convert);
     var cfg = {};
     var converted = new QuillDeltaToHtmlConverter(convert, cfg)
     var html = converted.convert()
+    console.log(html)
     res.send(html);
 }
 
@@ -162,7 +164,6 @@ getdoc = async (req, res) => {
         var converted = new QuillDeltaToHtmlConverter(convert, cfg)
         var html = converted.convert()
         var item = html.replace(/<(.|\n)*?>/g, '');
-        console.log(item)
         Text.findOne({id: docid}, (err, result) => {
             // if(err) return err
             result.content = item
