@@ -24,7 +24,8 @@ Document.createMapping({
                "tokenizer":"nGram_token",
                "filter":[
                   "lowercase",
-                  "asciifolding"
+                  "asciifolding",
+                  "english_stop"
                ]
             },
             "stop_anal":{ 
