@@ -10,6 +10,8 @@ search = async (req, res) => {
     },
     {
     highlight: {
+        pre_tags: ["<em>"],
+        post_tags: ["</em>"],
         number_of_fragments : 1,
         fragment_size: 100,
         fields: {
