@@ -15,7 +15,19 @@ DocumentSchema.plugin(mongoosastic)
 
 let Document = mongoose.model('Text', DocumentSchema)
 
-Document.createMapping({
+Document.createMapping(function(err, mapping){
+    console.log("create mapping")
+    if(err){
+      console.log('error creating mapping (you can safely ignore this)');
+      console.log(err);
+    }else{
+      console.log('mapping created!');
+      console.log(mapping);
+    }
+});
+
+/*
+{
    "settings":{
       "analysis":{
          "analyzer":{
@@ -69,16 +81,8 @@ Document.createMapping({
        }
      }
    }
- }, function(err, mapping){
-    console.log("create mapping")
-    if(err){
-      console.log('error creating mapping (you can safely ignore this)');
-      console.log(err);
-    }else{
-      console.log('mapping created!');
-      console.log(mapping);
-    }
-});
+ }
+*/
 
 let stream = Document.synchronize();
 

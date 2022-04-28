@@ -149,12 +149,11 @@ getdoc = async (req, res) => {
     res.send(html);
 }
 
-// // async function to add keys to elastic search
+// async function to add keys to elastic search
 (function dequeueChanges() {
   // Dequeue from array
   var docid;
   if((docid = changedDocuments.shift())){
-        console.log("something changed in " + docid)
         var doc = connection.get('text-editor', docid);
         var convert = doc.data.ops;
         var cfg = {};
