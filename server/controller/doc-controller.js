@@ -12,7 +12,7 @@ var flag = false;
 
 function redirect(docid) {
     var docMod = parseInt(docid) % 3;
-    return "http://209.151.152.59:430" + docMod
+    return "430" + docMod
 }
 
 connect = async (req, res) => {
@@ -20,6 +20,10 @@ connect = async (req, res) => {
     // If undefined IDs are passed through, skip function.
     if(req.params.uid === 'undefined') return res.status(400);
     const {docid, uid} = req.params;
+
+    // If docID doesn't match with current hash, redirect
+    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/connect/" + docid + "/" + uid)
+
     // Create the HTTP Stream
     const head = {
         'Cache-Control': 'no-cache',
@@ -80,6 +84,9 @@ operation = async (req, res) => {
     const {op, version} = req.body;
     const {docid, uid} = req.params;
     
+    // If docID doesn't match with current hash, redirect
+    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/op/" + docid + "/" + uid)
+
     flag = true
     var doc = connection.get('text-editor', docid);
     var docVersion = versionGlo[docid];
@@ -181,6 +188,11 @@ presence = async (req, res) => {
     // const localPresence = presenceConnection.create()
     // console.log(data)
     // localPresence.submit(data)
+    
+    // If docID doesn't match with current hash, redirect
+    const {docid, uid} = req.params;
+    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/presence/" + docid + "/" + uid)
+
     var userName;
     auth.verify(req, res, async function () {
         let verified = null;
@@ -193,7 +205,7 @@ presence = async (req, res) => {
         index: req.body.index,
         length: req.body.length,
         name: userName,
-        uid: req.params.uid
+        uid: uid
     }
     sendPrescenceToAll(data, req.params)
     return res.status(200).json({
