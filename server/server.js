@@ -9,7 +9,6 @@ dotenv.config();
 
 IP = process.env.BACKENDIP
 PORT = process.env.PORT? process.env.PORT: 4000
-console.log(PORT)
 
 // Middleware
 app.use(express.urlencoded({extended: true, limit: '10mb'}))

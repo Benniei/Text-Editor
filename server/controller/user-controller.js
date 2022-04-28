@@ -62,6 +62,7 @@ registerUser = async(req, res) => {
 
 loginUser = async(req, res) => {
     try {
+        console.log("----loginUser")
         const {email, password} = req.body
         if (!email || !password) {
             return res

@@ -84,6 +84,6 @@ let Document = mongoose.model('Text', DocumentSchema)
  }
 */
 
-// let stream = Document.synchronize();
+let stream = Document.synchronize();
 
 module.exports = Document
