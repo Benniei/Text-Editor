@@ -61,11 +61,13 @@ Document.createMapping({
      "properties":{
        "name": {
          "type": "text",
-         "analyzer": "nGram_anal"
+         "analyzer": "nGram_anal",
+         "search_analyzer":"stopanal"
        },
        "content": {
          "type": "text",
-         "analyzer": "nGram_anal"
+         "analyzer": "nGram_anal",
+         "search_analyzer":"stopanal"
        }
      }
    }
