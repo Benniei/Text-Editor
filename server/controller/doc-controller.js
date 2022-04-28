@@ -60,7 +60,7 @@ connect = async (req, res) => {
     else{
         clients[docid] = {}
         clients[docid][uid] = client
-        versionGlo[docid] = 1
+        versionGlo[docid] = doc.version
     }
     // Handle connection closing
     req.on('close', () => {
