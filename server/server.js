@@ -8,7 +8,8 @@ const fileupload = require('express-fileupload')
 dotenv.config();
 
 IP = process.env.BACKENDIP
-PORT = apps.env.PORT? apps.env.PORT: 4000
+PORT = process.env.PORT? process.env.PORT: 4000
+console.log(PORT)
 
 // Middleware
 app.use(express.urlencoded({extended: true, limit: '10mb'}))
