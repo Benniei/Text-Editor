@@ -62,12 +62,12 @@ Document.createMapping({
        "name": {
          "type": "text",
          "analyzer": "nGram_anal",
-         "search_analyzer":"stopanal"
+         "search_analyzer": "stop_anal"
        },
        "content": {
          "type": "text",
          "analyzer": "nGram_anal",
-         "search_analyzer":"stopanal"
+         "search_analyzer": "stop_anal"
        }
      }
    }
