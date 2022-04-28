@@ -38,7 +38,7 @@ connect = async (req, res) => {
         if (err) throw err;
         var back = {
             content: doc.data.ops,
-            version: 1
+            version: versionGlo[docid]
         }
         res.write(`data: ${JSON.stringify(back)}\n\n`);
         return;
@@ -60,7 +60,7 @@ connect = async (req, res) => {
     else{
         clients[docid] = {}
         clients[docid][uid] = client
-        versionGlo[docid] = doc.version
+        versionGlo[docid] = 1
     }
     // Handle connection closing
     req.on('close', () => {
