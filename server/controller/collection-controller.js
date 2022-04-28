@@ -10,7 +10,7 @@ MongoClient.connect(uri, function(err, database) {
 })
 
 const id = function() {
-    return Math.random() * Date.now();
+    return Math.floor(Math.random() * Date.now());
   };
   
 
