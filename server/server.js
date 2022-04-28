@@ -8,7 +8,7 @@ const fileupload = require('express-fileupload')
 dotenv.config();
 
 IP = process.env.BACKENDIP
-PORT = 4000
+PORT = apps.env.PORT? apps.env.PORT: 4000
 
 // Middleware
 app.use(express.urlencoded({extended: true, limit: '10mb'}))
@@ -36,4 +36,4 @@ const mongoose = require('./db/mongoose.js')
 mongoose.on('error', console.error.bind(console, 'MongoDB connection error: '))
 
 // Listen
-app.listen(PORT, IP, () => console.log("Server running on port " +IP +  PORT))
+app.listen(PORT, IP, () => console.log("Server running on port " + IP +  PORT))
