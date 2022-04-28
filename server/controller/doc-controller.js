@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const Text = require('../models/text-model')
 
 var clients = {};
-var versionGlo = {};
+// var versionGlo = {};
 var changedDocuments = [];
 var requestBody = null;
 var flag = false;
@@ -39,7 +39,7 @@ connect = async (req, res) => {
         if (err) throw err;
         var back = {
             content: doc.data.ops,
-            version: versionGlo[docid]
+            version: doc.version
         }
         res.write(`data: ${JSON.stringify(back)}\n\n`);
         return;
@@ -61,7 +61,7 @@ connect = async (req, res) => {
     else{
         clients[docid] = {}
         clients[docid][uid] = client
-        versionGlo[docid] = 1
+        // versionGlo[docid] = doc.version
     }
     // Handle connection closing
     req.on('close', () => {
@@ -76,7 +76,7 @@ operation = async (req, res) => {
     
     flag = true
     var doc = connection.get('text-editor', docid);
-    var docVersion = versionGlo[docid];
+    var docVersion = doc.version;
     
     console.log("operation", docid, uid, op, version, docVersion)
     if(docVersion > version) {
@@ -93,7 +93,7 @@ operation = async (req, res) => {
         const ids = [docid, uid]
         
         doc.submitOp(op, {source: ids})
-        versionGlo[docid] = versionGlo[docid] + 1;
+        // versionGlo[docid] = versionGlo[docid] + 1;
 
         // Add item to queue
         if(changedDocuments.indexOf(docid) < 0){
