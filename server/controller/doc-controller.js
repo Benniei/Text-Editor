@@ -3,6 +3,7 @@ var connection = require('../db/shareDB.js')
 const auth = require('../auth')
 const jwt = require('jsonwebtoken')
 const Text = require('../models/text-model')
+const dotenv = require('dotenv')
 
 var clients = {};
 var versionGlo = {};
