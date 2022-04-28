@@ -18,8 +18,7 @@ createCollection = async (req, res) => {
     console.log("-------------createCollection")
     const {name} = req.body
     // need to do name to ID mapping
-    const newID = id()
-    console.log(newID)
+    newID = id().toString()
     var doc = connection.get('text-editor', newID);
     doc.fetch(err => {
         if (err) throw err;
