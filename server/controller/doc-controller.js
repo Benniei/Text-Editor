@@ -9,6 +9,12 @@ var versionGlo = {};
 var changedDocuments = [];
 var requestBody = null;
 var flag = false;
+
+function redirect(docid) {
+    var docMod = parseInt(docid) % 3;
+    return "http://209.151.152.59:430" + docMod
+}
+
 connect = async (req, res) => {
     console.log("-------------connect")
     // If undefined IDs are passed through, skip function.

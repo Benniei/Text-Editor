@@ -1,0 +1,22 @@
+upstream websocket {
+    server 209.151.152.59:4001;
+}
+
+upstream backend {
+    server 209.151.152.59:4300;
+    server 209.151.152.59:4301;
+    server 209.151.152.59:4302;
+}
+
+server {
+    listen 80;
+
+    server_name api.localhost.com;
+    location / {
+        proxy_set_header   X-Forwarded-For $remote_addr;
+        proxy_set_header   Host $http_host;
+        proxy_pass         http://backend;
+        proxy_buffering    off;
+        add_header         X-CSE356 "61f9fc9073ba724f297db858";
+    }
+}
