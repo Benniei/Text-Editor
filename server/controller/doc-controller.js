@@ -24,7 +24,7 @@ connect = async (req, res) => {
 
     // If docID doesn't match with current hash, redirect
     console.log(process.env.PORT)
-    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/connect/" + docid + "/" + uid)
+    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/doc/connect/" + docid + "/" + uid)
 
     // Create the HTTP Stream
     const head = {
