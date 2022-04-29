@@ -7,16 +7,15 @@ search = async (req, res) => {
         index: 'texts',
         query: {
             match: {content: queryContent}
+        },
+        highlight: {
+            number_of_fragments : 1,
+            fragment_size: 100,
+            fields: {
+                content: {}
+            }
         }
-    },
-    {
-    highlight: {
-        number_of_fragments : 1,
-        fragment_size: 100,
-        fields: {
-            content: {}
-        }
-    }})
+    })
     results = searchRes.hits.hits
     var finalResult = []
     console.log(results)
