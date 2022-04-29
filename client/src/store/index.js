@@ -106,7 +106,7 @@ async function operations(docid, uid, delta, versionData) {
         version: versionData,
         op: delta.ops 
     }
-
+    console.log(docid, uid, data)
     let response = await api.operation(docid, uid, data);
     while(response.data.status === "retry"){
         data.version = response.data.version
