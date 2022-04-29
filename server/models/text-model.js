@@ -11,7 +11,13 @@ var DocumentSchema = new Schema(
     {timestamps: true}
 )
 
-DocumentSchema.plugin(mongoosastic)
+DocumentSchema.plugin(mongoosastic, {
+    host: "cloud-peak.es.us-east-1.aws.found.io",
+    port: 9243,
+    protocol: "https",
+    auth: "elastic:qfpcdyKBHBNlZqk14GwfhNB9",
+    curlDebug: true
+})
 
 let Document = mongoose.model('Text', DocumentSchema)
 
@@ -24,7 +30,7 @@ let Document = mongoose.model('Text', DocumentSchema)
 //       console.log('mapping created!');
 //       console.log(mapping);
 //     }
-// });
+//  });
 
 /*
 {
@@ -85,5 +91,16 @@ let Document = mongoose.model('Text', DocumentSchema)
 */
 
 let stream = Document.synchronize();
+
+var count = 0;
+stream.on('data', function(err, doc){
+  count++;
+});
+stream.on('close', function(){
+  console.log('indexed ' + count + ' documents!');
+});
+stream.on('error', function(err){
+  console.log(err);
+});
 
 module.exports = Document

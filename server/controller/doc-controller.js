@@ -53,10 +53,7 @@ connect = async (req, res) => {
             content: doc.data.ops,
             version: versionGlo[docid]
         }
-        console.log("back")
-        console.log(back.content)
         res.write(`data: ${JSON.stringify(back)}\n\n`);
-        return;
     })
 
 
@@ -87,7 +84,7 @@ operation = async (req, res) => {
     console.log("-------------operation")
     const {op, version} = req.body;
     const {docid, uid} = req.params;
-    console.log("operation", docid, uid, op, version, process.env.PORT)
+    console.log("operation", docid, uid, op, version, "PORT", process.env.PORT)
     // If docID doesn't match with current hash, redirect
     if(redirect(docid) !== process.env.PORT){
 	console.log("--------redirect to " + redirect(docid));
