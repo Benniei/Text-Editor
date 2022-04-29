@@ -16,26 +16,20 @@ search = async (req, res) => {
                 content: {}
             }
         }
-    }).then(
-        function(searchRes) {
-            results = searchRes.hits.hits
-            var finalResult = []
-            for(var i = 0; i < Math.min(10, results.length); i++){
-                const item = results[i]._source
-                const finalString = results[i].highlight;
-                var data = {
-                    docid: item.docid,
-                    name: item.name,
-                    snippet: finalString //patch up later
-                }
-                finalResult.push(data)
-            }
-            res.status(200).json(finalResult).end()
-        },
-        function(err) {
-            console.trace(err.message);
+    })
+    var results = searchRes.hits.hits
+    var finalResult = []
+    for(var i = 0; i < Math.min(10, results.length); i++){
+        const item = results[i]._source
+        const finalString = results[i].highlight;
+        var data = {
+            docid: item.docid,
+            name: item.name,
+            snippet: finalString //patch up later
         }
-    )
+        finalResult.push(data)
+    }
+    res.status(200).json(finalResult).end()
 }
 
 suggest = async (req, res) => {
