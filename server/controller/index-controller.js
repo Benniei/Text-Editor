@@ -2,6 +2,7 @@ const ElasticClient = require('../models/elastic-model')
 const url = require('url')
 
 search = async (req, res) => {
+    console.log("------------search")
     var queryContent = url.parse(req.url, true).query.q;
     const searchRes = await ElasticClient.search({
         index: 'texts',
@@ -18,7 +19,6 @@ search = async (req, res) => {
     })
     results = searchRes.hits.hits
     var finalResult = []
-    console.log(results)
     for(var i = 0; i < Math.min(10, results.length); i++){
         const item = results[i]._source
         const finalString = results[i].highlight;
@@ -33,6 +33,7 @@ search = async (req, res) => {
 }
 
 suggest = async (req, res) => {
+    console.log("-------------suggest")
     var queryContent = url.parse(req.url, true).query.q;
     var suggest = []
 }

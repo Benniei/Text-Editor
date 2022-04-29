@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const mongoosastic = require('mongoosastic')
 const Schema = mongoose.Schema
 
 var DocumentSchema = new Schema(
