@@ -4,7 +4,7 @@ const url = require('url')
 search = async (req, res) => {
     console.log("------------search")
     var queryContent = url.parse(req.url, true).query.q;
-    await ElasticClient.search({
+    var searchRes = await ElasticClient.search({
         index: 'texts',
         query: {
             match: {content: queryContent}
