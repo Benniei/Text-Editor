@@ -8,11 +8,10 @@ uploadMedia = async (req, res) => {
         return res.status(200).json({error: true, status: 'error'})
     }
     else{
-        extension = image.mimetype.substring(mime.indexOf("/") + 1)
+        extension = image.mimetype.substring(image.mimetype.indexOf("/") + 1)
     }
     let imageID = Math.floor(Math.random() * Date.now()) + "." + extension;
     const normpath = "./public/images/" + imageID;
-    media[imageID] = image;
     image.mv(normpath, (error) => {
         if (error) {
             console.error(error)
@@ -30,7 +29,7 @@ accessMedia = async (req, res) => {
     console.log(id)
     var fs = require('fs');
     var pathToFile = path.join(__dirname, "..", "public", "images", id)
-    if(picture !== false) {
+    if(id) {
         res.sendFile(pathToFile, (err) => {
             if (err) console.log(err)
             console.log('Sent:', id); //Outputs "Sent: example-text.txt" in the console

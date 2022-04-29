@@ -53,7 +53,8 @@ connect = async (req, res) => {
             content: doc.data.ops,
             version: versionGlo[docid]
         }
-        console.log("back:" + back)
+        console.log("back")
+        console.log(back.content)
         res.write(`data: ${JSON.stringify(back)}\n\n`);
         return;
     })
