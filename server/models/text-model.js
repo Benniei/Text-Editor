@@ -1,6 +1,17 @@
 const mongoose = require('mongoose')
 const mongoosastic = require('mongoosastic')
 const Schema = mongoose.Schema
+const { Client } = require('@elastic/elasticsearch')
+
+const client = new Client({
+   cloud: {
+     id: 'https://cloud-peak.es.us-east-1.aws.found.io:9243'
+   },
+   auth: {
+     username: 'elastic',
+     password: 'qfpcdyKBHBNlZqk14GwfhNB9'
+   }
+ })
 
 var DocumentSchema = new Schema(
     {
@@ -12,11 +23,7 @@ var DocumentSchema = new Schema(
 )
 
 DocumentSchema.plugin(mongoosastic, {
-    host: "cloud-peak.es.us-east-1.aws.found.io",
-    port: 9243,
-    protocol: "https",
-    auth: "elastic:qfpcdyKBHBNlZqk14GwfhNB9",
-    curlDebug: true
+    esClient: client
 })
 
 let Document = mongoose.model('Text', DocumentSchema)
