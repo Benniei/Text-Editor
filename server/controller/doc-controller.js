@@ -173,7 +173,7 @@ getdoc = async (req, res) => {
         var converted = new QuillDeltaToHtmlConverter(convert, cfg)
         var html = converted.convert()
         var item = html.replace(/<(.|\n)*?>/g, '');
-        await client.update({
+        await ElasticClient.update({
             index: 'texts',
             id: docid,
             doc: {

@@ -1,9 +1,9 @@
-const ElasticClient = require('../models/elasticmodel')
+const ElasticClient = require('../models/elastic-model')
 const url = require('url')
 
 search = async (req, res) => {
     var queryContent = url.parse(req.url, true).query.q;
-    const searchRes = await client.search({
+    const searchRes = await ElasticClient.search({
         index: 'texts',
         query: {
             match: {content: queryContent}
@@ -19,11 +19,12 @@ search = async (req, res) => {
     }})
     results = searchRes.hits.hits
     var finalResult = []
+    console.log(results)
     for(var i = 0; i < Math.min(10, results.length); i++){
         const item = results[i]._source
-        const finalString = results[i].highlight.content;
+        const finalString = results[i].highlight;
         var data = {
-            docid: item.id,
+            docid: item.docid,
             name: item.name,
             snippet: finalString //patch up later
         }

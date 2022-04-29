@@ -32,7 +32,7 @@ createCollection = async (req, res) => {
             return;
         }
     })
-    await elasticClient.index({
+    await ElasticClient.index({
         index: 'texts',
         id: doc.id,
         document: {
