@@ -5,11 +5,11 @@ const { Client } = require('@elastic/elasticsearch')
 
 const client = new Client({
    cloud: {
-     id: 'https://cloud-peak.es.us-east-1.aws.found.io:9243'
+     id: "cloud-peak:dXMtZWFzdC0xLmF3cy5mb3VuZC5pbyQ4ZTcwNTU2NTkxMWM0MzMxOGQ4ZWU5ZGE4NDJiNTZiNSQwNWI5M2FmNTBmNTk0NDBiYTI3Y2EwMTVlODU1YTVlYQ=="
    },
    auth: {
-     username: 'elastic',
-     password: 'qfpcdyKBHBNlZqk14GwfhNB9'
+     username: "elastic",
+     password: "qfpcdyKBHBNlZqk14GwfhNB9"
    }
  })
 
@@ -97,17 +97,6 @@ let Document = mongoose.model('Text', DocumentSchema)
  }
 */
 
-let stream = Document.synchronize();
-
-var count = 0;
-stream.on('data', function(err, doc){
-  count++;
-});
-stream.on('close', function(){
-  console.log('indexed ' + count + ' documents!');
-});
-stream.on('error', function(err){
-  console.log(err);
-});
+// let stream = Document.synchronize();
 
 module.exports = Document
