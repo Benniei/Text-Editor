@@ -24,7 +24,7 @@ connect = async (req, res) => {
 
     // If docID doesn't match with current hash, redirect
     console.log(process.env.PORT)
-    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/doc/connect/" + docid + "/" + uid)
+    if(redirect(docid) !== process.env.PORT) return res.redirect(307, "http://209.151.152.59:" + redirect(docid) + "/doc/connect/" + docid + "/" + uid)
 
     // Create the HTTP Stream
     const head = {
@@ -53,6 +53,7 @@ connect = async (req, res) => {
             content: doc.data.ops,
             version: versionGlo[docid]
         }
+        console.log("back:" + back)
         res.write(`data: ${JSON.stringify(back)}\n\n`);
         return;
     })
@@ -67,7 +68,7 @@ connect = async (req, res) => {
     // Checking if the connection to document exist
     if(clients[docid] !== undefined){
         // Add client to list of clients
-        clients[docid][uid] = client
+	clients[docid][uid] = client
     }
     // Make new list of clients for the document
     else{
@@ -85,9 +86,9 @@ operation = async (req, res) => {
     console.log("-------------operation")
     const {op, version} = req.body;
     const {docid, uid} = req.params;
-    
+    console.log("operation", docid, uid, op, version, process.env.PORT)
     // If docID doesn't match with current hash, redirect
-    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/doc/op/" + docid + "/" + uid)
+    if(redirect(docid) !== process.env.PORT) return res.redirect(307, "http://209.151.152.59:" + redirect(docid) + "/doc/op/" + docid + "/" + uid)
 
     flag = true
     var doc = connection.get('text-editor', docid);
@@ -193,7 +194,7 @@ presence = async (req, res) => {
     
     // If docID doesn't match with current hash, redirect
     const {docid, uid} = req.params;
-    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/doc/presence/" + docid + "/" + uid)
+    if(redirect(docid) !== process.env.PORT) return res.redirect(307, "http://209.151.152.59:" + redirect(docid) + "/doc/presence/" + docid + "/" + uid)
 
     var userName;
     auth.verify(req, res, async function () {
