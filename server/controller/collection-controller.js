@@ -1,6 +1,7 @@
 var connection = require('../db/shareDB.js')
 var MongoClient = require('mongodb').MongoClient;
 const Text = require('../models/text-model')
+const ElasticClient = require('../models/elastic-model')
 
 const uri = "mongodb://127.0.0.1:27017/";
 var myDb;
@@ -29,6 +30,14 @@ createCollection = async (req, res) => {
                 id: newID
             }).save()
             return;
+        }
+    })
+    await elasticClient.index({
+        index: 'texts',
+        id: doc.id,
+        document: {
+            name: name,
+            docid: doc.id
         }
     })
     

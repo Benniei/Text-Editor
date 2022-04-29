@@ -3,6 +3,7 @@ var connection = require('../db/shareDB.js')
 const auth = require('../auth')
 const jwt = require('jsonwebtoken')
 const Text = require('../models/text-model')
+const ElasticClient = require('../models/elastic-model')
 const dotenv = require('dotenv')
 
 var clients = {};
@@ -36,11 +37,6 @@ connect = async (req, res) => {
     res.set(head);
     console.log(docid, uid);
     var doc = connection.get('text-editor', docid);
-    // var presenceConnection = connection.getDocPresence('text-editor', docid);
-    // presenceConnection.subscribe( function(err){
-    //     if(err) throw err;
-    //     presenceConnection.on('presence', sendPrescenceToAll);
-    // })
 
     doc.subscribe(function(err) {
         if (err) throw err;
@@ -167,7 +163,7 @@ getdoc = async (req, res) => {
 }
 
 // async function to add keys to elastic search
-(function dequeueChanges() {
+(async function dequeueChanges() {
   // Dequeue from array
   var docid;
   if((docid = changedDocuments.shift())){
@@ -177,10 +173,12 @@ getdoc = async (req, res) => {
         var converted = new QuillDeltaToHtmlConverter(convert, cfg)
         var html = converted.convert()
         var item = html.replace(/<(.|\n)*?>/g, '');
-        Text.findOne({id: docid}, (err, result) => {
-            // if(err) return err
-            result.content = item
-            result.save()
+        await client.update({
+            index: 'texts',
+            id: docid,
+            doc: {
+                content: item
+            }
         })
   }
   setTimeout( dequeueChanges, 500 );
