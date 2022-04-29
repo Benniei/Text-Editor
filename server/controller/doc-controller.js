@@ -87,7 +87,7 @@ operation = async (req, res) => {
     const {docid, uid} = req.params;
     
     // If docID doesn't match with current hash, redirect
-    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/op/" + docid + "/" + uid)
+    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/doc/op/" + docid + "/" + uid)
 
     flag = true
     var doc = connection.get('text-editor', docid);
@@ -193,7 +193,7 @@ presence = async (req, res) => {
     
     // If docID doesn't match with current hash, redirect
     const {docid, uid} = req.params;
-    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/presence/" + docid + "/" + uid)
+    if(redirect(docid) !== process.env.PORT) return res.redirect("http://209.151.152.59:" + redirect(docid) + "/doc/presence/" + docid + "/" + uid)
 
     var userName;
     auth.verify(req, res, async function () {
