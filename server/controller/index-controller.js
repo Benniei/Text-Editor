@@ -5,8 +5,8 @@ search = async (req, res) => {
     var queryContent = url.parse(req.url, true).query.q;
     const searchRes = await Text.search({
         query:{
-            query_string: {
-                query: queryContent
+            match: {
+                content: queryContent
             }
         }
     },
