@@ -10,10 +10,8 @@ search = async (req, res) => {
     },
     {
     highlight: {
-        pre_tags: ["<em>"],
-        post_tags: ["</em>"],
         number_of_fragments : 1,
-        fragment_size: 300,
+        fragment_size: 100,
         fields: {
             content: {}
         }
@@ -26,7 +24,7 @@ search = async (req, res) => {
         var data = {
             docid: item.id,
             name: item.name,
-            snippet: finalString //patch up later
+            snippet: finalString[0] //patch up later
         }
         finalResult.push(data)
     }

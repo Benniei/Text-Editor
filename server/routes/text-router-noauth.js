@@ -1,4 +1,5 @@
 const express = require('express')
+const auth = require('../auth')
 const UserController = require('../controller/user-controller')
 const CollectionController = require('../controller/collection-controller')
 const MediaController = require('../controller/media-controller')
@@ -17,11 +18,11 @@ router.get('/user/loggedIn', UserController.userLoggedIn)
 // Collection Creation
 router.post('/collection/create', CollectionController.createCollection)
 router.post('/collection/delete', CollectionController.deleteCollection)
-router.get('/collection/list', CollectionController.listCollection)
+router.get('/collection/list', auth.verify, CollectionController.listCollection)
 
 // Media Controller
-router.post('/media/upload', MediaController.uploadMedia)
-router.get('/media/access/:id', MediaController.accessMedia)
+router.post('/media/upload', auth.verify, MediaController.uploadMedia)
+router.get('/media/access/:id', auth.verify, MediaController.accessMedia)
 
 // Document Editing
 router.get('/doc/connect/:docid/:uid', DocController.connect)

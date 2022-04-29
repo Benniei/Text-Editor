@@ -89,8 +89,10 @@ operation = async (req, res) => {
     const {docid, uid} = req.params;
     console.log("operation", docid, uid, op, version, process.env.PORT)
     // If docID doesn't match with current hash, redirect
-    if(redirect(docid) !== process.env.PORT) return res.redirect(307, "http://209.151.152.59:" + redirect(docid) + "/doc/op/" + docid + "/" + uid)
-
+    if(redirect(docid) !== process.env.PORT){
+	console.log("--------redirect to " + redirect(docid));
+	 return res.redirect(307, "http://209.151.152.59:" + redirect(docid) + "/doc/op/" + docid + "/" + uid)
+	}
     flag = true
     var doc = connection.get('text-editor', docid);
     var docVersion = versionGlo[docid];
