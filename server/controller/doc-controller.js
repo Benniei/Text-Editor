@@ -178,11 +178,12 @@ getdoc = async (req, res) => {
             index: 'texts',
             id: docid,
             refresh: 'wait_for',
-            doc: {
-                content: item
+            body: {
+                doc: {
+                    content: item
+                }
             }
         })
-        ElasticClient.indices.refresh('texts')
   }
   setTimeout( dequeueChanges, 500 );
 })();
