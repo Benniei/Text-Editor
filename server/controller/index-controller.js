@@ -4,6 +4,7 @@ const url = require('url')
 search = async (req, res) => {
     console.log("------------search")
     var queryContent = url.parse(req.url, true).query.q;
+    console.log(queryContent)
     var searchRes = await ElasticClient.search({
         index: 'texts',
         query: {
@@ -11,13 +12,14 @@ search = async (req, res) => {
         },
         highlight: {
             number_of_fragments : 1,
-            fragment_size: 100,
+            fragment_size: 300,
             fields: {
                 content: {}
             }
         }
     })
     var results = searchRes.hits.hits
+    console.log(results)
     var finalResult = []
     for(var i = 0; i < Math.min(10, results.length); i++){
         const item = results[i]._source
@@ -29,6 +31,7 @@ search = async (req, res) => {
         }
         finalResult.push(data)
     }
+    console.log(finalResult)
     res.status(200).json(finalResult).end()
 }
 
