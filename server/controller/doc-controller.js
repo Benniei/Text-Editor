@@ -182,6 +182,7 @@ getdoc = async (req, res) => {
                 content: item
             }
         })
+        ElasticClient.indices.refresh('texts')
   }
   setTimeout( dequeueChanges, 500 );
 })();
