@@ -177,6 +177,7 @@ getdoc = async (req, res) => {
         await ElasticClient.update({
             index: 'texts',
             id: docid,
+            refresh: true,
             doc: {
                 content: item
             }
