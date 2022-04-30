@@ -178,8 +178,8 @@ getdoc = async (req, res) => {
             index: 'texts',
             id: docid,
             document: {
-                    docid: docid
-                    content: item
+                docid: docid,
+                content: item
             }
         })
   }
