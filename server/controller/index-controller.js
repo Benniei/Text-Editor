@@ -19,7 +19,7 @@ search = async (req, res) => {
         }
     })
     var results = searchRes.hits.hits
-    console.log(results)
+//    console.log(results)
     var finalResult = []
     for(var i = 0; i < Math.min(10, results.length); i++){
         const item = results[i]._source

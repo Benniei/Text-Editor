@@ -174,7 +174,7 @@ getdoc = async (req, res) => {
         var html = converted.convert()
         var item = html.replace(/<(.|\n)*?>/g, '');
 	console.log("----------updating " + docid)
-        await ElasticClient.index({
+        await ElasticClient.update({
             index: 'texts',
             id: docid,
             document: {
