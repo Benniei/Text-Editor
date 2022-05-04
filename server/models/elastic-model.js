@@ -1,13 +1,7 @@
 const { Client } = require('@elastic/elasticsearch')
 
 const client = new Client({
-   cloud: {
-     id: "cloud-peak:dXMtZWFzdC0xLmF3cy5mb3VuZC5pbyQ4ZTcwNTU2NTkxMWM0MzMxOGQ4ZWU5ZGE4NDJiNTZiNSQwNWI5M2FmNTBmNTk0NDBiYTI3Y2EwMTVlODU1YTVlYQ=="
-   },
-   auth: {
-     username: "elastic",
-     password: "qfpcdyKBHBNlZqk14GwfhNB9"
-   }
+   node: 'http://209.151.151.166:9200'
  })
 
  module.exports = client

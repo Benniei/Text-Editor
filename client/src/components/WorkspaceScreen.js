@@ -63,7 +63,7 @@ function WorkspaceScreen() {
         var versionData;
         if(!listening) {
             uid = uniqueID()
-            const events = new EventSource('http://209.151.152.59/doc/connect/' + docid + '/' + uid)
+            const events = new EventSource('http://cloud-peak.cse356.compas.cs.stonybrook.edu/doc/connect/' + docid + '/' + uid)
 
             events.onmessage = (event) => {
                 var parsedData = JSON.parse(event.data); 

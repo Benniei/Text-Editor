@@ -23,10 +23,6 @@ connect = async (req, res) => {
     if(req.params.uid === 'undefined') return res.status(400);
     const {docid, uid} = req.params;
 
-    // If docID doesn't match with current hash, redirect
-    // console.log(process.env.PORT)
-    // if(redirect(docid) !== process.env.PORT) return res.redirect(307, "http://209.151.152.59:" + redirect(docid) + "/doc/connect/" + docid + "/" + uid)
-
     // Create the HTTP Stream
     const head = {
         'Cache-Control': 'no-cache',
@@ -81,11 +77,7 @@ operation = async (req, res) => {
     const {op, version} = req.body;
     const {docid, uid} = req.params;
     console.log("operation", docid, uid, op, version, "PORT", process.env.PORT)
-    // If docID doesn't match with current hash, redirect
-    // if(redirect(docid) !== process.env.PORT){
-	// console.log("--------redirect to " + redirect(docid));
-	//  return res.redirect(307, "http://209.151.152.59:" + redirect(docid) + "/doc/op/" + docid + "/" + uid)
-	// }
+
     flag = true
     var doc = connection.get('text-editor', docid);
     var docVersion = versionGlo[docid];
@@ -173,7 +165,7 @@ getdoc = async (req, res) => {
         var converted = new QuillDeltaToHtmlConverter(convert, cfg)
         var html = converted.convert()
         var item = html.replace(/<(.|\n)*?>/g, '');
-	console.log("----------updating " + docid)
+	    console.log("----------updating " + docid)
         await ElasticClient.update({
             index: 'texts',
             id: docid,
@@ -186,16 +178,9 @@ getdoc = async (req, res) => {
   setTimeout( dequeueChanges, 500 );
 })();
 
-presence = async (req, res) => {
-    // var presenceConnection = connection.getDocPresence('text-editor', docid);
-    // const localPresence = presenceConnection.create()
-    // console.log(data)
-    // localPresence.submit(data)
-    
-    // If docID doesn't match with current hash, redirect
+presence = async (req, res) => 
     const {docid, uid} = req.params;
-    // if(redirect(docid) !== process.env.PORT) return res.redirect(307, "http://209.151.152.59:" + redirect(docid) + "/doc/presence/" + docid + "/" + uid)
-
+    
     var userName;
     auth.verify(req, res, async function () {
         let verified = null;

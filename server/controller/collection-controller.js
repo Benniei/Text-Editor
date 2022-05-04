@@ -3,7 +3,7 @@ var MongoClient = require('mongodb').MongoClient;
 const Text = require('../models/text-model')
 const ElasticClient = require('../models/elastic-model')
 
-const uri = "mongodb://127.0.0.1:27017/";
+const uri = "mongodb://209.151.150.113:27017/";
 var myDb;
 MongoClient.connect(uri, function(err, database) {
     if(err) throw err;
