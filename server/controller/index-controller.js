@@ -10,7 +10,7 @@ search = async (req, res) => {
         query: {
             match: {
                 content: {
-                    query: queryContent
+                    query: queryContent,
                     boost: 2
                 }
             }
