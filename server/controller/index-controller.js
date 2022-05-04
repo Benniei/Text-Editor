@@ -38,7 +38,6 @@ search = async (req, res) => {
 suggest = async (req, res) => {
     console.log("-------------suggest")
     var queryContent = url.parse(req.url, true).query.q;
-    var suggest = []
     var searchRes = await ElasticClient.search({
         index: 'texts',
         query: {
@@ -59,8 +58,17 @@ suggest = async (req, res) => {
         }
     })
     var results = searchRes.hits.hits
-    console.log(results)
-    res.status(200).json(results).end()
+    var suggest = []
+    for(var i = 0; i < results; i++){
+        const item = results[i]._source
+        let index = 0;
+        while (input.indexOf('<em>', index) >= 0) {
+            suggest.push(input.substring(input.indexOf('<em>', index) + 4, input.indexOf('</em>', index)));
+            index = input.indexOf('</em>', index) + 5;
+        }
+    }
+    console.log(suggest)
+    res.status(200).json(suggset).end()
 }
 
 module.exports = {
