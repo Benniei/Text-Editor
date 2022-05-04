@@ -2,6 +2,7 @@ var connection = require('../db/shareDB.js')
 var MongoClient = require('mongodb').MongoClient;
 const Text = require('../models/text-model')
 const ElasticClient = require('../models/elastic-model')
+const dotenv = require('dotenv')
 
 const uri = "mongodb://209.151.150.113:27017/";
 var myDb;
@@ -19,7 +20,9 @@ createCollection = async (req, res) => {
     console.log("-------------createCollection")
     const {name} = req.body
     // need to do name to ID mapping
-    newID = id().toString()
+    
+    var serverNumber = Math.floor(Math.random() * process.env.NUM_SERVER);
+    var newID = "s" + serverNumber + "-" + id().toString()
     var doc = connection.get('text-editor', newID);
     doc.fetch(err => {
         if (err) throw err;
