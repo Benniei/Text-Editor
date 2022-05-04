@@ -37,14 +37,6 @@ curl -X PUT "localhost:9200/texts?pretty" -H 'Content-Type: application/json' -d
    "settings":{
       "analysis":{
          "analyzer":{
-            "nGram_anal":{ 
-               "type":"custom",
-               "tokenizer":"nGram_token",
-               "filter":[
-                  "lowercase",
-                  "asciifolding"
-               ]
-            },
             "stop_anal":{ 
                "type":"custom",
                "tokenizer":"whitespace",
@@ -61,17 +53,6 @@ curl -X PUT "localhost:9200/texts?pretty" -H 'Content-Type: application/json' -d
                "type":"stop",
                "stopwords":"_english_"
             }
-         },
-         "tokenizer": {
-           "nGram_token": {
-                 "type": "edge_ngram",
-                 "min_gram": 3,
-                 "max_gram": 10,
-                 "token_chars": [
-                   "letter",
-                   "digit"
-                 ]
-            }
          }
       }
    },
@@ -79,11 +60,11 @@ curl -X PUT "localhost:9200/texts?pretty" -H 'Content-Type: application/json' -d
      "properties":{
        "name": {
          "type": "text",
-         "analyzer": "nGram_anal"
+         "analyzer": "stop_anal"
        },
        "content": {
          "type": "text",
-         "analyzer": "nGram_anal"
+         "analyzer": "stop_anal"
        }
      }
    }

@@ -39,6 +39,22 @@ suggest = async (req, res) => {
     console.log("-------------suggest")
     var queryContent = url.parse(req.url, true).query.q;
     var suggest = []
+    var searchRes = await ElasticClient.search({
+        index: 'texts',
+        query: {
+            fuzzy: {content: queryContent, fuzziness:2}
+        },
+        highlight: {
+            number_of_fragments : 1,
+            fragment_size: 300,
+            fields: {
+                content: {}
+            }
+        }
+    })
+    var results = searchRes.hits.hits
+    console.log(results)
+    res.status(200).json(results).end()
 }
 
 module.exports = {
