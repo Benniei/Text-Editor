@@ -42,7 +42,9 @@ suggest = async (req, res) => {
     var searchRes = await ElasticClient.search({
         index: 'texts',
         query: {
-            fuzzy: {content: queryContent, fuzziness:2}
+            name: {
+                fuzzy: {content: queryContent, fuzziness:2}
+            }
         },
         highlight: {
             number_of_fragments : 1,
