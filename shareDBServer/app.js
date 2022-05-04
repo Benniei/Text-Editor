@@ -30,16 +30,3 @@ function startServer() {
     server.listen(4001, ip);
     console.log("ShareDB Server is running on " + ip + " port 4001");
 }
-
-function createDoc(document_name) {
-    var connection = ShareDBServer.connect();
-    var doc = connection.get('text-editor', 'text1');
-    doc.fetch(err => {
-        if (err) throw err;
-        if (doc.type === null) {
-            doc.create([], 'rich-text')
-            console.log("Document " + document_name + " is created");
-            return;
-        }
-    })
-}
