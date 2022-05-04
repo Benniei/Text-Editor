@@ -59,7 +59,7 @@ suggest = async (req, res) => {
     })
     var results = searchRes.hits.hits
     var suggest = []
-    for(var i = 0; i < results; i++){
+    for(var i = 0; i < results.length; i++){
         const item = results[i]._source
         let input = results[i].highlight
         let index = 0;
