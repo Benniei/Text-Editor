@@ -8,8 +8,8 @@ search = async (req, res) => {
     var searchRes = await ElasticClient.search({
         index: 'texts',
         query: {
-            match_phrase: {
-                message: queryContent
+            query_string: {
+                query: queryContent
             }
         },
         highlight: {

@@ -32,12 +32,12 @@ Routing Tables
 Delete Old Elastic Search
 `curl -X DELETE "localhost:9200/texts"`
 <code>
-curl -X PUT "localhost:9200/texts?pretty" -H 'Content-Type: application/json' -d'
+curl -X PUT "http://209.151.151.166:9200/texts/?pretty" -H 'Content-Type: application/json' -d'
 {
    "settings":{
       "analysis":{
          "analyzer":{
-            "stop_anal":{ 
+            "stop_anal":{
                "type":"custom",
                "tokenizer":"whitespace",
                "filter":[
