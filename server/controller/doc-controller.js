@@ -76,7 +76,6 @@ operation = async (req, res) => {
     console.log("-------------operation")
     const {op, version} = req.body;
     const {docid, uid} = req.params;
-    console.log("operation", docid, uid, op, version, "PORT", process.env.PORT)
 
     flag = true
     var doc = connection.get('text-editor', docid);
@@ -169,9 +168,10 @@ getdoc = async (req, res) => {
         await ElasticClient.update({
             index: 'texts',
             id: docid,
-            refresh: 'wait_for',
-            doc: {
-                content: item
+            body: { 
+                doc: {
+                    content: item
+                }
             }
         })
   }
