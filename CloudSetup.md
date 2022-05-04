@@ -16,6 +16,12 @@
 8. Install Elastic Search
    1. https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-elasticsearch-on-ubuntu-20-04
 
+# Scaling Node
+1. IP Servers
+   1. server -> .env
+      1. make backend ip current ip
+   2. client -> api
+      1. make backend ip match up
 # Restarting Server
 1. Restart mongod
 
