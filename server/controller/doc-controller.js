@@ -178,7 +178,7 @@ getdoc = async (req, res) => {
   setTimeout( dequeueChanges, 500 );
 })();
 
-presence = async (req, res) => 
+presence = async (req, res) => {
     const {docid, uid} = req.params;
     
     var userName;

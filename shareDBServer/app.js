@@ -7,7 +7,7 @@ var WebSocket = require('ws');
 var WebSocketJSONStream = require('@teamwork/websocket-json-stream');
 const dotenv = require('dotenv')
 dotenv.config();
-const db = require('sharedb-mongo')('mongodb://localhost:27017/editor-text');
+const db = require('sharedb-mongo')('mongodb://209.151.150.113:27017/editor-text');
 ShareDB.types.register(richText.type);
 
 var ShareDBServer = new ShareDB({db});
