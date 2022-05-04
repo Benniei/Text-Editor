@@ -62,16 +62,12 @@ suggest = async (req, res) => {
     for(var i = 0; i < results.length; i++){
         const item = results[i]._source
         let input = results[i].highlight.content
-        let index = 0;
         for(var j=0; j < input.length; j++) {
-            while (input[j].indexOf('<em>', index) >= 0) {
-                let text = input[j].substring(input[j].indexOf('<em>', index) + 4, input[j].indexOf('</em>', index))
-                if(suggest.includes(text))
-                    index = input[j].indexOf('</em>', index) + 5;
-                    continue;
-                suggest.push(text);
-                index = input[j].indexOf('</em>', index) + 5;
-            }
+            let index = 0;
+            let text = input[j].substring(input[j].indexOf('<em>', index) + 4, input[j].indexOf('</em>', index))
+            if(suggest.includes(text))
+                continue;
+            suggest.push(text);
         }
     }
     console.log(suggest)
