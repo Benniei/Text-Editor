@@ -175,7 +175,7 @@ getdoc = async (req, res) => {
             }
         })
   }
-  setTimeout( dequeueChanges, 500 );
+  setTimeout( dequeueChanges, 50 );
 })();
 
 presence = async (req, res) => {

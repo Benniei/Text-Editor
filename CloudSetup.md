@@ -30,7 +30,7 @@ Routing Tables
 `iptables -t nat -I OUTPUT -o eth0 -p tcp -m tcp --dport 25 -j DNAT --to-destination 130.245.171.73:11587`
 
 Delete Old Elastic Search
-`curl -X DELETE "localhost:9200/texts"`
+`curl -X DELETE "http://209.151.151.166:9200/texts"`
 <code>
 curl -X PUT "http://209.151.151.166:9200/texts/?pretty" -H 'Content-Type: application/json' -d'
 {
