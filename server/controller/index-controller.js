@@ -27,7 +27,7 @@ search = async (req, res) => {
         var data = {
             docid: item.docid,
             name: item.name,
-            snippet: finalString //patch up later
+            snippet: finalString.content[0] //patch up later
         }
         finalResult.push(data)
     }
@@ -67,6 +67,7 @@ suggest = async (req, res) => {
             while (input[j].indexOf('<em>', index) >= 0) {
                 let text = input[j].substring(input[j].indexOf('<em>', index) + 4, input[j].indexOf('</em>', index))
                 if(suggest.includes(text))
+                    index = input[j].indexOf('</em>', index) + 5;
                     continue;
                 suggest.push(text);
                 index = input[j].indexOf('</em>', index) + 5;
