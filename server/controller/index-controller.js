@@ -1,42 +1,64 @@
 const ElasticClient = require('../models/elastic-model')
 const url = require('url')
 
+stopwords = ['i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now']
+let searchCache = {}
+
+function remove_stopwords(str) {
+    res = []
+    words = str.split(' ')
+    for(i=0;i<words.length;i++) {
+       word_clean = words[i].split(".").join("")
+       if(!stopwords.includes(word_clean)) {
+           res.push(word_clean)
+       }
+    }
+    return(res.join(' '))
+}  
+
 search = async (req, res) => {
     console.log("------------search")
-    var queryContent = url.parse(req.url, true).query.q;
-    console.log(queryContent)
-    var searchRes = await ElasticClient.search({
-        index: 'texts',
-        query: {
-            match: {
-                content: {
-                    query: queryContent
+    var preQuery = url.parse(req.url, true).query.q;
+    var queryContent = remove_stopwords(preQuery)
+    console.log(preyQuery + " ---> " + queryContent)
+    if(!searchCache.queryContent){
+        var searchRes = await ElasticClient.search({
+            index: 'texts',
+            query: {
+                match: {
+                    content: {
+                        query: queryContent
+                    }
+                }
+            },
+            highlight: {
+                number_of_fragments : 1,
+                fragment_size: 400,
+                fields: {
+                    content: {}
                 }
             }
-        },
-        highlight: {
-            number_of_fragments : 1,
-            fragment_size: 400,
-            fields: {
-                content: {}
+        })
+        var results = searchRes.hits.hits
+    //    console.log(results)
+        var finalResult = []
+        for(var i = 0; i < Math.min(10, results.length); i++){
+            const item = results[i]._source
+            const finalString = results[i].highlight;
+            var data = {
+                docid: item.docid,
+                name: item.name,
+                snippet: finalString.content[0] //patch up later
             }
+            finalResult.push(data)
         }
-    })
-    var results = searchRes.hits.hits
-//    console.log(results)
-    var finalResult = []
-    for(var i = 0; i < Math.min(10, results.length); i++){
-        const item = results[i]._source
-        const finalString = results[i].highlight;
-        var data = {
-            docid: item.docid,
-            name: item.name,
-            snippet: finalString.content[0] //patch up later
-        }
-        finalResult.push(data)
+        console.log(finalResult)
+        searchCache.queryContent = data
+        res.status(200).json(finalResult).end()
     }
-    console.log(finalResult)
-    res.status(200).json(finalResult).end()
+    else{
+        res.status(200).json(searchCache.queryContent)
+    }
 }
 
 suggest = async (req, res) => {
