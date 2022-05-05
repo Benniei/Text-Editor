@@ -22,7 +22,7 @@ search = async (req, res) => {
     var preQuery = url.parse(req.url, true).query.q;
     var queryContent = remove_stopwords(preQuery)
     console.log(preQuery + " ---> " + queryContent)
-    if(!searchCache.queryContent){
+    if(!searchCache[queryContent]){
         console.log("choice 1")
         var searchRes = await ElasticClient.search({
             index: 'texts',
@@ -55,13 +55,13 @@ search = async (req, res) => {
             finalResult.push(data)
         }
         console.log(finalResult)
-        searchCache.queryContent = finalResult
+        searchCache[queryContent] = finalResult
         res.status(200).json(finalResult).end()
     }
     else{
         console.log("choice 2")
-        console.log(searchCache.queryContent)
-        res.status(200).json(searchCache.queryContent).end()
+        console.log(searchCache[queryContent])
+        res.status(200).json(searchCache[queryContent]).end()
     }
 }
 
@@ -69,7 +69,8 @@ suggest = async (req, res) => {
     console.log("-------------suggest")
     var queryContent = url.parse(req.url, true).query.q;
     console.log(queryContent)
-    if(!suggestCache.queryContent){
+    console.log(suggestCache[queryContent])
+    if(!suggestCache[queryContent]){
         console.log("choice1")
         var searchRes = await ElasticClient.search({
             index: 'texts',
@@ -104,13 +105,13 @@ suggest = async (req, res) => {
             }
         }
         console.log(suggest)
-        suggestCache.queryContent = suggest
+        suggestCache[queryContent] = suggest
         res.status(200).json(suggest).end()
     }
     else{
         console.log("choice 2")
-        console.log(suggestCache.queryContent)
-        res.status(200).json(suggestCache.queryContent).end()
+        console.log(suggestCache[queryContent])
+        res.status(200).json(suggestCache[queryContent]).end()
     }
 }
 
