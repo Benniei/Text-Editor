@@ -76,6 +76,8 @@ operation = async (req, res) => {
     console.log("-------------operation")
     const {op, version} = req.body;
     const {docid, uid} = req.params;
+    
+    if(!op) return res.status(400);
 
     flag = true
     var doc = connection.get('text-editor', docid);
