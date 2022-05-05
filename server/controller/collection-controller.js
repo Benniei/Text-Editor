@@ -21,8 +21,7 @@ createCollection = async (req, res) => {
     const {name} = req.body
     // need to do name to ID mapping
     
-    var serverNumber = Math.floor(Math.random() * process.env.NUM_SERVER);
-    var newID = "s" + serverNumber + "-" + id().toString()
+    var newID = id().toString()
     var doc = connection.get('text-editor', newID);
     doc.fetch(err => {
         if (err) throw err;
