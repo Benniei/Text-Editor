@@ -77,6 +77,8 @@ operation = async (req, res) => {
     const {op, insert, version} = req.body;
     const {docid, uid} = req.params;
 
+    if(insert)
+        return res.json({status: "ok", ack: op, version: docVersion})
     if(!op) return res.status(400);
 
     flag = true
