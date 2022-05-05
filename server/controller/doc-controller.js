@@ -78,6 +78,7 @@ operation = async (req, res) => {
     const {docid, uid} = req.params;
 
     var op = insert 
+    if(!op) return res.status(400);
 
     flag = true
     var doc = connection.get('text-editor', docid);
