@@ -74,10 +74,9 @@ connect = async (req, res) => {
 
 operation = async (req, res) => {
     console.log("-------------operation")
-    const {insert, version} = req.body;
+    const {op, insert, version} = req.body;
     const {docid, uid} = req.params;
 
-    var op = insert 
     if(!op) return res.status(400);
 
     flag = true
