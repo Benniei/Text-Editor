@@ -16,7 +16,7 @@ search = async (req, res) => {
         },
         highlight: {
             number_of_fragments : 1,
-            fragment_size: 300,
+            fragment_size: 400,
             fields: {
                 content: {}
             }

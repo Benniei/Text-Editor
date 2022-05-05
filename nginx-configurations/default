@@ -10,7 +10,7 @@ server {
 	    proxy_http_version 1.1;
         proxy_set_header   Connection "";
         
-        proxy_pass         http://194.113.72.252:4000;
+        proxy_pass         http://209.151.152.129:4000;
         add_header         X-CSE356 "61f9fc9073ba724f297db858";
     }
 }

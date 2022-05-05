@@ -1,0 +1,38 @@
+map $uri $docid {
+    ~^/doc/.+/(?<id>.+) $id;
+    default "default";
+}
+
+upstream backend {
+    hash $docid;
+    server 194.113.72.225:4000;
+}
+
+server {
+    listen 80;
+
+    server_name www.localhost.com;
+    location / {
+	proxy_set_header   X-Forwarded-For $remote_addr;
+        proxy_set_header   Host $http_host;
+        proxy_read_timeout 3600;
+        proxy_buffering    off;
+	proxy_http_version 1.1;
+        proxy_set_header   Connection "";
+        
+        proxy_pass         http://194.113.72.252:4000;
+        add_header         X-CSE356 "61f9fc9073ba724f297db858";
+    }
+    location /doc/ {
+        proxy_set_header   X-Forwarded-For $remote_addr;
+        proxy_set_header   Host $http_host;
+        proxy_read_timeout 3600;
+        proxy_buffering    off;
+        proxy_http_version 1.1;
+        proxy_set_header   Connection "";
+
+        proxy_pass         http://backend;
+        add_header         X-CSE356 "61f9fc9073ba724f297db858";
+    }
+
+}
