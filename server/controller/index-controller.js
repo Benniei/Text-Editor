@@ -70,6 +70,7 @@ suggest = async (req, res) => {
     var queryContent = url.parse(req.url, true).query.q;
     console.log(queryContent)
     if(!suggestCache.queryContent){
+        console.log("choice1")
         var searchRes = await ElasticClient.search({
             index: 'texts',
             query: {
