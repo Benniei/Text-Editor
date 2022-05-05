@@ -20,7 +20,7 @@ search = async (req, res) => {
     console.log("------------search")
     var preQuery = url.parse(req.url, true).query.q;
     var queryContent = remove_stopwords(preQuery)
-    console.log(preyQuery + " ---> " + queryContent)
+    console.log(preQuery + " ---> " + queryContent)
     if(!searchCache.queryContent){
         var searchRes = await ElasticClient.search({
             index: 'texts',
