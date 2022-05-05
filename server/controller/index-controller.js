@@ -55,7 +55,7 @@ search = async (req, res) => {
             finalResult.push(data)
         }
         console.log(finalResult)
-        finalResult.sort((a, b) => {(b.snippet.match(/<em>/g) || []).length - (a.snippet.match(/<em>/g) || []).length})
+        finalResult.sort(function(a, b){return (b.snippet.match(/<em>/g) || []).length - (a.snippet.match(/<em>/g) || []).length})
         searchCache[queryContent] = finalResult
         res.status(200).json(finalResult).end()
     }
