@@ -53,11 +53,11 @@ search = async (req, res) => {
             finalResult.push(data)
         }
         console.log(finalResult)
-        searchCache.queryContent = data
+        searchCache.queryContent = finalResult
         res.status(200).json(finalResult).end()
     }
     else{
-        res.status(200).json(searchCache.queryContent)
+        res.status(200).json(searchCache.queryContent).end()
     }
 }
 
