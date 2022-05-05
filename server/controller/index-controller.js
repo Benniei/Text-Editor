@@ -42,6 +42,7 @@ search = async (req, res) => {
 suggest = async (req, res) => {
     console.log("-------------suggest")
     var queryContent = url.parse(req.url, true).query.q;
+    console.log(queryContent)
     var searchRes = await ElasticClient.search({
         index: 'texts',
         query: {
