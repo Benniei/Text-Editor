@@ -41,7 +41,7 @@ search = async (req, res) => {
             },
             highlight: {
                 fields: {
-                    content: {type: "plain"}
+                    content: {type: "fvh"}
                 }
             }
         })

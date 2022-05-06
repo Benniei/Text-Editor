@@ -36,7 +36,7 @@ Routing Tables
 Delete Old Elastic Search
 `curl -X DELETE "http://209.151.151.166:9200/texts"`
 <code>
-curl -X PUT "http://209.151.151.166:9200/texts/?pretty" -H 'Content-Type: application/json' -d'
+curl -X PUT "http://209.151.151.166:9200/texts?pretty" -H 'Content-Type: application/json' -d'
 {
    "settings":{
       "analysis":{
@@ -68,7 +68,8 @@ curl -X PUT "http://209.151.151.166:9200/texts/?pretty" -H 'Content-Type: applic
        },
        "content": {
          "type": "text",
-         "analyzer": "stop_anal"
+         "analyzer": "stop_anal",
+         "term_vector": "with_positions_offsets"
        }
      }
    }
