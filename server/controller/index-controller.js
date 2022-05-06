@@ -84,7 +84,7 @@ suggest = async (req, res) => {
                 match: {
                     content: {
                         query: queryContent,
-                        fuzziness: 1,
+                        fuzziness: 2,
                         prefix_length: 1
                     }
                 }
