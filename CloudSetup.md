@@ -64,11 +64,11 @@ curl -X PUT "http://209.151.151.166:9200/texts?pretty" -H 'Content-Type: applica
      "properties":{
        "name": {
          "type": "text",
-         "analyzer": "stop_anal"
+         "analyzer": "simple"
        },
        "content": {
          "type": "text",
-         "analyzer": "stop_anal",
+         "analyzer": "standard",
          "term_vector": "with_positions_offsets"
        }
      }
