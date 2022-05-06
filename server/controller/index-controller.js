@@ -20,7 +20,7 @@ function remove_stopwords(str) {
 (async function clearcache() {
     searchCache = {}
     suggestCache = {}
-    setTimeout( clearcache, 50 );
+    setTimeout( clearcache,31000 );
   })();
 
 search = async (req, res) => {
