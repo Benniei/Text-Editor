@@ -50,11 +50,11 @@ search = async (req, res) => {
         var finalResult = []
         for(var i = 0; i < Math.min(10, results.length); i++){
             const item = results[i]._source
-            const finalString = results[i].highlight;
+            const finalString = results[i].highlight.content.join();
             var data = {
                 docid: item.docid,
                 name: item.name,
-                snippet: finalString.content[0] //patch up later
+                snippet: finalString //patch up later
             }
             finalResult.push(data)
         }
