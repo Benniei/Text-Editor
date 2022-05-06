@@ -70,7 +70,6 @@ suggest = async (req, res) => {
     console.log("-------------suggest")
     var queryContent = url.parse(req.url, true).query.q;
     console.log(queryContent)
-    console.log(suggestCache[queryContent])
     if(!suggestCache[queryContent]){
         console.log("choice1")
         var searchRes = await ElasticClient.search({
@@ -79,13 +78,13 @@ suggest = async (req, res) => {
                 match: {
                     content: {
                         query: queryContent,
-                        fuzziness: 2,
+                        fuzziness: 1,
                         prefix_length: 1
                     }
                 }
             },
             highlight: {
-                number_of_fragments : 1,
+                number_of_fragments : 2,
                 fragment_size: 300,
                 fields: {
                     content: {}
