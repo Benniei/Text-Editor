@@ -41,7 +41,7 @@ search = async (req, res) => {
             },
             highlight: {
                 number_of_fragments : 1,
-                fragment_size: 400,
+                fragment_size: 100,
                 fields: {
                     content: {type: "plain"}
                 }
@@ -91,7 +91,7 @@ suggest = async (req, res) => {
             },
             highlight: {
                 number_of_fragments : 2,
-                fragment_size: 300,
+                fragment_size: 100,
                 fields: {
                     content: {type: "plain"}
                 }
