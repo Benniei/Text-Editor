@@ -17,6 +17,12 @@ function remove_stopwords(str) {
     return(res.join(' '))
 }  
 
+(async function clearcache() {
+    searchCache = {}
+    suggestCache = {}
+    setTimeout( clearcache, 50 );
+  })();
+
 search = async (req, res) => {
     console.log("------------search")
     var preQuery = url.parse(req.url, true).query.q;
