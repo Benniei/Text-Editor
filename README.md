@@ -1,6 +1,6 @@
 # CSE 356 Text Editor
 
-## Milestone 1
+## Milestone 01
 
 Project is to create a shared document service. Multiple clients/users should be able to edit and coordinate to work on documents.
 
@@ -50,7 +50,7 @@ Project is to create a shared document service. Multiple clients/users should be
     
     b. The client should POST its changes (while editing the doc from UI)  via /op/id to the server.
 
-## Milestone 2
+## Milestone 02
 
 Milestone #2 high-level requirements:
 
@@ -104,3 +104,13 @@ The EventStream should send messages in the form { content, version }, { presenc
 The /users/signup request must send an email to the user's email address which instructs the user to access a verification URL.  The body of the email must contain a complete verification URL.  The verification URL must be at the API path /users/verify and can contain any number of query string parameters in addition to a key parameter.  The key must be unique for the verification request and must be verified by the API request for the account to be enabled.  Optionally, the /users/verify call can start a login session and redirect the user to the It would also be nice to redirect the user to /home.
 
 File uploads at the /media/upload endpoint must be either png or jpeg to be accepted.  The uploaded files must be stored on the server along with their mime type.  The /media/access/MEDIAID must respond with the correct mime type along with the image file contents.
+
+## Milestone 03
+
+Everything from Milestone #2, plus the following two GET routes:
+
+* /index/search?q=...     Returns 10 documents that include the searched word in the document name or body as a JSON array [{docid, name, snippet}, ...], ordered in descending order of relevance.  The snippet is an excerpt from the document that surrounds the search phrase where the search terms are surrounded with <em>...</em> markers.  (Note: Don't forget to remove stop words and use stemming.)
+
+* /index/suggest?q=...    Returns an array of suggested word completions starting with the queried prefix, sorted in descending order of relevant (at least one suggestion must be returned if any of the documents in the system include a word starting with the specified prefix).  The result is a JSON array [strings,...], ordered from the most relevant completion first.  The queried prefix is expected to be at least 4 letters long and the returned completions must be at least 1 character longer than the queried prefix.
+
+Additionally, /media/upload should now permit image/gif files.
